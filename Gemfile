@@ -66,3 +66,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "foreman", "~> 0.90.0", group: :development
