@@ -1,0 +1,14 @@
+<nav>
+  <div>
+    <!-- Logo -->
+  </div>
+  <div>
+    <% if user_signed_in? %>
+      <span class="text-gray-300 px-3 py-2 rounded-md text-sm font-medium"><%= current_user.username %>!</span>
+      <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+    <% else %>
+      <%= link_to "Login", new_user_session_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+    <% end %>
+  </div>
+</nav>
