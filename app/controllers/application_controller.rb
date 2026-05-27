@@ -6,13 +6,14 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :authenticate_user!, unless: :devise_controller?
 
   protected
 
   def configure_permitted_parameters
     # Autorise username à l'inscription
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :username ])
     # Autorise username à la mise à jour du profil
-    devise_parameter_sanitizer.permit(:account_update, keys: [:username])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :username ])
   end
 end
