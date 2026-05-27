@@ -51,7 +51,7 @@ Source unique de vérité : section **"Suivi (vivant)"** dans `PLANNING.md`. À 
 
 ## Démarrage de session
 
-À l'ouverture de **chaque nouvelle session** dans ce projet, ta première action est de :
+Dès le **premier message** de Chris dans une nouvelle session sur ce projet, ta toute première action — avant de répondre à son message — est de :
 
 1. Lire la **date du jour** (fournie dans le contexte system)
 2. Déterminer la **semaine ISO** et la **phase courante** d'apprentissage selon `PLANNING.md`
@@ -59,8 +59,11 @@ Source unique de vérité : section **"Suivi (vivant)"** dans `PLANNING.md`. À 
    - La phase et la semaine en cours
    - Le **programme du jour** (selon le détail jour par jour de la semaine si présent dans `PLANNING.md`, sinon selon les livrables hebdo)
    - Les blocages ou ajustements notés la veille dans la section Suivi
+4. **Si c'est lundi** (ou première session de la semaine) : proposer à Chris de fetcher les issues GitHub de la semaine via `gh issue list` et de mettre à jour la section Suivi avec les US visées cette semaine. Le kanban GitHub Projects n'étant pas lu automatiquement, c'est le moyen de garder le PLANNING.md aligné avec le backlog.
 
 Si la date du jour ne correspond à aucune journée détaillée, demande à Chris ce qu'il veut prioriser.
+
+**Puis** réponds normalement à son message.
 
 ## Planning d'apprentissage
 

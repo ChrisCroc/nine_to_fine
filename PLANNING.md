@@ -39,7 +39,7 @@ Volume cible : **40-55h/semaine** (8-11h par jour sur 5 jours + 4-5h le samedi).
 
 | Sem | Dates | Objectif | Livrables |
 |---|---|---|---|
-| 22 | 25-31 mai | Finir scaffolding des models Nine to Fine + Tailwind setup | Tous les models créés (Garment, Outfit, Category, OutfitGarment, Tag, Like, Comment, Follow). Tailwind opérationnel. 1ère page stylée. |
+| 22 | 25-31 mai | Scaffolding des **models structurels** Nine to Fine + Tailwind setup | Models Category, Garment, Outfit, OutfitGarment, Tag, Tagging (les 6 nécessaires pour le CRUD sem 22-24). Tailwind opérationnel. 1ère page stylée. |
 | 23 | 1-7 juin | CRUD Garment complet + intro Tailwind layouts | Upload photo (Active Storage), index/show/new/edit Garments, navbar Tailwind responsive |
 
 #### Détail jour par jour — Sem 22 (en cours)
@@ -49,12 +49,12 @@ Volume cible : **40-55h/semaine** (8-11h par jour sur 5 jours + 4-5h le samedi).
 | Lundi | 25 mai | Conception complète (user stories, schéma DB, kanban GitHub, roadmap) + install et config Devise (username, email, password) | ✅ |
 | Mardi | 26 mai | Model User + ApplicationController (authenticate_user! + permitted_parameters) + PagesController (home publique) + navbar + flashes + devise views | ✅ |
 | Mercredi | 27 mai | Setup environnement de travail : `~/.claude/CLAUDE.md` global + `CLAUDE.md` projet + `PLANNING.md` 18 sem + fix CI (PR #29) + upgrade image_processing 2.0.1 (PR #30) + vault Obsidian `DevJobReady` | ✅ |
-| Jeudi | 28 mai | Générer les 10 models dans l'ordre : Category → Garment → Outfit → OutfitGarment → Tag → Tagging → Like → Comment → Follow → AiSuggestion (`rails g model X`) + migrations + `db:migrate` + vérifier associations en console | ⬜ |
+| Jeudi | 28 mai | Générer les **6 models structurels** dans l'ordre : Category → Garment → Outfit → OutfitGarment → Tag → Tagging (`rails g model X`) + migrations + `db:migrate` + vérifier associations en console. **Like/Comment/Follow reportés à sem 25** (générés au moment de leur implémentation). **AiSuggestion reporté à Phase 4 sem 36-37** (intégration agent IA). | ⬜ |
 | Vendredi | 29 mai | CRUD Garment (controller + vues new/show/index/edit) + tester le flow en local + premier styling Tailwind sur la page Garment | ⬜ |
 | Samedi | 30 mai | Tailwind layouts (Tailwind Labs YouTube : vidéo "Building responsive layouts") + navbar Tailwind responsive | ⬜ |
 | Dimanche | 31 mai | OFF | ⬜ |
 | 24 | 8-14 juin | CRUD Outfit + composition de tenues | OutfitGarment join, page de composition d'outfit, premiers tests RSpec |
-| 25 | 15-21 juin | Likes, Comments, profils publics + **LANCEMENT RECHERCHE EMPLOI** | Likes/Comments fonctionnels, profil user public. **LinkedIn + GitHub à jour. 3 premières candidatures Rails.** |
+| 25 | 15-21 juin | Likes, Comments, Follows, profils publics + **LANCEMENT RECHERCHE EMPLOI** | Models sociaux générés (Like, Comment, Follow) + Likes/Comments/Follow fonctionnels, profil user public. **LinkedIn + GitHub à jour. 3 premières candidatures Rails.** |
 
 ### Phase 2 — React fondamentaux (sem 26-31, 22 juin → 2 août)
 
