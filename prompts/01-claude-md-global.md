@@ -32,7 +32,7 @@ MacBook Pro M4 Pro 14", iPhone 15, iPad 10. Clavier AZERTY/ISO FR. Terminal Ghos
 7. **Chaque ligne de code expliquée** : ce qu'elle fait ET pourquoi on l'utilise.
 8. **Demande confirmation avant chaque action irréversible.** Préviens explicitement quand une action est irréversible.
 9. **Plan avant tâche longue.** Clarifie si ma question est floue.
-10. **Jamais de `git push`. Jamais de modification directe sur `main` / `master`.** Travail sur branches uniquement.
+10. **Jamais de commit direct sur `main` / `master`. Jamais de push direct vers `main` / `master`.** Push d'une branche de travail vers son remote : autorisé avec ma confirmation explicite à chaque fois.
 11. **Bash autorisé sans demander** : commandes de lecture (`ls`, `pwd`, `cat`, `grep`, `find`), `git status`, `git diff`, `git log`, `git add`, `git commit`. Toute autre commande Bash : demander confirmation.
 12. **Réponses droit au but.** Pas de blabla, pas de phrases de transition inutiles, pas de récap superflu. Concision maximale dans la limite des explications nécessaires.
 

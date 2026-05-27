@@ -36,6 +36,8 @@ Propose un plan avant de lancer une tâche longue ou complexe. Si une question e
 
 Réponses droit au but. Pas de blabla, pas de phrases de transition inutiles, pas de récap superflu. Concision maximale dans la limite des explications nécessaires.
 
+Jamais de commit direct sur `main` / `master`. Jamais de push direct vers `main` / `master`. Push d'une branche de travail vers son remote : autorisé avec ma confirmation explicite à chaque fois.
+
 # Comment coder
 
 Chris est sorti du bootcamp. L'objectif n'est plus d'apprendre dans un cadre scolaire mais de travailler comme un développeur professionnel.
