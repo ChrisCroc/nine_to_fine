@@ -1,0 +1,124 @@
+# Plan d'apprentissage — Chris Crokaert | 25 mai → 27 septembre 2026
+
+## Objectif
+
+Décrocher un poste de **développeur junior** (Paris ou full remote) d'ici fin septembre 2026.
+
+Stack cible à maîtriser à un niveau employable :
+- **Ruby on Rails** : niveau pro (au-delà du bootcamp)
+- **Tailwind CSS** : maîtrise
+- **React** : maîtrise des fondamentaux
+- **TypeScript** : maîtrise des fondamentaux
+- **Intégration d'agents IA** dans des applications réelles
+- **Next.js** : optionnel (Phase 4 si dans les temps)
+
+---
+
+## Ritual quotidien fixe
+
+Volume cible : **40-55h/semaine** (8-11h par jour sur 5 jours + 4-5h le samedi). Dimanche off obligatoire (anti-burnout).
+
+| Slot | Durée | Activité |
+|---|---|---|
+| **Matin** | 1h30-2h | **Odin Project — Rails** (sujet du jour défini selon la phase) |
+| **Avant-midi** | 2h30-3h | **Focus apprentissage** de la phase courante (Tailwind / React / TS / Next selon période) |
+| **Après-midi** | 2h30-3h | **Production projet** (Nine to Fine en P1 / mini-projets en P2-3 / vitrine en P4) |
+| **Soir** | 30-45 min | **Exercice dirigé avec Claude** (continuité hebdomadaire) |
+| **Vendredi PM** | 1h (dès sem 25) | **Recherche emploi** : candidatures, mise à jour LinkedIn/GitHub, contacts alumni |
+| **Samedi** | 4-5h | **Rattrapage / projet / recherche emploi** |
+| **Dimanche** | OFF | Repos obligatoire |
+
+---
+
+## Plan par phase
+
+### Phase 1 — Rails pro + Tailwind (sem 22-25, 25 mai → 21 juin)
+
+**Focus apprentissage** : Tailwind CSS (Tailwind Labs YouTube + docs officielles).
+**Odin Rails** : Active Record avancé (callbacks, scopes, query optim), Forms avancées, Authentication "from scratch" (comprendre ce que Devise fait sous le capot).
+
+| Sem | Dates | Objectif | Livrables |
+|---|---|---|---|
+| 22 | 25-31 mai | Finir scaffolding des models Nine to Fine + Tailwind setup | Tous les models créés (Garment, Outfit, Category, OutfitGarment, Tag, Like, Comment, Follow). Tailwind opérationnel. 1ère page stylée. |
+| 23 | 1-7 juin | CRUD Garment complet + intro Tailwind layouts | Upload photo (Active Storage), index/show/new/edit Garments, navbar Tailwind responsive |
+| 24 | 8-14 juin | CRUD Outfit + composition de tenues | OutfitGarment join, page de composition d'outfit, premiers tests RSpec |
+| 25 | 15-21 juin | Likes, Comments, profils publics + **LANCEMENT RECHERCHE EMPLOI** | Likes/Comments fonctionnels, profil user public. **LinkedIn + GitHub à jour. 3 premières candidatures Rails.** |
+
+### Phase 2 — React fondamentaux (sem 26-31, 22 juin → 2 août)
+
+**Focus apprentissage** : React (Scrimba CS Career Path + react.dev officiel).
+**Odin Rails** : APIs Rails + Testing RSpec à fond (faiblesse classique des juniors).
+**Nine to Fine** : en maintenance (1 jour/sem pour ne pas perdre Rails).
+
+| Sem | Dates | Objectif | Livrables |
+|---|---|---|---|
+| 26 | 22-28 juin | JSX, composants, props | Mini-projet 1 : `react-todo` (renommable) |
+| 27 | 29 juin-5 juil | useState, événements, listes | Mini-projet 2 : `react-flashcards` |
+| 28 | 6-12 juil | useEffect, fetch, async | Mini-projet 3 : `react-weather` (consomme API publique) |
+| 29 | 13-19 juil | Composition, lifting state, custom hooks | Refacto des 3 mini-projets avec hooks custom |
+| 30 | 20-26 juil | React Router + formulaires contrôlés | Mini-projet 4 : `react-notes` (multi-pages, CRUD local) |
+| 31 | 27 juil-2 août | Contexte, state global léger | Ajout dark mode + auth fake (Context) à `react-notes` |
+
+### Phase 3 — TypeScript (sem 32-35, 3-30 août)
+
+**Focus apprentissage** : TypeScript (Total TypeScript "Beginner's TypeScript" de Matt Pocock).
+**Odin Rails** : Performance, caching, background jobs (Sidekiq), mailers.
+
+| Sem | Dates | Objectif | Livrables |
+|---|---|---|---|
+| 32 | 3-9 août | Types primitifs, interfaces, types de fonctions | Migration `react-todo` → TS |
+| 33 | 10-16 août | Generics, narrowing, types utilitaires | Migration `react-weather` → TS (types pour API response) |
+| 34 | 17-23 août | TS avancé : discriminated unions, `satisfies`, mapped types | Migration `react-notes` → TS strict |
+| 35 | 24-30 août | TS + React patterns pro (props strictes, hooks typés, contextes typés) | Tous mini-projets en TS strict, README pro pour chacun. **Projet vitrine acté : Nine to Fine v2.** |
+
+### Phase 4 — Projet vitrine + emploi intensif (sem 36-39, 31 août → 27 sept)
+
+**Focus apprentissage** : Next.js (Learn Next.js officiel) si dans les temps. Sinon, vanilla React+TS+Vite.
+**Odin Rails** : Advanced topics + révision en mode entretien (questions techniques classiques).
+
+| Sem | Dates | Objectif | Livrables |
+|---|---|---|---|
+| 36 | 31 août-6 sept | Setup projet vitrine Nine to Fine v2 : SPA React+TS+Tailwind ⇄ API Rails | API JSON Rails (refacto v1) + front React TS scaffold |
+| 37 | 7-13 sept | Fonctionnalités cœur + intégration agent IA | 2-3 features clés en place, premier appel API Anthropic depuis le back |
+| 38 | 14-20 sept | Polish UI Tailwind, tests, déploiement | Déployé (Vercel front + Render/Fly back), README pro, vidéo démo 90s |
+| 39 | 21-27 sept | Finitions + emploi à 100% | **10+ candidatures/semaine**, préparation entretiens techniques (React, Rails, TS) |
+
+---
+
+## Recherche emploi — jalons
+
+| Période | Cible |
+|---|---|
+| **Mi-juin** (sem 25) | LinkedIn + GitHub propres. 3 premières candidatures Rails. |
+| **Mi-juillet** (sem 29) | 3-5 candidatures/semaine. 1 contact alumni Le Wagon/semaine. |
+| **Mi-août** (sem 33) | 5-10 candidatures/semaine. |
+| **Septembre** | 10+ candidatures/semaine. Entretiens en cours. |
+
+**Plateformes cibles** : Welcome to the Jungle, LinkedIn Jobs, Indeed France, Collective.work, réseau alumni Le Wagon.
+
+---
+
+## Règles pédagogiques (Claude → Chris)
+
+Ces règles s'appliquent uniquement au cadre apprentissage. Les règles de comportement général (challenge, vérification doc, concision, etc.) sont définies dans le `CLAUDE.md` global.
+
+1. **Jamais la solution directement** — toujours le "pourquoi" d'abord.
+2. **Questions de vérification** avant de passer à la suite ("explique-moi pourquoi tu utilises `useEffect` ici plutôt que `useMemo`").
+3. **Continuité du cursus** : chaque exercice du soir s'appuie sur les précédents de la semaine.
+4. **2 alternatives** quand pertinent, avec trade-offs.
+5. **Adapter le niveau** : Rails = challenger fort (niveau pro). React / TS / Tailwind / Next = vulgariser plus (apprentissage en cours).
+6. **Signaler les erreurs fréquentes** liées au code que Chris vient d'écrire.
+7. **Lecture / vidéo quotidienne** suggérée. Source officielle, vérifiée 2 fois, datée.
+
+---
+
+## Suivi (section vivante)
+
+À mettre à jour à la fin de chaque semaine.
+
+### Sem 22 (25-31 mai 2026)
+- **Accompli** : [à remplir]
+- **Blocages** : [à remplir]
+- **Ajustements pour sem 23** : [à remplir]
+
+<!-- Ajouter une section par semaine au fur et à mesure -->
