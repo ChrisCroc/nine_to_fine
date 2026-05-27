@@ -45,16 +45,25 @@ Follow belongs_to User
 - **Branches** : jamais de commit direct sur `main`. Travailler sur des branches `feature/`, `fix/`, `chore/`
 - **Commits** : messages en anglais, format `type: short description` (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`)
 
-## État actuel (à mettre à jour)
+## État actuel
 
-Voir `NOTES.md` à la racine pour le journal de bord détaillé. Au 26 mai 2026 :
-- Devise installé et configuré (username + auth protection)
-- PagesController : home publique
-- Navbar + flashes en place
-- Models data : à créer (Garment, Outfit, etc.)
+Source unique de vérité : section **"Suivi (vivant)"** dans `PLANNING.md`. À mettre à jour à la fin de chaque journée.
+
+## Démarrage de session
+
+À l'ouverture de **chaque nouvelle session** dans ce projet, ta première action est de :
+
+1. Lire la **date du jour** (fournie dans le contexte system)
+2. Déterminer la **semaine ISO** et la **phase courante** d'apprentissage selon `PLANNING.md`
+3. Annoncer brièvement à Chris :
+   - La phase et la semaine en cours
+   - Le **programme du jour** (selon le détail jour par jour de la semaine si présent dans `PLANNING.md`, sinon selon les livrables hebdo)
+   - Les blocages ou ajustements notés la veille dans la section Suivi
+
+Si la date du jour ne correspond à aucune journée détaillée, demande à Chris ce qu'il veut prioriser.
 
 ## Planning d'apprentissage
 
-Le projet est utilisé comme support pour le plan d'apprentissage 18 semaines de Chris (25 mai → 27 sept 2026). Voir le fichier importé ci-dessous pour les jalons, ritual quotidien et règles pédagogiques.
+Le projet est utilisé comme support pour le plan d'apprentissage 18 semaines de Chris (25 mai → 27 sept 2026). Voir le fichier importé ci-dessous pour les jalons, ritual quotidien, détail des semaines en cours, règles pédagogiques et journal de suivi.
 
 @PLANNING.md

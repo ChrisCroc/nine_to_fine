@@ -41,6 +41,18 @@ Volume cible : **40-55h/semaine** (8-11h par jour sur 5 jours + 4-5h le samedi).
 |---|---|---|---|
 | 22 | 25-31 mai | Finir scaffolding des models Nine to Fine + Tailwind setup | Tous les models créés (Garment, Outfit, Category, OutfitGarment, Tag, Like, Comment, Follow). Tailwind opérationnel. 1ère page stylée. |
 | 23 | 1-7 juin | CRUD Garment complet + intro Tailwind layouts | Upload photo (Active Storage), index/show/new/edit Garments, navbar Tailwind responsive |
+
+#### Détail jour par jour — Sem 22 (en cours)
+
+| Jour | Date | Programme | Statut |
+|---|---|---|---|
+| Lundi | 25 mai | Conception complète (user stories, schéma DB, kanban GitHub, roadmap) + install et config Devise (username, email, password) | ✅ |
+| Mardi | 26 mai | Model User + ApplicationController (authenticate_user! + permitted_parameters) + PagesController (home publique) + navbar + flashes + devise views | ✅ |
+| Mercredi | 27 mai | Setup environnement de travail : `~/.claude/CLAUDE.md` global + `CLAUDE.md` projet + `PLANNING.md` 18 sem + fix CI (PR #29) + upgrade image_processing 2.0.1 (PR #30) + vault Obsidian `DevJobReady` | ✅ |
+| Jeudi | 28 mai | Générer les 10 models dans l'ordre : Category → Garment → Outfit → OutfitGarment → Tag → Tagging → Like → Comment → Follow → AiSuggestion (`rails g model X`) + migrations + `db:migrate` + vérifier associations en console | ⬜ |
+| Vendredi | 29 mai | CRUD Garment (controller + vues new/show/index/edit) + tester le flow en local + premier styling Tailwind sur la page Garment | ⬜ |
+| Samedi | 30 mai | Tailwind layouts (Tailwind Labs YouTube : vidéo "Building responsive layouts") + navbar Tailwind responsive | ⬜ |
+| Dimanche | 31 mai | OFF | ⬜ |
 | 24 | 8-14 juin | CRUD Outfit + composition de tenues | OutfitGarment join, page de composition d'outfit, premiers tests RSpec |
 | 25 | 15-21 juin | Likes, Comments, profils publics + **LANCEMENT RECHERCHE EMPLOI** | Likes/Comments fonctionnels, profil user public. **LinkedIn + GitHub à jour. 3 premières candidatures Rails.** |
 
@@ -112,13 +124,21 @@ Ces règles s'appliquent uniquement au cadre apprentissage. Les règles de compo
 
 ---
 
-## Suivi (section vivante)
+## Suivi (vivant)
 
-À mettre à jour à la fin de chaque semaine.
+Source unique de vérité pour le journal de bord. À mettre à jour à la fin de chaque journée.
 
 ### Sem 22 (25-31 mai 2026)
-- **Accompli** : [à remplir]
-- **Blocages** : [à remplir]
-- **Ajustements pour sem 23** : [à remplir]
+
+**Accompli**
+- **Lundi 25 mai** : Conception complète : 24 user stories, schéma DB, kanban GitHub, roadmap. Install et config Devise (username, email, password).
+- **Mardi 26 mai** : Model User + validation username. ApplicationController (authenticate_user! + configure_permitted_parameters). PagesController (home publique avec skip_before_action). Navbar (user_signed_in?, current_user.username, login/logout/signup). Flashes (_flashes.html.erb). Devise views générées + champ username dans sign up. `db:create` + `db:migrate` OK. Commit + push GitHub.
+- **Mercredi 27 mai** : Mise en place de l'environnement de travail Claude. Créé `~/.claude/CLAUDE.md` global (comportement permanent). Créé `CLAUDE.md` projet (stack, models, conventions, démarrage de session). Créé `PLANNING.md` (18 sem, ritual, phases, règles péda). Fix 4 problèmes CI pré-existants (PR #29 mergée : lint rubocop, fixtures users, pages_controller_test, dossier test/system). Upgrade image_processing 1→2 + ajout mini_magick explicite (PR #30 mergée). Setup vault Obsidian `~/Obsidian/DevJobReady/` avec symlink PLANNING.md. Activation protection branche `main` sur GitHub. Migration `NOTES.md` → cette section Suivi (PR en cours).
+
+**Blocages**
+- _Rien à signaler pour l'instant._
+
+**Ajustements pour la suite**
+- _Rien à signaler pour l'instant._
 
 <!-- Ajouter une section par semaine au fur et à mesure -->
