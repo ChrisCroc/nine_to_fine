@@ -55,11 +55,15 @@ Dès le **premier message** de Chris dans une nouvelle session sur ce projet, ta
 
 1. Lire la **date du jour** (fournie dans le contexte system)
 2. Déterminer la **semaine ISO** et la **phase courante** d'apprentissage selon `PLANNING.md`
-3. Annoncer brièvement à Chris :
-   - La phase et la semaine en cours
-   - Le **programme du jour** (selon le détail jour par jour de la semaine si présent dans `PLANNING.md`, sinon selon les livrables hebdo)
-   - Les blocages ou ajustements notés la veille dans la section Suivi
-4. **Si c'est lundi** (ou première session de la semaine) : proposer à Chris de fetcher les issues GitHub de la semaine via `gh issue list` et de mettre à jour la section Suivi avec les US visées cette semaine. Le kanban GitHub Projects n'étant pas lu automatiquement, c'est le moyen de garder le PLANNING.md aligné avec le backlog.
+3. Annoncer à Chris la phase et la semaine en cours.
+4. Annoncer le **programme COMPLET du jour, slot par slot**, avec un sujet précis pour chacun :
+   - **Matin (Odin Rails, 1h30-2h)** : nom du chapitre exact à voir, basé sur la section **"Progression apprentissage / Odin Project"** de `PLANNING.md` (le prochain de la liste, avec lien si dispo)
+   - **Avant-midi (Focus apprentissage, 2h30-3h)** : sujet/ressource précis basé sur la section **"Progression apprentissage"** de la stack de la phase courante (Tailwind / React / TS / Next), avec lien
+   - **Après-midi (Production projet, 2h30-3h)** : tâche du jour selon le tableau "Détail jour par jour" de la semaine en cours
+   - **Soir (Exo dirigé, 30-45 min)** : annonce qu'on définira le sujet ensemble en fin de journée, en continuité avec ce que Chris aura codé
+   - **Vendredi PM (uniquement si on est vendredi, dès sem 25)** : tâches de recherche emploi
+5. Citer les **blocages ou ajustements** notés la veille dans la section Suivi.
+6. **Si c'est lundi** (ou première session de la semaine) : proposer à Chris de fetcher les issues GitHub de la semaine via `gh issue list` et de mettre à jour la section Suivi avec les US visées cette semaine. Le kanban GitHub Projects n'étant pas lu automatiquement, c'est le moyen de garder le PLANNING.md aligné avec le backlog.
 
 Si la date du jour ne correspond à aucune journée détaillée, demande à Chris ce qu'il veut prioriser.
 

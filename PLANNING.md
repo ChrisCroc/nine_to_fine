@@ -14,6 +14,46 @@ Stack cible à maîtriser à un niveau employable :
 
 ---
 
+## Progression apprentissage
+
+Source de vérité pour savoir **exactement** où Chris en est sur chaque ressource. À mettre à jour quand un chapitre / vidéo / section est terminé. Claude lit cette section au démarrage de session pour proposer le prochain sujet précis du matin et de l'avant-midi.
+
+### Odin Project — Full Stack Ruby on Rails
+
+- **Fait** : Rails Basics, Active Record Basics, Validations, Migrations, **Associations** (✅ dernier complété)
+- **Prochain (à faire)** : Active Record Callbacks → Active Record Querying → Forms et Form Helpers → Authentication (manuelle, comprendre Devise) → Building APIs → Testing (Minitest puis introduction RSpec)
+- **URL parcours** : https://www.theodinproject.com/paths/full-stack-ruby-on-rails/courses/ruby-on-rails
+
+### Tailwind CSS
+
+- **Fait** : rien
+- **Prochain (à faire dans l'ordre)** :
+  1. Docs officielles section **"Installation"** : https://tailwindcss.com/docs/installation (déjà installé via gem, lire pour comprendre)
+  2. Docs officielles section **"Core concepts > Styling with utility classes"** : https://tailwindcss.com/docs/styling-with-utility-classes
+  3. Docs officielles section **"Core concepts > Responsive design"** : https://tailwindcss.com/docs/responsive-design
+  4. Tailwind Labs YouTube — playlist **"Tailwind CSS v4.0"** (les vidéos d'introduction d'Adam Wathan)
+  5. Docs section **"Layout"** (Flexbox, Grid, Spacing) — appliquer immédiatement sur Nine to Fine
+
+### React (à démarrer Phase 2, sem 26)
+
+- **Fait** : rien
+- **Prochain** : Scrimba "Learn React" (CS Career Path) + react.dev "Learn" en parallèle
+- **URLs** : https://scrimba.com/learn/learnreact + https://react.dev/learn
+
+### TypeScript (à démarrer Phase 3, sem 32)
+
+- **Fait** : rien
+- **Prochain** : Total TypeScript "Beginner's TypeScript" (gratuit, Matt Pocock)
+- **URL** : https://www.totaltypescript.com/tutorials/beginners-typescript
+
+### Next.js (Phase 4, sem 36, optionnel)
+
+- **Fait** : rien
+- **Prochain** : Learn Next.js officiel (gratuit, ~6h)
+- **URL** : https://nextjs.org/learn
+
+---
+
 ## Ritual quotidien fixe
 
 Volume cible : **40-55h/semaine** (8-11h par jour sur 5 jours + 4-5h le samedi). Dimanche off obligatoire (anti-burnout).
