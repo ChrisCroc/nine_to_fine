@@ -40,7 +40,9 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 2.0"
+# From image_processing 2.x, mini_magick is a soft dependency and must be declared explicitly
+gem "mini_magick"
 
 gem "devise"
 # Use Active Storage on Amazon S3 [https://guides.rubyonrails.org/active_storage_overview.html#amazon-s3-service]
