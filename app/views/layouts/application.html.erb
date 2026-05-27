@@ -24,7 +24,13 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <header>
+      <%= render "shared/navbar" %>
+    </header>
+
+
+    <main class="container mx-auto mt-28 px-5">
+      <%= render "shared/flashes" %>
       <%= yield %>
     </main>
   </body>
