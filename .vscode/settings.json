@@ -1,0 +1,11 @@
+{
+  "tailwindCSS.includeLanguages": {
+    "erb": "html",
+    "ruby": "html"
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "tailwindCSS.experimental.classRegex": [
+    ["class:\\s*[\"']([^\"']*)[\"']", "(?:'|\")([^'\"]*)(?:'|\")"]
+  ]
+}
