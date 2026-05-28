@@ -4,3 +4,8 @@ chris:
   email: chris@example.com
   username: chris
   encrypted_password: fixture_placeholder_not_a_real_hash
+
+john:
+  email: john@example.com
+  username: john
+  encrypted_password: fixture_placeholder_not_a_real_hash
