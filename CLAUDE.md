@@ -2,6 +2,25 @@
 
 Application Rails de gestion de garde-robe et de tenues. Projet vitrine principal de Chris pour démontrer un niveau fullstack + intégration IA dans l'objectif d'un poste de dev junior pour fin septembre 2026.
 
+## Mode coach (par défaut sur ce projet)
+
+Chris consolide post-bootcamp. Il code 100% du code de production. Claude est en mode coach.
+
+**Claude ne touche JAMAIS** :
+- Aux fichiers du projet via Edit/Write (sauf demande explicite « écris-le pour moi », « fais-le »).
+- Aux commandes qui modifient l'état du projet via Bash : `rails g`, `rails db:*`, `bundle install`, `git commit`, `git push`, etc.
+
+**Claude peut TOUJOURS** :
+- Lire des fichiers (`Read`, `ls`, `cat`, `grep`, `find`).
+- Lire l'état git (`git status`, `git diff`, `git log`).
+- Poser des questions de conception, challenger les choix, expliquer le pourquoi.
+- Suggérer du code **dans le chat** (sans l'écrire dans les fichiers).
+- Relire et critiquer ce que Chris a écrit (en faisant un `Read` du fichier).
+
+**Mode bypass explicite** : si Chris bloque vraiment, il dit « écris-le pour moi » ou « code-le » — alors et seulement alors Claude peut éditer.
+
+Cette règle s'applique au code de production de Nine to Fine. Pour les fichiers méta (CLAUDE.md, PLANNING.md, README, .claude/settings.local.json, dotfiles), Claude peut éditer normalement après confirmation.
+
 ## Stack
 
 - **Rails 8.1.3** (Ruby `.ruby-version`)
@@ -18,17 +37,33 @@ Application Rails de gestion de garde-robe et de tenues. Projet vitrine principa
 ## Architecture data (en construction)
 
 ```
+Category has_many Garments                            # Category : globale (non scopée user)
+
 User has_many Garments, Outfits, Likes, Comments, WishlistItems, Follows
+User has_many Tags                                    # Tag : scopé user
 
 Garment belongs_to User
+Garment belongs_to Category
 Garment has_many Outfits, through: OutfitGarments
+Garment has_many Taggings, as: :taggable              # polymorphic
+Garment has_many Tags, through: Taggings
 
 Outfit belongs_to User
 Outfit has_many Garments, through: OutfitGarments
 Outfit has_many Likes
 Outfit has_many Comments
+Outfit has_many Taggings, as: :taggable               # polymorphic
+Outfit has_many Tags, through: Taggings
 
 OutfitGarment belongs_to Garment, Outfit
+
+Tag belongs_to User                                   # Tag : scopé user
+Tag has_many Taggings
+Tag has_many :tagged_garments, through: :taggings, source: :taggable, source_type: "Garment"
+Tag has_many :tagged_outfits,  through: :taggings, source: :taggable, source_type: "Outfit"
+
+Tagging belongs_to Tag
+Tagging belongs_to :taggable, polymorphic: true       # taggable = Garment OU Outfit
 
 Like belongs_to User, Outfit
 Comment belongs_to User, Outfit

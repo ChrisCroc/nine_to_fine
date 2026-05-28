@@ -1,6 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# Fixtures intentionally empty. User has unique constraints via Devise
-# (email, username) — generated empty fixtures `one: {}` / `two: {}` caused
-# UniqueViolation on insertion. Add real fixtures here only when a test
-# actually needs seeded users.
+chris:
+  email: chris@example.com
+  username: chris
+  encrypted_password: fixture_placeholder_not_a_real_hash
+
+john:
+  email: john@example.com
+  username: john
+  encrypted_password: fixture_placeholder_not_a_real_hash

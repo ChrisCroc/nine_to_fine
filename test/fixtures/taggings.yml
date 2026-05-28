@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+summer_on_black_tshirt:
+  tag: summer
+  taggable: black_tshirt (Garment)
+
+vintage_on_blue_jeans:
+  tag: vintage
+  taggable: blue_jeans (Garment)
+
+business_on_casual_friday:
+  tag: business
+  taggable: casual_friday (Outfit)
