@@ -45,6 +45,20 @@ Follow belongs_to User
 - **Branches** : jamais de commit direct sur `main`. Travailler sur des branches `feature/`, `fix/`, `chore/`
 - **Commits** : messages en anglais, format `type: short description` (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`)
 
+## Sandbox d'exercices
+
+Dossier parent `~/code/sandbox/` contenant un sous-dossier par technologie, chacun étant un repo Git autonome :
+
+- `~/code/sandbox/rails/` — repo [ChrisCroc/sandbox-rails](https://github.com/ChrisCroc/sandbox-rails) (anciennement `sandbox_s1`, renommé 2026-05-28). App Rails 8 dédiée aux exos de consolidation.
+- `~/code/sandbox/tailwind/` — fichiers HTML standalone avec Tailwind via CDN.
+- `react/`, `typescript/`, `nextjs/` : à créer aux phases ultérieures si besoin.
+
+**Usage** : slot du soir (30-45 min) dans le ritual quotidien. Exos basés sur Knowledge Check Odin + sous-portions des "Project: X" Odin + cas limites du code de l'aprem dans Nine to Fine. Voir règles pédagogiques 8, 9, 10 du `PLANNING.md`.
+
+**Convention de commit pour le sandbox Rails** : `exo(<concept>): <short desc>` (ex: `exo(callbacks): add before_save normalize_name on Garment`).
+
+Mémoire détaillée : `~/.claude/projects/-Users-chriscroc-code-nine-to-fine/memory/sandbox-setup.md`.
+
 ## État actuel
 
 Source unique de vérité : section **"Suivi (vivant)"** dans `PLANNING.md`. À mettre à jour à la fin de chaque journée.
