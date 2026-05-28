@@ -66,4 +66,9 @@ class GarmentTest < ActiveSupport::TestCase
     assert_not garment.valid?
     assert_includes garment.errors[:name], "is too long (maximum is 200 characters)"
   end
+
+  test "can access its outfits through outfit_garments" do
+    garment = garments(:black_tshirt)
+    assert_includes garment.outfits, outfits(:casual_friday)
+  end
 end

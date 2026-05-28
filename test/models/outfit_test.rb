@@ -38,4 +38,10 @@ class OutfitTest < ActiveSupport::TestCase
     outfit = Outfit.new(name: "Casual Friday", user: users(:john))
     assert outfit.valid?
   end
+
+   test "can access its garments through the outfit" do
+    outfit = outfits(:casual_friday)
+    assert_equal 2, outfit.garments.count
+    assert_includes outfit.garments, garments(:black_tshirt)
+  end
 end

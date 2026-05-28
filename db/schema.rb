@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_28_141437) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_28_143359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,6 +33,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_141437) do
     t.bigint "user_id", null: false
     t.index ["category_id"], name: "index_garments_on_category_id"
     t.index ["user_id"], name: "index_garments_on_user_id"
+  end
+
+  create_table "outfit_garments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "garment_id", null: false
+    t.bigint "outfit_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["garment_id"], name: "index_outfit_garments_on_garment_id"
+    t.index ["outfit_id", "garment_id"], name: "index_outfit_garments_on_outfit_and_garment", unique: true
+    t.index ["outfit_id"], name: "index_outfit_garments_on_outfit_id"
   end
 
   create_table "outfits", force: :cascade do |t|
@@ -60,5 +70,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_141437) do
 
   add_foreign_key "garments", "categories"
   add_foreign_key "garments", "users"
+  add_foreign_key "outfit_garments", "garments"
+  add_foreign_key "outfit_garments", "outfits"
   add_foreign_key "outfits", "users"
 end
