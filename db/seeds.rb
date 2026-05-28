@@ -24,4 +24,3 @@ categories.each do |attributes|
 end
 
 puts "Seeding complete! #{Category.count} categories in DB."
-
