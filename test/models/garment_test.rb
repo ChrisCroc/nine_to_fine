@@ -71,4 +71,9 @@ class GarmentTest < ActiveSupport::TestCase
     garment = garments(:black_tshirt)
     assert_includes garment.outfits, outfits(:casual_friday)
   end
+
+    test "can have tags through taggings" do
+    garment = garments(:black_tshirt)
+    assert_includes garment.tags, tags(:summer)
+  end
 end

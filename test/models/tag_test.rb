@@ -38,4 +38,14 @@ class TagTest < ActiveSupport::TestCase
     tag = Tag.new(name: "summer", user: users(:john))
     assert tag.valid?
   end
+  test "tagged_garments returns only garments" do
+    tag = tags(:summer)
+    assert_includes tag.tagged_garments, garments(:black_tshirt)
+    assert_not_includes tag.tagged_garments, outfits(:casual_friday)
+  end
+
+  test "tagged_outfits returns only outfits" do
+    tag = tags(:business)
+    assert_includes tag.tagged_outfits, outfits(:casual_friday)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_28_145235) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_28_150308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -55,6 +55,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_145235) do
     t.index ["user_id"], name: "index_outfits_on_user_id"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "tag_id", null: false
+    t.bigint "taggable_id", null: false
+    t.string "taggable_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id", "taggable_type", "taggable_id"], name: "index_taggings_uniqueness", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -82,5 +93,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_145235) do
   add_foreign_key "outfit_garments", "garments"
   add_foreign_key "outfit_garments", "outfits"
   add_foreign_key "outfits", "users"
+  add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "users"
 end

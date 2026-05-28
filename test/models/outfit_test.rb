@@ -44,4 +44,9 @@ class OutfitTest < ActiveSupport::TestCase
     assert_equal 2, outfit.garments.count
     assert_includes outfit.garments, garments(:black_tshirt)
   end
+
+    test "can have tags through taggings" do
+    outfit = outfits(:casual_friday)
+    assert_includes outfit.tags, tags(:business)
+  end
 end
