@@ -24,3 +24,7 @@ categories.each do |attributes|
 end
 
 puts "Seeding complete! #{Category.count} categories in DB."
+
+puts "Seeding garments..."
+garments = [
+  { name: "White T-Shirt", color: "white", user: User.first, category: Category.find_by(name: "Top") },

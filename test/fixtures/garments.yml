@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+black_tshirt:
+  name: Black T-shirt
+  description: My go-to comfy tee
+  color: black
+  brand: Uniqlo
+  user: chris
+  category: top
+
+blue_jeans:
+  name: Blue Jeans
+  color: blue
+  brand: Levi's
+  user: chris
+  category: bottom

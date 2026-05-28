@@ -28,12 +28,17 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   test "cannot be destroyed when garments exist" do
-    skip "Attendre la génération du modèle Garment"
-    # category = categories(:top)
-    # Garment.create!(name: "T-shirt", user: users(:chris), category: category)
-    # assert_not category.destroy
-    # assert_includes category.errors[:base], /restrict/i
-    # assert Category.exists?(category.id)
+    category = categories(:top)
+    Garment.create!(
+      name: "Test garment",
+      color: "white",
+      user: users(:chris),
+      category: category
+    )
+
+    assert_not category.destroy
+    assert_not_empty category.errors[:base]
+    assert Category.exists?(category.id)
   end
 
   test "DB rejects duplicate name even with validations bypassed" do
