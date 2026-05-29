@@ -1,0 +1,8 @@
+<h1><%= @garment.name %></h1>
+<p>Color: <%= @garment.color %></p>
+<p>Brand: <%= @garment.brand.presence || "-" %></p>
+<p>Description: <%= @garment.description.presence || "-" %></p>
+<p>Category: <%= @garment.category.name %></p>
+<%= link_to "Edit", edit_garment_path(@garment) %>
+<%= button_to "Delete", garment_path(@garment), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+<%= link_to "My Clothes", garments_path %>

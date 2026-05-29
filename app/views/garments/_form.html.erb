@@ -1,0 +1,41 @@
+<%= form_with model: garment do |f| %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <% if garment.errors[:name].any? %>
+      <span class="field-error"><%= garment.errors[:name].first %></span>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :color %>
+    <%= f.text_field :color %>
+    <% if garment.errors[:color].any? %>
+      <span class="field-error"><%= garment.errors[:color].first %></span>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :brand %>
+    <%= f.text_field :brand %>
+  </div>
+
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label :category_id, "Category" %>
+    <%= f.collection_select :category_id, @categories, :id, :name, prompt: "Choose a category" %>
+    <% if garment.errors[:category].any? %>
+      <span class="field-error"><%= garment.errors[:category].first %></span>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.submit %>
+  </div>
+
+<% end %>
