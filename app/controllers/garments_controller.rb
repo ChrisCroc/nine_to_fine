@@ -1,5 +1,4 @@
 class GarmentsController < ApplicationController
-
   before_action :set_garment, only: %i[show edit update destroy]
   before_action :set_categories, only: %i[new edit create update]
   def index
@@ -46,7 +45,7 @@ private
   end
 
   def garment_params
-    params.expect(garment: [:name, :color, :description, :brand, :category_id])
+    params.expect(garment: [ :name, :color, :description, :brand, :category_id ])
   end
 
   def set_categories
