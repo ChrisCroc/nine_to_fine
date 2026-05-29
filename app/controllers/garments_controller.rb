@@ -41,7 +41,7 @@ class GarmentsController < ApplicationController
 private
 
   def set_garment
-    @garment = current_user.garments.find(params[:id])
+    @garment = current_user.garments.find(params.expect(:id))
   end
 
   def garment_params
