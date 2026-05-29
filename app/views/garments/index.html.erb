@@ -1,17 +1,36 @@
-<h1>My Clothes</h1>
+<section class="min-h-screen bg-linear-to-tr from-yellow-900 to-yellow-50 p-4 md:p-8">
+  <div class="max-w-6xl mx-auto">
 
-<%= link_to "Add a new garment", new_garment_path %>
+    <%# En-tête de page %>
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30">My Clothes</h1>
+      <%= link_to "Add a piece", new_garment_path, class: "bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+    </div>
 
-<% if @garments.empty? %>
-  <p>You haven't added any garments yet.</p>
-<% else %>
-  <ul>
-    <% @garments.each do |garment| %>
-      <li>
-        <%= link_to garment.name, garment %> - <%= garment.color %> - <%= garment.category.name %>
-        <%= link_to "Edit this garment", edit_garment_path(garment) %>
-        <%= button_to "Delete", garment, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
-      </li>
+    <% if @garments.empty? %>
+      <%#  Etat vide %>
+      <div class="text-center py-20">
+        <p class="text-lg text-zinc-800 mb-4">You haven't added any garments yet.</p>
+        <%= link_to "Add your first piece of clothes", new_garment_path, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+      </div>
+    <% else %>
+      <%# Grille de cards %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @garments.each do |garment| %>
+          <%= link_to garment, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:z-10" do %>
+            <div class="h-48 bg-zinc-100 flex items-center justify-center">
+              <span class="text-sm text-zinc-400">Photo</span>
+            </div>
+            <div class="p-4">
+              <div class="flex items-start justify-between gap-2">
+                <h2 class="font-semibold text-zinc-900"><%= garment.name %></h2>
+                <span class="shrink-0 inline-block bg-zinc-100 text-zinc-700 text-xs font-medium px-2 py-1 rounded-full"><%= garment.category.name %></span>
+              </div>
+              <p class="text-sm text-zinc-500 mt-1"><%= garment.color %></p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
+  </div>
+</section>
