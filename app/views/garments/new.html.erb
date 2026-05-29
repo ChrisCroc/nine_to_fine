@@ -1,5 +1,16 @@
-<h1>Add a new piece of clothes to your wardrobe</h1>
-<div class="bg-sky-100 p-4 rounded">
-<%= render "form", garment: @garment %>
-<%= link_to "Back to garments", garments_path %>
-</div>
+<section class="min-h-screen flex items-center justify-center bg-linear-to-tr from-yellow-900 to-yellow-50 p-4 md:p-8">
+  <div class="w-full max-w-lg bg-white rounded-xl shadow-xl overflow-hidden">
+    <%# Card header : zone photo (Active storage semaine 23) %>
+    <div class="h-75 bg-zinc-100 flex items-center justify-center">
+      <span class="text-sm text-zinc-400">Photo (coming soon)</span>
+    </div>
+
+    <%# Card Body : Formulaire %>
+    <div class="p-6 md:p-8">
+      <h1 class="text-2xl font-bold text-zinc-900 mb-6">Add a new piece to your wardrobe</h1>
+      <%= render "form", garment: @garment %>
+      <%= link_to "Back to garments", garments_path, class: "block text-center text-sm text-zinc-500 hover:text-zinc-700 mt-4" %>
+    </div>
+  </div>
+
+</section>

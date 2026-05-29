@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+@theme {
+  --color-champagne: #E7DBC4;
+}

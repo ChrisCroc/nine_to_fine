@@ -1,8 +1,67 @@
-<h1><%= @garment.name %></h1>
-<p>Color: <%= @garment.color %></p>
-<p>Brand: <%= @garment.brand.presence || "-" %></p>
-<p>Description: <%= @garment.description.presence || "-" %></p>
-<p>Category: <%= @garment.category.name %></p>
-<%= link_to "Edit", edit_garment_path(@garment) %>
-<%= button_to "Delete", garment_path(@garment), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
-<%= link_to "My Clothes", garments_path %>
+<section class="min-h-screen flex items-center justify-center bg-linear-to-tr from-yellow-900 to-yellow-50 p-4 md:p-8">
+  <div class="w-full max-w-6xl bg-white rounded-xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-5">
+
+    <%# Colonne photo (~60%) - futur swipe outfits %>
+    <div class="md:col-span-3 h-64 md:h-auto bg-zinc-100 flex items-center justify-center">
+      <span class="text-sm text-zinc-400">Photo (coming soon)</span>
+    </div>
+
+    <%# Colonne infos (~40%) %>
+    <div class="md:col-span-2 p-6 md:p-8 flex flex-col">
+      <h1 class="text-2xl md:text-3xl font-bold text-zinc-900"><%= @garment.name %></h1>
+      <span class="inline-block self-start bg-zinc-100 text-zinc-700 text-xs font-medium px-3 py-1 rounded-full mt-2 mb-6"><%= @garment.category.name %></span>
+
+      <dl class="space-y-3 mb-6">
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Color</dt>
+          <dd class="text-zinc-900"><%= @garment.color %></dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Brand</dt>
+          <dd class="text-zinc-900"><%= @garment.brand.presence || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Description</dt>
+          <dd class="text-zinc-900"><%= @garment.description.presence || "—" %></dd>
+        </div>
+      </dl>
+
+      <%# Outfits %>
+      <div class="mb-6">
+        <h2 class="text-xs font-medium uppercase tracking-wide text-zinc-400 mb-2">Outfits</h2>
+        <% if @garment.outfits.any? %>
+          <div class="flex flex-wrap gap-2">
+            <% @garment.outfits.each do |outfit| %>
+              <span class="inline-block bg-zinc-100 text-zinc-700 text-sm px-3 py-1 rounded-full"><%= outfit.name %></span>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-sm text-zinc-400 italic">Not used in any outfit yet</p>
+        <% end %>
+      </div>
+
+      <%# Tags %>
+      <div class="mb-6">
+        <h2 class="text-xs font-medium uppercase tracking-wide text-zinc-400 mb-2">Tags</h2>
+        <% if @garment.tags.any? %>
+          <div class="flex flex-wrap gap-2">
+            <% @garment.tags.each do |tag| %>
+              <span class="inline-block bg-zinc-100 text-zinc-700 text-sm px-3 py-1 rounded-full"><%= tag.name %></span>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-sm text-zinc-400 italic">No tags assigned</p>
+        <% end %>
+      </div>
+
+      <%# Actions %>
+      <div class="flex items-center gap-3 mt-auto">
+        <%= link_to "Edit", edit_garment_path(@garment), class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md
+             hover:bg-zinc-700 transition" %>
+        <%= button_to "Delete", garment_path(@garment), method: :delete, data: { turbo_confirm: "Are you sure?" }, form_class: "flex-1", class: "w-full
+            text-center bg-white text-red-600 border border-red-300 font-semibold py-2 px-5 rounded-md hover:bg-red-50 transition cursor-pointer" %>
+      </div>
+        <%= link_to "My Clothes", garments_path, class: "block text-center text-sm text-zinc-500 hover:text-zinc-700 mt-4" %>
+    </div>
+  </div>
+</section>
