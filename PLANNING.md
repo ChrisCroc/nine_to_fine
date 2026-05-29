@@ -297,6 +297,24 @@ Source unique de vérité pour le journal de bord. À mettre à jour à la fin d
 
   - **Soir prévu** : retour dans la session Claude app pour 3 exos sandbox ciblés (1 Queries + 1 Tailwind + 1 Models/Tests) + mise à jour matricielle du PLANNING.md (18 sem × 4 stacks, lectures jour par jour jusqu'au 27 sept).
 
+- **Vendredi 29 mai (matinée + midi)** :
+
+  - **Matin — Odin Rails** : lecture profonde **20. Form Basics** + Knowledge Check répondu par écrit (règle péda 9). Décision en milieu de matinée d'enchaîner **28. Advanced Forms** plutôt que **22. Sessions/Cookies/Auth** : continuité directe avec Form Basics + application immédiate au CRUD Garment de l'aprem + Devise déjà fonctionnel rend chap. 22 moins urgent (relégué slot du soir ou samedi). Notes Obsidian créées : `Apprentissage/Rails/Views & Forms/form-basics.md` (form_with, CSRF, params imbriqués, `render :new, status: :unprocessable_entity`, triche `_method`) + `Apprentissage/Rails/Views & Forms/advanced-forms.md` (`collection_select`, `fields_for`, `accepts_nested_attributes_for`, `_destroy` + `allow_destroy`, pattern many-to-many appliqué à OutfitGarment). Index Rails mis à jour.
+
+  - **Avant-midi — Tailwind v4** : pivot acté — la chaîne YouTube **Tailwind Labs n'a aucune vidéo récente sur v4** (vérifié par Chris : pas de contenu plus jeune qu'un an, zéro mention v4). Lecture profonde des **docs officielles tailwindcss.com + blog post de lancement v4.0** à la place. Note Obsidian créée : `Apprentissage/Tailwind/Transverses/tailwind-v4-overview.md`. Couvre : nouveau engine (rebuilds 8-100× plus rapides), CSS-first config (`@theme` remplace `tailwind.config.js`), auto content detection (fini le `content:` array), dynamic utility values (`grid-cols-15` direct sans arbitrary syntax), container queries first-class (`@container`, `@sm:`...), palette OKLCH P3, gradients étendus (angles directs `bg-linear-45`, interpolation `/oklch`, conic + radial), transforms 3D, variants nouveaux (`not-*`, `starting:`, `in-*`, `nth-*`), outil migration v3→v4. Index Tailwind mis à jour (ordre lecture : 3-4 marqués ✅, 5 marqué ⏳ avec lien vers la note).
+
+  - **Workflow PLANNING.md (matinée)** : 2 PR mergées.
+    - **PR #39** (`chore(planning): defer Friday exos + routine to Saturday`) : déplace les exos sandbox du soir jeudi (polymorphic + piège `default: 0`/`validates presence`) à samedi + déplace la routine `/end-of-day` (initialement prévue vendredi midi) à samedi. Saturday row enrichie avec 5 chantiers + priorité de coupe (ménage dotfiles puis Tailwind si débordement).
+    - **PR #40** (`chore(planning): add Saturday strategic discussion + Option D decision`) : ajoute item `(0) PRIORITÉ MATIN` dans Saturday row + section Ajustements détaillée avec contexte de la décision + Option D + **5 points à trancher samedi matin**. Marqué non-coupable.
+
+  - **Décision stratégique actée (midi)** : **Option D** pour Phases 2-3-4 — saupoudrer Nine to Fine sur Phases 2-3 (**1.5 j/sem** au lieu de 1) pour viser **v1 polishée + déployée mi-juillet**, et reformuler Phase 4 en **sprint d'enrichissement** (IA + Tailwind v4 polish + deploy + refactor partiel) plutôt que refonte SPA complète. **+ Contrainte additionnelle** : produire **un projet React/TS vitrine séparé** d'ici fin Phase 4 (en plus de N to F). 5 points concrets à trancher samedi matin (voir section "Ajustements pour la suite", point "PRIORITÉ MATIN").
+
+  - **Workflow git matinée** : 3 PR ouvertes et mergées (#39, #40, et le récap matinée lui-même). Cleanup branche locale `chore/planning-saturday-strategic-refresh` faite. **Branche `feature/garment-crud` créée vide**, à rebaser sur main à jour avant attaque CLI cet aprem.
+
+  - **Méta-leçon prise (à graver)** : **vérifier la date des ressources externes avant de les recommander** — leçon après ma fausse référence initiale à une "playlist Tailwind v4" sur YouTube Tailwind Labs qui n'existait pas / était périmée. À étendre à toute ressource externe (tutos, vidéos, articles). Ma mémoire d'entraînement peut être périmée — confronter à la réalité avant de recommander.
+
+  - **Aprem prévu** : CRUD Garment selon programme sem 22 vendredi (controller + vues new/show/index/edit + flow local + premier styling Tailwind sur page Garment). Setup : Claude Code CLI en Ghostty split (panel shell pour `rails s` + git + VS Code, panel CLI pour coaching). Mode coach actif : Chris code 100% du code de prod, Claude challenge sans toucher aux fichiers via Edit/Write (sauf bypass explicite).
+
 **Blocages**
 - _Rien à signaler pour l'instant._
 
