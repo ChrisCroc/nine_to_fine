@@ -241,8 +241,55 @@ Source unique de vérité pour le journal de bord récent. À mettre à jour à 
 
   - **Rendu visuel non vérifié par Claude** (lecture de code uniquement) : validation à l'œil par Chris dans le navigateur (dégradé cohérent avec la home, sticky au scroll, scale des cards, lisibilité du titre index sur le haut clair du dégradé).
 
+- **Samedi 30 mai (matin + début aprem)** : **Refonte stratégique Phases 2-3-4 + restructuration documentaire** livrée. Brainstorm long (~3h) avec Claude en mode dynamic, suivi de l'implémentation Subagent-Driven. **PR #49 mergée** (commit `28d5df6` sur main) + **PR #48 fermée en supersedence** (son contenu inclus dans #49). Cleanup branches local + remote (12 références distantes orphelines élaguées en passant).
+
+  **Livrables PR #49** :
+  - Architecture documentaire complète sous `docs/planning/` : `PHASES/phase-{1,2,3,4}.md` (refonte complète des Phases 2-3-4 selon Option D), `SUIVI/SUIVI-COURANT.md` (rolling sem en cours + précédente) + `SUIVI/ARCHIVE/` (dossier vide avec `.gitkeep` pour rotation mensuelle future), `DECISIONS/2026-05-30-refonte-strategique-phases-2-3-4.md` (decision log persistant), `PROGRESSION.md` (extrait de l'ancien PLANNING.md, état Odin/Tailwind/React/TS/Next), `JALONS-EMPLOI.md` (reformulé détaillé avec colonne vitrines présentables par jalon).
+  - **PLANNING.md slim** : passé de **465 → 85 lignes** (vue stratégique + portfolio 3 artefacts + plan haut niveau + ritual + règles péda + pointeurs).
+  - **`FEATURES_FUTURES.md` racine** : backlog v1+ structuré avec 6 items déjà documentés (drag-and-drop composition outfit en priorité haute, autocomplete Stimulus tags, combinaison de filtres, Ransack, refactor partiel modèle, audit perf Bullet+Solid_cache).
+  - **CLAUDE.md projet** : imports `@` ajustés (4 imports au lieu de 1 : PLANNING + SUIVI-COURANT + PROGRESSION + PHASES/phase-1) + ajout règle 7 "Lecture adaptée du Suivi" (mardi-vendredi focus veille / lundi lecture intégrale sem précédente).
+  - **Decision log persistant** : matérialise les 5 décisions actées (Q1 scope v1, Q2 cadence N to F 1.5j/sem, Q3 projet React/TS prep entretiens + skill `job-tracker`, Q4 structure AA P4 + scope Minimal, Q5 forme refonte) + bonus split B+ + règle lecture Suivi.
+
+  **Décisions stratégiques majeures actées** :
+  - **Portfolio final = 3 artefacts** (au lieu de 2 prévus initialement) : Nine to Fine + Outil prep entretiens (React/TS Phase 4) + **skill Claude Code `job-tracker`** (à créer samedi sem 25, 20-21 juin). Le 3e artefact différencie fortement le profil junior 2026.
+  - **N to F v1 polishée + déployée mi-juillet sem 29** via Kamal sur Hetzner (Fly.io fallback explicite si VPS bloque à J-3). Scope = Outfit CRUD + composition + Likes/Comments/Follows + profil public + tags comma-separated + recherche par nom + filtres link_to.
+  - **Phase 4 = sprint enrichissement Minimal** (IA suggester + tests + polish + démo 90s), pas refonte SPA. Escalade Standard conditionnelle (Bullet + indexes + Solid_cache) si on avance.
+  - **Phase 4 structure AA** : lun-mar N to F / mer-jeu React/TS / vendredi 100% emploi / soir prep entretien / samedi rattrapage+entretiens.
+
+  **Méthode utilisée** : brainstorming superpowers (5 questions + 1 bonus split documentaire), spec écrit (`docs/superpowers/specs/2026-05-30-phases-2-3-4-refonte-design.md`), plan d'implémentation (`docs/superpowers/plans/2026-05-30-phases-2-3-4-refonte-implementation.md`, 15 tasks), exécution Subagent-Driven (3 lots = 3 commits atomiques scaffold/PLANNING/CLAUDE.md), vérifications post-implémentation, push + PR. PR #49 ouverte puis mergée dans la matinée.
+
+  **Méta-leçons retenues** :
+  - **Claude doit vérifier la doc officielle avant de poser des questions hors scope** : leçon prise sur Q1bis Asset Pipeline (`Cache-Control` est en section 3.3 du Rails Guide, pas dans sections 1-3 lues) où j'avais sur-questionné. Réflexe à généraliser : fetch les sources avant de poser des questions de profondeur.
+  - **Vérifier la date des ressources externes avant de les recommander** : fausse référence à une playlist Tailwind v4 sur YouTube qui n'existe pas (vendredi 29 mai). Ma mémoire d'entraînement peut être périmée — confronter à la réalité avant de recommander.
+
+- **Samedi 30 mai (après-midi début)** : **Rattrapage Odin — 3 chapitres en lecture profonde** (chap. 17 Asset Pipeline + chap. 18 Importmaps + chap. 19 Turbo Drive). Pour chaque : lecture par Chris, Knowledge Check officielles répondus par écrit + questions de challenge de Claude, **note Obsidian de consolidation** rédigée par Claude.
+
+  **Livrables Obsidian** (`~/Obsidian/DevJobReady/Apprentissage/Rails/Asset Pipeline & Hotwire/`) :
+  - `the-asset-pipeline.md` (~200 lignes, 9 sections) — Propshaft vs Sprockets dans Rails 8, mécanisme fingerprinting (hash SHA256 + manifest .manifest.json), pourquoi le fingerprinting permet caching HTTP agressif (`Cache-Control: max-age=31536000, immutable`), helpers Rails (image_tag, asset_path, stylesheet_link_tag, javascript_include_tag), application directe Nine to Fine (Tailwind builds + Propshaft sert), 5 pièges à graver.
+  - `importmaps.md` (~300 lignes, 12 sections) — historique Webpacker → Importmaps, mécanisme "string substitution" + bare module specifiers + ES6 modules + HTTP/2 multiplexing, anatomie d'un `pin` (simple, `to:`, `pin_all_from`, option `preload:`), commandes `bin/importmap` (pin/unpin/update/--download), CDN JSPM vs vendor/javascript local, modulepreload + HTTP/2. Section dédiée Nine to Fine avec preuves de `find` dans les gems (Turbo+Stimulus embarqués → pas de vendor/ ni --download nécessaires).
+  - `turbo-drive-fundamentals.md` (~450 lignes, 13 sections) — Hotwire overview (Turbo+Stimulus+Strada) + matrice Drive/Frames/Streams, page navigation (visit = Location + Action), 3 actions (advance/replace/restore avec correction de la confusion `replace` ≠ Frames), override méthode HTTP (data-turbo-method), désactivation (data-turbo="false" sur élément/parent + ré-activation enfant), pattern PRG + pourquoi Turbo rejette HTTP 200 sur form (raison structurelle), data-turbo-confirm modal native, prefetch on hover Turbo 8 (actif default Rails 8), 6 pièges à graver. Complète `turbo-status-codes-303-422.md` existante.
+  - **Index Rails** (`Apprentissage/Rails/index.md`) mis à jour : 3 nouvelles entrées avec mini-description.
+
+  **Pièges techniques importants découverts ou consolidés ce jour** :
+  - **Confusion classique** Turbo Drive `replace` (= `history.replaceState`, charge toute la page) **vs** Turbo Frames (= update partiel d'une zone définie). Erreur fréquente que Chris a faite et qui a été corrigée en live, puis gravée dans la note Turbo Drive.
+  - **Syntaxe Ruby vs HTML keyword args** : `alt="..."` (HTML attribute, INVALIDE en Ruby) vs `alt: "..."` (Ruby keyword argument). Chris a fait l'erreur 2 fois dans la même session. **À graver dans une note Obsidian Transverses dédiée** (mentionnée dans la note `the-asset-pipeline.md` section "Pièges").
+  - **Virgule entre arguments d'appel helper** : `image_tag "logo.png" alt: "..."` (sans virgule, erreur de syntaxe Ruby) → toujours `image_tag "logo.png", alt: "..."`. Lié au piège précédent.
+  - **Migration UJS → Turbo** sur DELETE : `link_to "Delete", path, method: :delete` (UJS Rails 6, ne marche plus) → `data: { turbo_method: :delete }` sur link_to, ou `method: :delete` direct sur button_to (qui génère un vrai form avec hidden `_method`).
+  - **Pattern PRG (POST-Redirect-GET)** compris en profondeur : pourquoi Turbo Drive rejette explicitement HTTP 200 sur form submission. Raison technique : ambiguïté d'URL + risque de double-submit au refresh.
+  - **Prefetch on hover Turbo 8** : actif **par défaut** dans Rails 8 (donc Nine to Fine). Tous les `link_to` sont préfetchés au mouseover. Désactiver explicitement (`data: { turbo_prefetch: false }`) sur endpoints chers ou avec effets de bord trackés.
+
+  **Bonus info délivrée hors scope du chapitre Odin** : section sur le caching HTTP `Cache-Control: max-age=31536000, immutable` qui n'était pas dans les sections 1-3 du Rails Guide lues, mais qui explique POURQUOI le fingerprinting est révolutionnaire. Source officielle Rails Guide section 3.3 citée dans la note.
+
+- **Samedi 30 mai (fin d'aprem)** : Codification de la **règle pédagogique 11** dans `PLANNING.md` (section "Règles pédagogiques Claude → Chris"). **PR #50 ouverte** (commit `ab38bfa` sur branche `chore/planning-rule-11-obsidian-summaries`) — à merger par Chris.
+
+  **Contexte** : la règle "Claude rédige une note Obsidian après chaque lecture profonde + met à jour l'index techno" est appliquée par Claude depuis sem 22 (notes form-basics, advanced-forms, scoping, belongs-to-error-key-trap, etc.) mais n'était **explicitement listée** ni dans CLAUDE.md global, ni dans CLAUDE.md projet, ni dans PLANNING.md. Chris a demandé l'ajout en cours de samedi (pendant la lecture Importmaps) — règle 11 ajoutée juste après la règle 10 "Sandbox par techno".
+
+  **Contenu de la règle 11** (résumé) : note de consolidation dans `~/Obsidian/DevJobReady/Apprentissage/<Techno>/<sous-dossier>/<concept>.md` avec frontmatter standardisé (`created`, `stack`, `version`, `chapitre_doc`/`chapitre_odin`, `tags`, `sources`), sections (a) résumé conceptuel, (b) application directe Nine to Fine, (c) pièges à graver, (d) Knowledge Check répondus par écrit, (e) liens internes, (f) à approfondir plus tard. Index techno mis à jour avec mini-description.
+
+- **Samedi 30 mai (fin de journée)** : Tentative de brainstorm pour le **skill Claude Code `/end-of-day`** — **abandonnée en cours** par Chris suite à incompréhension côté Claude sur le besoin réel (cf. Blocages). Décision : reprendre plus tard avec une approche différente (investigation préalable de l'onglet routine natif Claude Code par Chris). **Identification de 4 routines à brainstormer séparément** (`/end-of-day`, `/courses-week-end`, `/commands-of-the-week`, `/plugins-and-gems`) pour ne pas refaire l'erreur du périmètre flou. Aucun fichier produit.
+
 **Blocages**
-- _Rien à signaler pour l'instant._
+- **Brainstorm skill `/end-of-day` interrompu** (samedi 30 mai fin de journée) : Claude a sauté l'étape "comprendre le besoin réel" et est parti direct sur des questions techniques (emplacement projet/global, mécanisme scheduled-tasks, sources de données auto-collectées vs interactives) sans clarifier d'abord que (a) `/end-of-day` est une **routine planifiée nocturne** (22h-2h), pas un slash command interactif, (b) le Suivi formel `SUIVI-COURANT.md` est **déjà la routine programmée de Claude en fin de session**, donc `/end-of-day` doit générer un **document personnel SÉPARÉ** (~2 pages) à lire avant dodo, pas le Suivi, (c) Chris a un **onglet routine natif** dans Claude Code que Claude aurait dû mentionner d'entrée plutôt que de proposer un mécanisme custom. → Frustration légitime de Chris. À reprendre plus tard (dimanche ou autre samedi) avec : investigation de l'onglet routine d'abord, périmètre clair sur le **doc personnel** (pas le Suivi formel), pas de questions de design avant compréhension du besoin réel.
 
 **Ajustements pour la suite**
 
@@ -262,7 +309,15 @@ Source unique de vérité pour le journal de bord récent. À mettre à jour à 
 
   **Méthode samedi** : ouvrir cette section avant de toucher au code de la journée. Discuter point par point avec Claude (challenge attendu). Acter les décisions dans le PLANNING.md (refonte des tableaux). Seulement ensuite passer aux 5 autres chantiers tactiques (Odin catch-up, sandbox exos, etc.).
 
-- **Samedi 30 mai (suite)** : voir détail des 5 chantiers tactiques dans le tableau "Sem 22" — rattrapage Odin 17/18/19, exo sandbox piège `default: 0 + validates presence` (polymorphic déplacé à dimanche), Tailwind layouts, routine `/end-of-day`, ménage dotfiles.
+- **Samedi 30 mai (bilan)** : sur les 5 chantiers tactiques prévus (rattrapage Odin, exo sandbox piège `default: 0`, Tailwind layouts, routine `/end-of-day`, ménage dotfiles), **seuls (1) rattrapage Odin et (4) brainstorm `/end-of-day`** ont été abordés. **Le brainstorm `/end-of-day` est interrompu** (à reprendre, voir Blocages). **Reportés à dimanche** :
+  - Exo sandbox piège `default: 0 + validates presence` (Rails sandbox)
+  - Exo `_field` partial DRY sur `_form.html.erb` Garment
+  - Mini-exo Tailwind grid 60/40 sandbox
+  - Exo Rails sandbox polymorphic (déjà initialement reporté de jeudi soir à samedi → re-reporté samedi → dimanche)
+  - Vidéo Tailwind Labs "Building responsive layouts" + navbar responsive
+  **Reportés à plus tard (pas dimanche)** :
+  - Brainstorm `/end-of-day` (et 3 autres routines identifiées : `/courses-week-end`, `/commands-of-the-week`, `/plugins-and-gems`) → à reprendre quand Chris aura un moment pour investiguer l'onglet routine natif Claude Code en amont.
+  - Ménage dotfiles (chantier coupable, restera coupé d'un samedi sur l'autre tant qu'il n'est pas urgent).
 
 - **Dimanche 31 mai — DÉROGATION explicite à la règle "Dimanche OFF obligatoire"** (actée vendredi 29 mai en fin de journée).
 
@@ -270,10 +325,16 @@ Source unique de vérité pour le journal de bord récent. À mettre à jour à 
 
   **Challenge de Claude refusé par Chris** : Claude a explicitement challengé la décision en proposant 2 alternatives (Option A : redistribution sur lundi soir / Option B : 1 seul exo light dimanche). Chris a maintenu sa demande avec l'argument "je sais ce que je fais". Décision respectée et notée ici pour traçabilité.
 
-  **Les 3 exos décalés dimanche** (détail dans la cellule du tableau sem 22) :
-  1. **`_field` partial DRY** sur `app/views/garments/_form.html.erb` — extraction du pattern d'input répété 5×. Court (~20-30 min). Mentionné explicitement comme "reporté délibérément" dans le récap Tailwind PR #46.
-  2. **Mini-exo Tailwind grid 60/40 sandbox** dans `~/code/sandbox/tailwind/grid-60-40/` — reproduire le split de `show.html.erb` (~30-45 min).
-  3. **Polymorphic Rails sandbox** dans `~/code/sandbox/rails/polymorphic/` — `Note` polymorphique sur `Project`/`Task`, `as: :notable`, `has_many through:` + `source/source_type`, cascade. Initialement reporté de jeudi soir à samedi, redéplacé samedi → dimanche pour alléger samedi (~45-60 min).
+  **Élargissement samedi 30 mai** : la dérogation initialement prévue pour "3 petits exos courts" devient **journée d'exos** complète (matin + après-midi) — Chris a décidé samedi soir de transformer dimanche en journée dédiée aux exos vu l'avancement très chargé de samedi (refonte stratégique + 3 chapitres Odin + règle péda 11). Pas de slot Odin/Tailwind/projet aprem prévu, uniquement exos.
+
+  **Liste des exos dimanche 31 mai** (toutes consolidations issues des sem 22) :
+  1. **Polymorphic Rails sandbox** dans `~/code/sandbox/rails/polymorphic/` — `Note` polymorphique sur `Project`/`Task`, `as: :notable`, `has_many through:` + `source/source_type`, cascade. Initialement reporté de jeudi soir → samedi → dimanche. **Priorité 1** (concept neuf jeudi 28 mai, le plus important à consolider).
+  2. **Piège `default: 0` + `validates presence`** : reproduire sur un autre model que Category. Comprendre quand un default DB est OK (valeur logiquement "vide" comme `false` pour un boolean) vs quand il rend `presence: true` muet.
+  3. **`_field` partial DRY** sur `app/views/garments/_form.html.erb` — extraction du pattern d'input répété 5×. Court (~20-30 min). Mentionné explicitement comme "reporté délibérément" dans le récap Tailwind PR #46.
+  4. **Mini-exo Tailwind grid 60/40 sandbox** dans `~/code/sandbox/tailwind/grid-60-40/` — reproduire le split de `show.html.erb` (~30-45 min).
+  5. **Si temps** : Vidéo Tailwind Labs "Building responsive layouts" + application sur la navbar Nine to Fine pour la rendre responsive.
+
+  **Bilan dérogation Dimanche OFF — toujours dérogation 1/3 sur 6 semaines glissantes** : l'élargissement de "3 exos courts" à "journée d'exos" reste la même dérogation (motif identique : exos sandbox reportés). Pas de double-comptage.
 
   **Compteur dérogations à surveiller sur 18 semaines** :
   - Dérogation 1 : **dimanche 31 mai 2026** (sem 22). Motif : exos sandbox décalés.
