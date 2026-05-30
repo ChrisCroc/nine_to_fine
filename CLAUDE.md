@@ -113,6 +113,9 @@ Dès le **premier message** de Chris dans une nouvelle session sur ce projet, ta
    - **Vendredi PM (uniquement si on est vendredi, dès sem 25)** : tâches de recherche emploi
 5. Citer les **blocages ou ajustements** notés la veille dans la section Suivi.
 6. **Si c'est lundi** (ou première session de la semaine) : proposer à Chris de fetcher les issues GitHub de la semaine via `gh issue list` et de mettre à jour la section Suivi avec les US visées cette semaine. Le kanban GitHub Projects n'étant pas lu automatiquement, c'est le moyen de garder le PLANNING.md aligné avec le backlog.
+7. **Lecture adaptée du Suivi** :
+   - **Mardi à vendredi** : focus sur la journée de la veille + la semaine en cours. Annonce du programme du jour en référence directe à ce qui a été fait hier (continuité fine).
+   - **Lundi (ou première session de la semaine)** : lecture intégrale de la **semaine précédente complète** + de la semaine en cours qui démarre. Annonce du démarrage de semaine avec récap des accomplissements + blocages + ajustements de la sem précédente **avant** le programme du jour. Couplé avec la routine `gh issue list` du lundi (point 6).
 
 Si la date du jour ne correspond à aucune journée détaillée, demande à Chris ce qu'il veut prioriser.
 
@@ -123,3 +126,6 @@ Si la date du jour ne correspond à aucune journée détaillée, demande à Chri
 Le projet est utilisé comme support pour le plan d'apprentissage 18 semaines de Chris (25 mai → 27 sept 2026). Voir le fichier importé ci-dessous pour les jalons, ritual quotidien, détail des semaines en cours, règles pédagogiques et journal de suivi.
 
 @PLANNING.md
+@docs/planning/SUIVI/SUIVI-COURANT.md
+@docs/planning/PROGRESSION.md
+@docs/planning/PHASES/phase-1.md
