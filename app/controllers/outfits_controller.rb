@@ -1,5 +1,6 @@
 class OutfitsController < ApplicationController
   before_action :set_outfit, only: %i[show edit update destroy]
+  before_action :set_garments, only: %i[new edit create update]
 
   def index
     @outfits = current_user.outfits.includes(:garments).order(created_at: :desc)
@@ -43,6 +44,10 @@ private
   end
 
   def outfit_params
-    params.expect(outfit: [ :name, :description ])
+    params.expect(outfit: [ :name, :description, garment_ids: [] ])
+  end
+
+  def set_garments
+    @garments = current_user.garments.order(created_at: :desc)
   end
 end
