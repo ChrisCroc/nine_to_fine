@@ -1,5 +1,42 @@
 @import "tailwindcss";
+@import "./tom-select.css";
 
 @theme {
   --color-champagne: #E7DBC4;
 }
+
+/* Tom Select — thème Nine to Fine */
+  .ts-control {
+    @apply flex w-full flex-wrap items-center cursor-text gap-1 rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm;
+  }
+  .ts-control > input {
+    @apply grow;
+  }
+  .ts-wrapper.focus .ts-control {
+    @apply border-zinc-500 ring-2 ring-zinc-500 outline-none;
+  }
+
+  /* pills sélectionnés */
+  .ts-control .item {
+    @apply inline-flex items-center gap-1 rounded-full bg-zinc-900 text-champagne text-sm px-3 py-1;
+  }
+  .ts-control .item .remove {
+    @apply ml-1 pl-1 border-none text-champagne/70 hover:text-white;
+  }
+
+  /* panneau déroulant */
+  .ts-dropdown {
+    @apply mt-1 rounded-md border border-zinc-200 bg-white shadow-xl overflow-hidden;
+  }
+  .ts-dropdown .option {
+    @apply px-3 py-2 text-sm text-zinc-700;
+  }
+  .ts-dropdown .active {
+    @apply bg-zinc-100 text-zinc-900;
+  }
+  .ts-dropdown .no-results {
+    @apply px-3 py-2 text-sm text-zinc-400 italic;
+  }
+  .ts-control .item .remove {
+    @apply ml-1 pl-2 border-l border-zinc-600 text-champagne/70 hover:text-white;
+  }

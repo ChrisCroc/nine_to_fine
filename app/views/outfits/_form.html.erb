@@ -14,7 +14,9 @@
   </div>
 
   <div class="mb-4">
-    <%= f.collection_check_boxes :garment_ids, @garments, :id, :name %>
+    <%= f.collection_select :garment_ids, @garments, :id, :name,
+      { include_blank: false },
+      { multiple: true, data: { controller: "select" } } %>
     <% if outfit.errors[:garments].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= outfit.errors[:garments].first %></span>
     <% end %>
