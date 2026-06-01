@@ -5,8 +5,8 @@ class OutfitTest < ActiveSupport::TestCase
   #   assert true
   # end
 
-  test "is valid with a name and a user" do
-    outfit = Outfit.new(name: "New Outfit", user: users(:chris))
+  test "is valid with a name and a user and at least one garment" do
+    outfit = Outfit.new(name: "New Outfit", user: users(:chris), garments: [ garments(:black_tshirt) ])
     assert outfit.valid?
   end
 
@@ -34,18 +34,24 @@ class OutfitTest < ActiveSupport::TestCase
     assert_includes duplicate.errors[:name], "has already been taken"
   end
 
+  test "is invalid without at least one garment" do
+    outfit = Outfit.new(name: "Empty outfit", user: users(:chris))
+    assert_not outfit.valid?
+    assert_includes outfit.errors[:garments], "can't be blank"
+  end
+
   test "is valid when another user has an outfit with the same name" do
-    outfit = Outfit.new(name: "Casual Friday", user: users(:john))
+    outfit = Outfit.new(name: "Casual Friday", user: users(:john), garments: [ garments(:white_sneakers) ])
     assert outfit.valid?
   end
 
-   test "can access its garments through the outfit" do
+  test "can access its garments through the outfit" do
     outfit = outfits(:casual_friday)
     assert_equal 2, outfit.garments.count
     assert_includes outfit.garments, garments(:black_tshirt)
   end
 
-    test "can have tags through taggings" do
+  test "can have tags through taggings" do
     outfit = outfits(:casual_friday)
     assert_includes outfit.tags, tags(:business)
   end
