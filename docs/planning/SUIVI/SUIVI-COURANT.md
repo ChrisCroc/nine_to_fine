@@ -85,6 +85,26 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 
 - **Lundi 1er juin (méta)** — Création `~/Obsidian/DevJobReady/to-do.md` (backlog vivant exos/dettes/brainstorms reportés/chantiers coupables) — lu et cité uniquement sur demande explicite. 2 règles ajoutées en mémoire feedback : `feedback-todo-file.md` (règle to-do) + `feedback-no-pause-asking.md` (ne plus demander pause/continue). Refactor SUIVI-COURANT.md sem 22 (64k → version condensée, détail technique migré vers notes Obsidian + `to-do.md` + `DECISIONS/`).
 
-- **Lundi 1er juin (aprem, Claude Code CLI)** — _à venir : démarrage CRUD Outfit (routes + controller + 5 vues), branche `feature/outfit-crud`._
+- **Lundi 1er juin (aprem, Claude Code CLI)** — **CRUD Outfit complet + composition + combobox JS, 3 PR mergées.**
 
-**Blocages** : aucun.
+  - **PR #53 — CRUD Outfit nu** (name + description). `resources :outfits`, controller 7 actions calqué sur Garment (sans category), 5 vues + `_form`. `show` en split vertical 60/40 responsive : mobile = flux naturel (card grandit, page scrolle), desktop = grille fixe `md:h-[85vh] md:grid md:grid-rows-5` + `row-span-3/2`. Décision design tranchée : `position` spatial (hyp. B) reporté → composition simple d'abord.
+
+  - **PR #54 — composition + validation**. Setter gratuit `garment_ids=` (jointure pure → pas besoin de `fields_for`) + `validates :garments, presence: true` (voit la collection en mémoire avant save). Scope `current_user.garments` (sécurité). Affichage des pills dans l'index. Détail → [[has-many-through-composition-and-presence-validation]].
+    ```ruby
+    params.expect(outfit: [ :name, :description, garment_ids: [] ])
+    validates :garments, presence: true
+    ```
+
+  - **PR #55 — combobox Tom Select** (branche `feature/combobox-js`). Dropdown searchable multi-select à pills via importmap + Stimulus, en remplacement des checkboxes. Setup douloureux (vendoring importmap qui 404 en cascade). Solution = pin CDN sur le build complete wrappé `+esm`. Détail + 7 pièges → [[tom-select-importmap-stimulus]].
+    ```ruby
+    pin "tom-select", to: "https://cdn.jsdelivr.net/npm/tom-select@2.6.1/dist/js/tom-select.complete.js/+esm"
+    ```
+    CSS Tom Select vendorisée proprement (inlinée dans le build Tailwind via `@import`).
+
+  - **Pièges DOM debug** (card index) : `<a>` dans `<a>` et balise fermante dans la boucle → [[erb-nested-anchor-and-loop-tag-pitfalls]].
+
+  - **Reports délibérés** → `to-do.md` : `position` spatial (canvas drag-drop, atelier Stimulus dédié), styling vue `edit` outfit.
+
+**Blocages**
+
+- **Setup Tom Select / importmap = ~35 min de trial-and-error** (build modulaire 404, UMD sans export default, vendoring qui re-télécharge, typo de casse). Leçon actée en mémoire feedback `feedback-verify-external-setup.md` : pour les setups d'outils externes fragiles, vérifier l'URL/format exact (WebFetch) **avant** de faire exécuter des commandes, et expliquer chaque ligne au fil de l'eau.

@@ -4,17 +4,18 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
 
 ## Odin Project — Full Stack Ruby on Rails
 
-- **Fait** (chap. 1-15 du parcours) : Introduction → Rails Basics (Routing, Controllers, Views, Project Store App, Deployment) → Active Record Basics → Migrations → Basic Validations → **Basic Associations** (✅ dernier complété)
-- **Prochain (ordre Odin officiel, lecture profonde de consolidation post-bootcamp — les "Project: X" sont remplacés par exos sandbox + Nine to Fine, voir règle péda 9)** :
-  - 17. The Asset Pipeline
-  - 18. Importmaps
-  - 19. Turbo Drive
-  - 20. Form Basics
-  - 22. Sessions, Cookies and Authentication
-  - 24. **Active Record Queries** (priorisé hors ordre sem 22 pour usage immédiat console)
-  - 25. Active Record Associations (avancées : polymorphic, has_many through, self-join)
+- **Fait** (chap. 1-15 du parcours) : Introduction → Rails Basics (Routing, Controllers, Views, Project Store App, Deployment) → Active Record Basics → Migrations → Basic Validations → **Basic Associations**
+- **Fait — consolidation post-bootcamp (sem 22-23, lecture profonde, "Project: X" remplacés par sandbox + Nine to Fine, règle péda 9)** :
+  - 17. The Asset Pipeline ✅
+  - 18. Importmaps ✅
+  - 19. Turbo Drive ✅
+  - 20. Form Basics ✅
+  - 22. Sessions, Cookies and Authentication ✅ (lundi 1 juin)
+  - 24. Active Record Queries ✅ (priorisé hors ordre sem 22)
+  - 25. Active Record Associations (polymorphic, has_many through, self-join) ✅
+  - 28. Advanced Forms ✅
+- **Prochain (ordre Odin officiel)** :
   - 27. Active Record Callbacks
-  - 28. Advanced Forms
   - 30. APIs and Building Your Own
   - 31. Working with External APIs
   - 34-37. CSS Bundling, JS Bundling, Turbo, Stimulus
@@ -26,11 +27,10 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
 
 ## Tailwind CSS
 
-- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview (blog post lancement + docs CSS-first, voir notes Obsidian)
+- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin, voir [[flexbox-grid-fundamentals]], [[spacing-sizing-system]])
 - **Prochain (à faire dans l'ordre)** :
-  1. Docs section **"Layout"** (Flexbox, Grid, Spacing) — appliquer immédiatement sur Nine to Fine
-  2. Tailwind Labs YouTube vidéo **"Building responsive layouts"** (samedi 30 mai prévu)
-  3. Docs section **"Customization"** (theme tokens, `@theme`, variants custom)
+  1. Tailwind Labs YouTube vidéo **"Building responsive layouts"**
+  2. Docs section **"Customization"** (theme tokens, `@theme`, variants custom)
 
 ## React (à démarrer Phase 2, sem 26)
 
