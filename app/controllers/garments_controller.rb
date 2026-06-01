@@ -35,7 +35,7 @@ class GarmentsController < ApplicationController
 
   def destroy
     @garment.destroy
-    redirect_to garments_path, status: :see_other, notice: "Garment was successfully destroyed."
+    redirect_to garments_path, status: :see_other, notice: "Garment was successfully deleted."
   end
 
 private

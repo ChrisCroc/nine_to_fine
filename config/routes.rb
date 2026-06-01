@@ -14,5 +14,6 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :garments
+  resources :outfits
   root to: "pages#home"
 end

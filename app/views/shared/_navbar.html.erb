@@ -1,8 +1,9 @@
 <nav class="bg-zinc-800 py-4 px-8 flex items-center justify-between">
-  <div>
+  <div class="flex items-center gap-2">
     <!-- Logo -->
     <% if user_signed_in? %>
-      <%= link_to "Wardrobe", garments_path, class: "text-champagne hover:text-white text-lg font-bold" %>
+      <%= link_to "Closet /", garments_path, class: "text-champagne hover:text-white text-lg font-bold" %>
+      <%= link_to "Dressing", outfits_path, class: "text-champagne hover:text-white text-lg font-bold" %>
     <% end %>
   </div>
   <div class="flex gap-4">
