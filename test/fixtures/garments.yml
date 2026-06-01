@@ -14,3 +14,10 @@ blue_jeans:
   brand: Levi's
   user: chris
   category: bottom
+
+white_sneakers:
+  name: White Sneakers
+  color: white
+  brand: Adidas
+  user: john
+  category: footwear
