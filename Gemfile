@@ -48,7 +48,7 @@ gem "devise"
 # Use Active Storage on Amazon S3 [https://guides.rubyonrails.org/active_storage_overview.html#amazon-s3-service]
 
 gem "active_storage_validations"
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible 
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
