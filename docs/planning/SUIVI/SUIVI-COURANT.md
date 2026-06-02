@@ -105,6 +105,8 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 
   - **Reports délibérés** → `to-do.md` : `position` spatial (canvas drag-drop, atelier Stimulus dédié), styling vue `edit` outfit.
 
+- **Lundi 1er juin (soir, Claude app)** — Exo dirigé sandbox `auth-from-scratch` (`has_secure_password` from scratch sans Devise) dans `~/code/sandbox/rails/`. Commit `f0c3609`. Périmètre : `AuthExoUser` + `AuthExoSessionsController` (new/create/destroy) + form login + helper `current_user` memoized + `before_action :require_login` global + `skip_before_action only: %i[new create]`. Note exo : [[auth-from-scratch-sandbox-exo]] (concepts incorporés en cours d'exo : index DB unique perf + intégrité atomique, `URI::MailTo::EMAIL_REGEXP`, séparation model/form pour confirmation password opt-in, REST = 1 controller / 1 ressource, opérateur `||=` memoization). 2 questions style entretien archivées : [[Entretiens/Rails/auth-from-scratch]] (`find_by(id:)` vs `find()` + `skip_before_action only:` sur Sessions). **Réponses orales chronométrées 90 sec à faire mardi matin 2 juin** au démarrage de session.
+
 **Blocages**
 
 - **Setup Tom Select / importmap = ~35 min de trial-and-error** (build modulaire 404, UMD sans export default, vendoring qui re-télécharge, typo de casse). Leçon actée en mémoire feedback `feedback-verify-external-setup.md` : pour les setups d'outils externes fragiles, vérifier l'URL/format exact (WebFetch) **avant** de faire exécuter des commandes, et expliquer chaque ligne au fil de l'eau.
