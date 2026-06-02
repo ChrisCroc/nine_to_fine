@@ -120,7 +120,10 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
   - **HEIC iPhone** : Safari/macOS convertit souvent le HEIC en JPEG à l'upload (d'où inflation de taille → seuil monté à 10 Mo). `image/heic`/`image/heif` gardés en défense.
   - **Validation via gem `active_storage_validations`** (option custom écrite d'abord pour comprendre, puis gem) : `content_type` + `size`, avec `spoofing_protection: true` (magic bytes via `file`/Marcel) → rejette un PDF renommé `.jpg`.
   - **Autres pièges debug** : `garment` (local de boucle) vs `@garment` (var d'instance) en `show` ; `object-cover`/`fill` (rogne) vs `object-contain`/`limit` (entier + bandes) → ratio `aspect-5/6` + fond blanc ; aperçu form gardé sur `blob&.persisted?` (« Cannot get a signed_id for a new record ») ; gem non chargée tant que serveur pas redémarré ; `spoofing_protection` = option de `content_type`, pas validateur racine.
-  - **Reports backlog `to-do.md`** : ⚠️ prod (HEIF dans libvips Docker + commande `file` pour spoofing) ; compression/resize à l'upload ; Stimulus lightbox (clic, pas hover) ; `file_field` perd la sélection après erreur ; tests Minitest model de la validation photo.
+  - **Reports backlog `to-do.md`** : ⚠️ prod (HEIF dans libvips Docker + commande `file` pour spoofing) ; compression/resize à l'upload ; Stimulus lightbox (clic, pas hover) ; `file_field` perd la sélection après erreur.
+  - Notes Obsidian : [[active-storage-fundamentals-and-variants]], [[active-storage-validations-and-pitfalls]], [[object-fit-and-aspect-ratio]].
+
+- **Mardi 2 juin (fin de journée, Claude Code CLI)** — **Tests Minitest model de la validation photo `Garment`, PR #61** (dette backlog comblée). 4 tests : image valide / sans photo (optionnel) / non-image rejeté / > 10 Mo rejeté. Fixtures réelles `valid.jpg` + `document.pdf` (générées vips/magick) car `spoofing_protection` lit les magic bytes. **Piège majeur : minitest 6 (Rails 8.1) a retiré `Object#stub`** → stub Ruby pur `define_singleton_method(:byte_size)` pour la branche taille. Suite complète : 47 runs, 0 failure. Note Obsidian : [[minitest-active-storage-validations]]. **Reste dette** : tests RSpec controller `GarmentsController` (7 actions + IDOR) → sem 24.
 
 **Blocages**
 
