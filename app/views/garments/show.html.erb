@@ -2,8 +2,12 @@
   <div class="w-full max-w-6xl bg-white rounded-xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-5">
 
     <%# Colonne photo (~60%) - futur swipe outfits %>
-    <div class="md:col-span-3 h-64 md:h-auto bg-zinc-100 flex items-center justify-center">
-      <span class="text-sm text-zinc-400">Photo (coming soon)</span>
+    <div class="md:col-span-3 h-64 md:h-auto bg-white flex items-center justify-center p-3">
+      <% if @garment.photo.attached? %>
+        <%= image_tag @garment.photo.variant(resize_to_limit: [ 400, 533 ], format: :webp), class: "h-full w-full object-contain" %>
+      <% else %>
+          <span class="text-sm text-zinc-400">No photo available</span>
+      <% end %>
     </div>
 
     <%# Colonne infos (~40%) %>
