@@ -41,11 +41,14 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 2.0"
-# From image_processing 2.x, mini_magick is a soft dependency and must be declared explicitly
-gem "mini_magick"
+# image_processing 2.x : le backend doit être déclaré explicitement (soft dependency)
+gem "ruby-vips"
 
 gem "devise"
 # Use Active Storage on Amazon S3 [https://guides.rubyonrails.org/active_storage_overview.html#amazon-s3-service]
+
+gem "active_storage_validations"
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible 
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
