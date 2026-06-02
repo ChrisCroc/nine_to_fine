@@ -13,9 +13,9 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
   - 22. Sessions, Cookies and Authentication ✅ (lundi 1 juin)
   - 24. Active Record Queries ✅ (priorisé hors ordre sem 22)
   - 25. Active Record Associations (polymorphic, has_many through, self-join) ✅
+  - 27. Active Record Callbacks ✅ (mardi 2 juin matin, voir [[callbacks]])
   - 28. Advanced Forms ✅
 - **Prochain (ordre Odin officiel)** :
-  - 27. Active Record Callbacks
   - 30. APIs and Building Your Own
   - 31. Working with External APIs
   - 34-37. CSS Bundling, JS Bundling, Turbo, Stimulus
@@ -27,10 +27,10 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
 
 ## Tailwind CSS
 
-- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin, voir [[flexbox-grid-fundamentals]], [[spacing-sizing-system]])
+- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin) + **Theme variables + Functions & Directives** (mardi 2 juin avant-midi, voir [[theme-variables-and-directives]])
 - **Prochain (à faire dans l'ordre)** :
-  1. Tailwind Labs YouTube vidéo **"Building responsive layouts"**
-  2. Docs section **"Customization"** (theme tokens, `@theme`, variants custom)
+  1. **Vidéo Tailwind Labs "Building responsive layouts"** — à vérifier qu'elle existe / est à jour v4 via WebFetch avant lecture (cf. règle `feedback-verify-external-setup`)
+  2. Docs section **Dark mode** + **Colors palette** (approfondissement Customization)
 
 ## React (à démarrer Phase 2, sem 26)
 
