@@ -45,7 +45,9 @@ private
   end
 
   def garment_params
-    params.expect(garment: [ :name, :color, :description, :brand, :category_id ])
+    permitted = params.expect(garment: [ :name, :color, :description, :brand, :category_id, :photo ])
+    permitted.delete(:photo) if permitted[:photo].blank?
+    permitted
   end
 
   def set_categories
