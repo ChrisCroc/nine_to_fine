@@ -72,8 +72,33 @@ class GarmentTest < ActiveSupport::TestCase
     assert_includes garment.outfits, outfits(:casual_friday)
   end
 
-    test "can have tags through taggings" do
+  test "can have tags through taggings" do
     garment = garments(:black_tshirt)
     assert_includes garment.tags, tags(:summer)
+  end
+
+  test "is valid with an attached image" do
+    garment = garments(:black_tshirt)
+    garment.photo.attach(io: file_fixture("valid.jpg").open, filename: "valid.jpg", content_type: "image/jpeg")
+    assert garment.valid?
+  end
+
+  test "is valid without a photo" do
+    assert garments(:black_tshirt).valid?
+  end
+
+  test "rejects a non-image file" do
+    garment = garments(:black_tshirt)
+    garment.photo.attach(io: file_fixture("document.pdf").open, filename: "document.pdf", content_type: "application/pdf")
+    assert_not garment.valid?
+    assert garment.errors[:photo].any?
+  end
+
+  test "rejects a file larger than 10MB" do
+    garment = garments(:black_tshirt)
+    garment.photo.attach(io: file_fixture("valid.jpg").open, filename: "valid.jpg", content_type: "image/jpeg")
+    garment.photo.blob.define_singleton_method(:byte_size) { 11.megabytes }
+    assert_not garment.valid?
+    assert_includes garment.errors[:photo], "must be smaller than 10MB"
   end
 end
