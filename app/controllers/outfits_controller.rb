@@ -3,7 +3,7 @@ class OutfitsController < ApplicationController
   before_action :set_garments, only: %i[new edit create update]
 
   def index
-    @outfits = current_user.outfits.includes(:garments).order(created_at: :desc)
+    @outfits = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ]).order(created_at: :desc)
   end
 
   def show
