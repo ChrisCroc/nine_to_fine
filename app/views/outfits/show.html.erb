@@ -2,8 +2,8 @@
   <div class="w-full max-w-6xl md:h-[85vh] bg-white rounded-xl shadow-xl overflow-hidden md:grid md:grid-rows-5">
 
     <%# Colonne photo (~60%) - futur swipe outfits %>
-    <div class="aspect-square w-full md:aspect-auto md:row-span-3 bg-zinc-100 flex items-center justify-center">
-      <span class="text-sm text-zinc-400">Photo (coming soon)</span>
+    <div class="aspect-square w-full md:aspect-auto md:row-span-3">
+      <%= render "collage", outfit: @outfit %>
     </div>
 
     <%# Colonne infos (~40%) %>

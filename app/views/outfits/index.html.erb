@@ -17,19 +17,16 @@
       <% else %>
 
       <%# Grille de cards %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <% @outfits.each do |outfit| %>
           <%= link_to outfit, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:z-10" do %>
-            <div class="h-48 bg-zinc-100 flex items-center justify-center">
-              <span class="text-sm text-zinc-400">Photo</span>
+            <div class="h-48">
+              <%= render "collage", outfit: outfit %>
             </div>
             <div class="p-4 flex flex-col gap-2">
               <%# ligne nom + tags %>
               <div class="flex items-start justify-between gap-2">
                 <h2 class="font-semibold text-zinc-900"><%= outfit.name %></h2>
-                <div class="rounded-xl bg-zinc-200 p-1">
-                  <h2>tags</h2>
-                </div>
               </div>
 
               <%# description, sous la ligne nom/tags %>
