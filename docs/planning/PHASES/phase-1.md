@@ -21,13 +21,15 @@
 
 Voir tableau détaillé jour par jour ci-dessous.
 
-### Sem 23 (1-7 juin) — anticipé
+### Sem 23 (1-7 juin)
 
-- Lundi : démarrage CRUD Outfit (routes + controller + index/show/new/edit/_form).
-- Mardi : composition outfit via `fields_for` (form imbriqué Outfit + OutfitGarment) + tests manuels.
-- Mercredi : Active Storage sur Garment (upload + preview + `image_processing`).
-- Jeudi : polish UI Outfit (split visuel comme Garment) + page composition cohérente.
-- Vendredi : intercalage du début de tags comma-separated si le temps + setup `bullet` gem.
+> **Re-sync 3 juin** : ~1 jour d'avance pris (composition tirée à lundi, Active Storage à mardi, polish UI Outfit à mercredi). Bullets ci-dessous alignés sur le réel ; détail jour par jour dans le Suivi.
+
+- Lundi : CRUD Outfit (routes + controller + 5 vues + `_form`) + composition via `garment_ids=` + combobox Tom Select. ✅
+- Mardi : Active Storage sur Garment (upload + variants WebP + validation type/taille) + tests Minitest. ✅
+- Mercredi : design des vues Outfit — collage adaptatif (mosaïque plafonnée + eager loading anti-N+1), PR #69. ✅
+- Jeudi : tags comma-separated (parse model `find_or_create_by` + UI input + pills) + setup gem `bullet` (remontés du vendredi anticipé). 🟡
+- Vendredi : **buffer** — exos sandbox reportés (N+1 provoqué/tué, logique du cap en Ruby pur, etc.) + respiration. 🟡
 
 ### Sem 24 (8-14 juin) — anticipé
 
