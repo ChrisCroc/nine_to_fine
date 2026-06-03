@@ -39,6 +39,7 @@ Volume cible : **40-55h/semaine** (8-11h par jour sur 5 jours + 4-5h le samedi).
 | **Avant-midi** | 2h30-3h | **Focus apprentissage** de la phase courante (Tailwind / React / TS / Next selon période) | 📖 **Lecture profonde** de la doc officielle — même logique que le matin |
 | **Après-midi** | 2h30-3h | **Production projet** (Nine to Fine en P1 / mini-projets en P2-3 / vitrine en P4) | 🛠️ **Application directe** des concepts du matin et du midi dans du code de prod |
 | **Soir** | 30-45 min | **Exercice dirigé avec Claude** dans la sandbox (`~/code/sandbox/<techno>/`) | 🎯 **Consolidation ciblée** : 1 exo min. par concept du jour (règle péda 8) |
+| **Fin de journée** | 5-10 min | **Reco 2 vidéos par Claude** (GoRails / Drifting Ruby ; Railscasts si concept intemporel flaggé) | 🎬 **Consolidation passive** : 2 vidéos backward (concept du jour) ou forward (concept à venir), choix selon contexte. Voir routine `Fin de session` dans [`CLAUDE.md`](CLAUDE.md). |
 | **Vendredi PM** | 1h (dès sem 25) | **Recherche emploi** : candidatures, mise à jour LinkedIn/GitHub, contacts alumni | — |
 | **Samedi** | 4-5h | **Rattrapage / projet / recherche emploi** | Lectures Odin courtes (Asset Pipeline, Importmaps, Turbo Drive) si décalage en semaine |
 | **Dimanche** | OFF | Repos obligatoire (ou lecture légère exceptionnelle si rattrapage urgent) | — |

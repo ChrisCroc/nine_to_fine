@@ -121,6 +121,27 @@ Si la date du jour ne correspond à aucune journée détaillée, demande à Chri
 
 **Puis** réponds normalement à son message.
 
+## Fin de session
+
+À la fin de chaque journée de travail (après l'exo dirigé du soir, avant de clôturer la session), ta dernière action est de recommander **2 vidéos** à Chris :
+
+1. **Sources autorisées** :
+   - **GoRails** ([youtube.com/@GoRailsHQ](https://www.youtube.com/@GoRailsHQ)) — Chris Oliver, contenu Rails 8 à jour.
+   - **Drifting Ruby** ([driftingruby.com](https://www.driftingruby.com/) + chaîne YouTube) — Dave Kimura, contenu Rails 8 à jour.
+   - **Railscasts** ([railscasts.com](http://railscasts.com/)) — Ryan Bates, **production arrêtée en 2013**. Autorisé **uniquement** pour les épisodes "concepts intemporels" (REST, polymorphic associations, scopes, OAuth, `has_many through`, service objects, Russian doll caching) et **toujours flaggés** : « vintage Rails 3/4 — concept seulement, pas le code ».
+
+2. **Choix selon le contexte** : Claude décide, vidéo par vidéo, si elle est :
+   - **Backward-looking** (consolidation d'un concept vu aujourd'hui)
+   - **Forward-looking** (préparation d'un concept à venir demain)
+
+3. **Format attendu pour chaque vidéo** :
+   - **Titre exact** + **URL** + **durée** + **chaîne**
+   - **Pourquoi cette vidéo aujourd'hui** (1-2 phrases : quel concept de la journée passée ou à venir elle couvre)
+   - **Vérification de la date** de publication (règle `feedback-verify-external-setup`) : si > 2 ans et hors Railscasts, flagger « vérifier que la syntaxe est encore à jour Rails 8 avant de reproduire ».
+   - **Cas Railscasts** : drapeau « vintage 2013, concept seulement, syntaxe Rails 3/4 à transposer ».
+
+4. **Vérification doc obligatoire** : Claude utilise WebFetch sur la page de la vidéo (ou la page d'épisode GoRails / Drifting Ruby / Railscasts) **avant** de recommander, pour confirmer titre + URL + date. Pas de reco basée sur la mémoire seule.
+
 ## Planning d'apprentissage
 
 Le projet est utilisé comme support pour le plan d'apprentissage 18 semaines de Chris (25 mai → 27 sept 2026). Voir le fichier importé ci-dessous pour les jalons, ritual quotidien, détail des semaines en cours, règles pédagogiques et journal de suivi.
