@@ -1,0 +1,28 @@
+<% garments = outfit.garments.sort_by { |g| g.category.position } %>
+<% count = garments.size %>
+<% visible = count > 4 ? garments.first(3) : garments %>
+<% overflow = count > 4 ? count - 3 : 0 %>
+<% slots = count > 4 ? 4 : count %>
+
+<% grid_class = case slots
+                when 1 then "grid-cols-1 grid-rows-1"
+                when 2 then "grid-cols-2 grid-rows-1"
+                else        "grid-cols-2 grid-rows-2"
+                end %>
+<div class="grid <%= grid_class %> gap-px h-full w-full bg-zinc-200">
+
+  <% visible.each_with_index do |garment, i| %>
+    <div class="bg-zinc-50 flex items-center justify-center <%= "col-span-2" if slots == 3 && i == 2 %>">
+      <% if garment.photo.attached? %>
+        <%= image_tag garment.photo.variant(resize_to_limit: [ 400, 533 ], format: :webp), class: "h-full w-full object-contain" %>
+      <% else %>
+        <span class="text-2xl font-bold text-zinc-400"><%= garment.name.first.upcase %></span>
+      <% end %>
+    </div>
+  <% end %>
+  <% if overflow > 0 %>
+    <div class="bg-zinc-900 flex items-center justify-center">
+      <span class="text-champagne text-2xl font-bold">+<%= overflow %></span>
+    </div>
+  <% end %>
+</div>

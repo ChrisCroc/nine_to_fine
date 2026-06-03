@@ -14,7 +14,23 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : 2-3 j (Stimulus + Sortable.js + UX + tests système Capybara).
 - **Slot suggéré** : Phase 4 sem 38-39 si escalade Standard (cf. règle 3), sinon post-emploi (oct 2026+).
 
+### Sélection des garments par clic dans l'index (remplace Tom Select)
+
+- **Contexte d'origine** : mercredi 3 juin 2026, session design des vues Outfit. Tom Select (combobox) reste viable tant qu'on a peu de garments, mais devient inviable à ~100 pièces (sélection laborieuse dans un dropdown, aggravée par des noms saisis sans rigueur).
+- **Description** : pour composer un outfit, l'utilisateur arrive sur l'**index des garments** et **clique les pièces** à ajouter (toggle visuel sur les cards), au lieu du dropdown Tom Select. Suppose un index filtrable (cf. entrée ci-dessous + filtres sem 24).
+- **Stack** : Stimulus controller de sélection multi-items + état de sélection persistant (hidden inputs `garment_ids[]` ou session) + flow d'ajout vers `OutfitGarmentsController`. Possiblement Turbo Frames pour embarquer l'index.
+- **Estimation** : 2-3 j.
+- **Slot suggéré** : post-emploi (oct 2026+), **après** l'index filtrable.
+
 ## Priorité moyenne
+
+### Index garments organisé (onglets catégorie / couleur)
+
+- **Contexte d'origine** : mercredi 3 juin 2026, même session design Outfit. Besoin de retrouver vite une pièce dans un grand index.
+- **Description** : index rangé avec **onglets/filtres** par catégorie, couleur, etc. NB : la **base** (filtres `link_to` un-à-la-fois + recherche par nom) est **déjà planifiée sem 24** ; la combinaison multi-filtres est déjà tracée plus bas ("Combinaison de filtres"). Le surplus *future* = présentation en onglets + sert de **socle** à la sélection par clic (entrée ci-dessus).
+- **Stack** : couvert par sem 24 + entrée "Combinaison de filtres" ; enrichissement onglets sans gem.
+- **Estimation** : base sem 24 ; enrichissement onglets ~1 j.
+- **Slot suggéré** : base sem 24, enrichissement post-emploi.
 
 ### Autocomplete Stimulus sur input tags
 
