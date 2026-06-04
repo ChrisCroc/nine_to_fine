@@ -151,6 +151,17 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
     - [How To Use Importmaps With Rails](https://gorails.com/episodes/how-to-use-importmaps-with-rails) (Chris Oliver, 29 oct 2024, 18 min) — backward, consolidation du setup Tom Select via importmap lundi 1er juin.
     - [Strict Loading with ActiveRecord](https://gorails.com/episodes/strict-loading-with-activerecord) (Chris Oliver, 16 oct 2023, 9 min) — backward, prolongement du combat anti-N+1 sur Outfit collage. ⚠️ Vidéo > 2 ans : vérifier que `strict_loading` Rails 8 n'a pas changé d'API avant de l'activer en dev/test (cf. règle vérification doc).
 
+- **Jeudi 4 juin (matin, Claude app)** — Odin chap. **34 CSS Bundling + 35 JS Bundling** (lus en paire). Note Obsidian : [[bundling-vs-importmap-rails-8]].
+
+- **Jeudi 4 juin (avant-midi, Claude app)** — Tailwind docs **Backgrounds + Borders + Effects + Opacity**. Note Obsidian : [[backgrounds-borders-effects-v4]].
+
+- **Jeudi 4 juin (après-midi, Claude Code CLI)** — **Tags comma-separated sur Garment + Outfit, PR #74 mergée** (mode coach strict, 5 commits) + gem `bullet` + 2 N+1 préexistants corrigés.
+  - **Concern `Taggable`** : assos polymorphes mutualisées (retirées des 2 models) + attribut virtuel `tag_names` (setter parse/normalise, getter pré-remplit l'edit) + `after_save :sync_tags` (`find_or_create_by` scopé user, downcase neutralise le piège casse vs uniqueness case-insensitive). ⭐ Garde **`nil` (préserver) vs `[]` (vider)**. Partial partagé `shared/_tags` (strict locals). Détail → [[taggable-concern-and-tag_names-virtual-attribute]].
+  - **Tests Minitest** (7 Garment + 1 sanity Outfit) : pipeline parse/normalise/dedup, anti-doublon (`find_or_create_by`), garde nil vs [], pas d'orphelin si invalide. ⭐ Pièges : `save` obligatoire pour déclencher `after_save` ; **recharger** l'objet pour tester fidèlement le cas `nil`. Détail → [[minitest-taggable-concern]].
+  - **Gem `bullet`** (dev only) → a révélé 2 N+1 préexistants : garment index (`photo_attachment`) + outfit show (`category` via collage). Fix par `includes(..., photo_attachment: :blob)`. ⭐ Pièges : ne pas mettre l'`includes` dans un `before_action` partagé (`set_outfit`) → « unused eager loading » ; alerte **stale** = restart serveur après ajout gem + hard reload. Détail → [[bullet-n+1-detection-and-eager-loading-fixes]].
+  - **Backlog `FEATURES_FUTURES.md`** : tags cliquables → index filtré par tag (sem 24, assos `tagged_garments/outfits` déjà prêtes) ; preview photo live à la création (Stimulus, sem 24-25).
+  - **Reports** : exo dirigé du soir + reco 2 vidéos fin de journée → non faits, à caler.
+
 **Blocages**
 
 - **Setup Tom Select / importmap = ~35 min de trial-and-error** (lundi 1er juin, build modulaire 404, UMD sans export default, vendoring qui re-télécharge, typo de casse). Leçon actée en mémoire feedback `feedback-verify-external-setup.md` : pour les setups d'outils externes fragiles, vérifier l'URL/format exact (WebFetch) **avant** de faire exécuter des commandes, et expliquer chaque ligne au fil de l'eau.
