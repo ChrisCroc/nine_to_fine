@@ -146,7 +146,10 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 
   - Notes Obsidian : [[eager-loading-sort-by-vs-order-and-nested-attachments]], [[outfit-collage-adaptive-mosaic]].
 
-  - **Reports** : exo dirigé du soir (N+1 provoqué/tué OU logique du cap en Ruby pur) **non fait** → à caler plus tard. 2 vidéos fin de journée **non recommandées** (session clôturée par Chris avant le slot).
+  - **Reports** : exo dirigé du soir (N+1 provoqué/tué OU logique du cap en Ruby pur) **non fait** → à caler plus tard. Routine reco vidéos non exécutée par Claude (session clôturée avant le slot), **mais Chris a regardé 3 vidéos GoRails en autonomie** (accès Pro) :
+    - [Preserving File Uploads On Edit with Rails](https://gorails.com/episodes/preserving-file-uploads-on-edit-with-rails) (Chris Oliver, 4 mai 2026) — backward, couvre exactement le piège `file_field` perd la sélection après erreur form noté au backlog mardi 2 juin (Active Storage).
+    - [How To Use Importmaps With Rails](https://gorails.com/episodes/how-to-use-importmaps-with-rails) (Chris Oliver, 29 oct 2024, 18 min) — backward, consolidation du setup Tom Select via importmap lundi 1er juin.
+    - [Strict Loading with ActiveRecord](https://gorails.com/episodes/strict-loading-with-activerecord) (Chris Oliver, 16 oct 2023, 9 min) — backward, prolongement du combat anti-N+1 sur Outfit collage. ⚠️ Vidéo > 2 ans : vérifier que `strict_loading` Rails 8 n'a pas changé d'API avant de l'activer en dev/test (cf. règle vérification doc).
 
 **Blocages**
 
