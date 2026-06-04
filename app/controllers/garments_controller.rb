@@ -2,7 +2,7 @@ class GarmentsController < ApplicationController
   before_action :set_garment, only: %i[show edit update destroy]
   before_action :set_categories, only: %i[new edit create update]
   def index
-    @garments = current_user.garments.includes(:category).order(created_at: :desc)
+    @garments = current_user.garments.includes(:category, photo_attachment: :blob).order(created_at: :desc)
   end
 
   def show
@@ -45,7 +45,7 @@ private
   end
 
   def garment_params
-    permitted = params.expect(garment: [ :name, :color, :description, :brand, :category_id, :photo ])
+    permitted = params.expect(garment: [ :name, :color, :description, :brand, :category_id, :photo, :tag_names ])
     permitted.delete(:photo) if permitted[:photo].blank?
     permitted
   end

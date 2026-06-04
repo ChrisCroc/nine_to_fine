@@ -1,5 +1,5 @@
 class OutfitsController < ApplicationController
-  before_action :set_outfit, only: %i[show edit update destroy]
+  before_action :set_outfit, only: %i[edit update destroy]
   before_action :set_garments, only: %i[new edit create update]
 
   def index
@@ -7,6 +7,7 @@ class OutfitsController < ApplicationController
   end
 
   def show
+    @outfit = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ]).find(params.expect(:id))
   end
 
   def new
@@ -44,7 +45,7 @@ private
   end
 
   def outfit_params
-    params.expect(outfit: [ :name, :description, garment_ids: [] ])
+    params.expect(outfit: [ :name, :description, :tag_names, garment_ids: [] ])
   end
 
   def set_garments
