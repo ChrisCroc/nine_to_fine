@@ -28,7 +28,7 @@ Voir tableau détaillé jour par jour ci-dessous.
 - Lundi : CRUD Outfit (routes + controller + 5 vues + `_form`) + composition via `garment_ids=` + combobox Tom Select. ✅
 - Mardi : Active Storage sur Garment (upload + variants WebP + validation type/taille) + tests Minitest. ✅
 - Mercredi : design des vues Outfit — collage adaptatif (mosaïque plafonnée + eager loading anti-N+1), PR #69. ✅
-- Jeudi : tags comma-separated (parse model `find_or_create_by` + UI input + pills) + setup gem `bullet` (remontés du vendredi anticipé). 🟡
+- Jeudi : tags comma-separated (concern `Taggable` + `tag_names` virtual attribute + `after_save sync` + pills partial) + tests Minitest + gem `bullet` (2 N+1 préexistants corrigés). PR #74. ✅
 - Vendredi : **buffer** — exos sandbox reportés (N+1 provoqué/tué, logique du cap en Ruby pur, etc.) + respiration. 🟡
 
 ### Sem 24 (8-14 juin) — anticipé
