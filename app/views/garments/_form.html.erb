@@ -47,6 +47,12 @@
     <% end %>
   </div>
 
+  <div class="mb-4">
+    <%= f.label :tag_names, "Tags", class: "block text-sm font-medium text-zinc-700 mb-1" %>
+    <%= f.text_field :tag_names, placeholder: "casual, summer, blue", class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+    <p class="mt-1 text-sm text-zinc-500">Split the tags with comas</p>
+  </div>
+
   <div>
     <%= f.submit class: "w-full bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:text-white hover:text-white" %>
   </div>
