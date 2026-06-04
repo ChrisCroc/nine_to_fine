@@ -67,6 +67,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  # Use console on exceptions pages [https://github.Com/rails/web-console]
+  gem "bullet"
+  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
 end
 
 group :test do
