@@ -150,5 +150,4 @@ private
   def build_garment(attrs = {})
     Garment.new({ name: "Test piece", color: "white", user: users(:chris), category: categories(:top) }.merge(attrs))
   end
-
 end
