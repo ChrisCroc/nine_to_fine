@@ -30,11 +30,10 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
 
 ## Tailwind CSS
 
-- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin) + **Theme variables + Functions & Directives** (mardi 2 juin avant-midi, voir [[theme-variables-and-directives]]) + **Customization : Dark mode + Colors palette** (mercredi 3 juin avant-midi, voir [[dark-mode]] et [[colors-palette]])
+- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin) + **Theme variables + Functions & Directives** (mardi 2 juin avant-midi, voir [[theme-variables-and-directives]]) + **Customization : Dark mode + Colors palette** (mercredi 3 juin avant-midi, voir [[dark-mode]] et [[colors-palette]]) + **Backgrounds + Borders + Effects + Opacity** (jeudi 4 juin avant-midi, voir [[backgrounds-borders-effects-v4]])
 - **Prochain (à faire dans l'ordre)** :
-  1. Docs section **Backgrounds, Borders & Effects** (rounded, shadows, gradients, opacity tricks) — pratique immédiate pour styling Nine to Fine
-  2. Docs section **Typography** (font-family, font-size, leading, tracking, text decoration) — affinage de la brand voice
-  3. Docs section **Transitions & Animation** (transition, ease, duration, animate-pulse/spin/bounce) — interactions polies
+  1. Docs section **Typography** (font-family, font-size, leading, tracking, text decoration) — affinage de la brand voice
+  2. Docs section **Transitions & Animation** (transition, ease, duration, animate-pulse/spin/bounce) — interactions polies
 
 ## React (à démarrer Phase 2, sem 26)
 
