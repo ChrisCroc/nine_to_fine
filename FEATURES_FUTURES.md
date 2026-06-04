@@ -22,6 +22,22 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : 2-3 j.
 - **Slot suggéré** : post-emploi (oct 2026+), **après** l'index filtrable.
 
+### Tags cliquables → index filtré par tag
+
+- **Contexte d'origine** : jeudi 4 juin 2026, session tags comma-separated. Marquée "à faire bientôt" par Chris. Les pills de tags (sur `garment#show` et `outfit#show`, partial `shared/_tags`) sont actuellement non cliquables.
+- **Description** : rendre chaque pill cliquable → mène vers l'**index du tag**, listant tout ce qui porte ce tag. Vue éventuellement **scindée en deux sections** : Garments d'un côté, Outfits de l'autre (le tag étant polymorphe via `tagged_garments` / `tagged_outfits` déjà définis sur `Tag`).
+- **Stack** : route + `TagsController#show` (ou `#index` filtré) scopé `current_user`, deux collections (`tag.tagged_garments`, `tag.tagged_outfits`), eager loading anti-N+1, `link_to` sur les pills dans `shared/_tags`. Recoupe les filtres `link_to` par tag planifiés sem 24.
+- **Estimation** : ~0.5-1 j (les associations `tagged_garments`/`tagged_outfits` existent déjà).
+- **Slot suggéré** : sem 24 (avec les filtres par tag) ou juste après — proche, pas post-emploi.
+
+### Prévisualisation live de la photo à la sélection (new + edit)
+
+- **Contexte d'origine** : jeudi 4 juin 2026, session tags. Marquée "à faire rapidement" par Chris. Actuellement (`garments/_form`), la vignette ne s'affiche que si une photo est déjà attachée et persistée (`photo.blob&.persisted?`) → visible en `edit` uniquement. En `new`, aucun aperçu du fichier choisi avant submit.
+- **Description** : afficher une **vignette live** de l'image sélectionnée dès que l'utilisateur choisit un fichier, **aussi bien en création qu'en édition**, sans attendre l'upload. Remplace/complète la vignette serveur actuelle.
+- **Stack** : Stimulus controller (`photo_preview_controller.js`) lisant le `change` du `file_field` + `URL.createObjectURL(file)` (ou `FileReader`) pour générer l'URL locale + `<img>` cible mis à jour côté client. Penser à `URL.revokeObjectURL` pour ne pas fuiter la mémoire. Recoupe le backlog "file_field perd la sélection après erreur" (to-do.md, 2 juin).
+- **Estimation** : ~0.5 j (un seul Stimulus controller, pas de back).
+- **Slot suggéré** : proche (sem 24-25), bon exercice Stimulus autonome.
+
 ## Priorité moyenne
 
 ### Index garments organisé (onglets catégorie / couleur)
