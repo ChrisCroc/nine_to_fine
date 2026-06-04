@@ -55,4 +55,10 @@ class OutfitTest < ActiveSupport::TestCase
     outfit = outfits(:casual_friday)
     assert_includes outfit.tags, tags(:business)
   end
+
+  test "supports tags through the Taggable concern" do
+    outfit = Outfit.new(name: "Tagged outfit", user: users(:chris), garments: [ garments(:black_tshirt) ], tag_names: "evening, Casual")
+    outfit.save!
+    assert_equal %w[casual evening], outfit.tags.pluck(:name).sort
+  end
 end

@@ -1,10 +1,10 @@
 class Garment < ApplicationRecord
+  include Taggable
+
   belongs_to :user
   belongs_to :category
   has_many :outfit_garments, dependent: :destroy
   has_many :outfits, through: :outfit_garments
-  has_many :taggings, as: :taggable, dependent: :destroy
-  has_many :tags, through: :taggings
   has_one_attached :photo
 
   validates :name, presence: true, length: { maximum: 200 }

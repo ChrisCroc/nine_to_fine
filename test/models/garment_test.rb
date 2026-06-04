@@ -101,4 +101,53 @@ class GarmentTest < ActiveSupport::TestCase
     assert_not garment.valid?
     assert_includes garment.errors[:photo], "must be smaller than 10MB"
   end
+
+  test "tag_names= normalizes, strips, dedupes and creates tags on save" do
+    garment = build_garment(tag_names: "Casual, casual, SUMMER, ")
+    garment.save!
+    assert_equal %w[casual summer], garment.tags.pluck(:name).sort
+  end
+
+  test "reuses an existing tag instead of creating a duplicate" do
+    # chris already has the tag "summer" (fixture) -> find_or_create_by must REUSE it
+    assert_no_difference -> { users(:chris).tags.count } do
+      build_garment(tag_names: "summer").save!
+    end
+  end
+
+  test "scopes tags to the garment's user" do
+    garment = build_garment(user: users(:chris), tag_names: "brandnew").tap(&:save!)
+    assert_equal users(:chris), garment.tags.first.user
+  end
+
+  test "clearing the field removes all tags" do
+    garment = build_garment(tag_names: "summer, casual").tap(&:save!)
+    garment.update!(tag_names: "")
+    assert_empty garment.tags
+  end
+
+  test "saving without tag_names preserves existing tags" do
+    garment = build_garment(tag_names: "summer, casual").tap(&:save!)
+    reloaded = Garment.find(garment.id) # New object : @tag_names is nil
+    reloaded.update!(name: "Renamed")
+    assert_equal 2, reloaded.tags.count
+  end
+
+  test "does not create orphan tags when the record is invalid" do
+    assert_no_difference -> { Tag.count } do
+      garment = build_garment(name: "", tag_names: "shouldnotexist")
+      assert_not garment.save # empty name -> validation fails -> after_save doesn't run
+    end
+  end
+
+  test "tag_names getter returns the tags as a comma-joined string" do
+    garment = build_garment(tag_names: "alpha, beta").tap(&:save!)
+    assert_equal "alpha, beta", Garment.find(garment.id).tag_names
+  end
+
+private
+
+  def build_garment(attrs = {})
+    Garment.new({ name: "Test piece", color: "white", user: users(:chris), category: categories(:top) }.merge(attrs))
+  end
 end

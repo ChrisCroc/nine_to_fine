@@ -32,6 +32,9 @@
         <% end %>
       </div>
 
+      <%# Tags %>
+      <%= render "shared/tags", taggable: @outfit %>
+
       <%# Actions %>
       <div class="flex items-center gap-3 md:mt-auto">
         <%= link_to "Edit", edit_outfit_path(@outfit), class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
