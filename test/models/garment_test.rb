@@ -145,6 +145,13 @@ class GarmentTest < ActiveSupport::TestCase
     assert_equal "alpha, beta", Garment.find(garment.id).tag_names
   end
 
+  test "is invalid when color is not in th eallowed list" do
+    garment = Garment.new(name: "Test tshirt", color: "neon", user: users(:chris), category: categories(:top))
+
+    assert_not garment.valid?
+    assert_includes garment.errors[:color], "is not included in the list"
+  end
+
 private
 
   def build_garment(attrs = {})

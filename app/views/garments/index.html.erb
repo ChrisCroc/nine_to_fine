@@ -1,40 +1,105 @@
-<section class="min-h-screen bg-linear-to-tr from-yellow-900 to-yellow-50 p-4 md:p-8">
-    <%# En-tête de page %>
+  <section class="min-h-screen bg-linear-to-tr from-yellow-900 to-yellow-50 p-4 md:p-8">
+    <%# En-tête : HORS du Turbo Frame (statique) %>
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
       <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30">My Clothes</h1>
       <div class="flex flex-wrap gap-3">
-        <%= link_to "Add a piece", new_garment_path, class: "bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition whitespace-nowrap" %>
-        <%= link_to "Create an outfit", new_outfit_path, class: "bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition whitespace-nowrap" %>
+        <%= link_to "Add a piece", new_garment_path, class: "bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white
+  transition whitespace-nowrap" %>
+        <%= link_to "Create an outfit", new_outfit_path, class: "bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700
+  hover:text-white transition whitespace-nowrap" %>
       </div>
     </div>
 
-    <% if @garments.empty? %>
-      <%#  Etat vide %>
-      <div class="text-center py-20">
-        <p class="text-lg text-zinc-800 mb-4">You haven't added any garments yet.</p>
-        <%= link_to "Add your first piece of clothes", new_garment_path, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
-      </div>
-    <% else %>
-      <%# Grille de cards %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
-        <% @garments.each do |garment| %>
-          <%= link_to garment, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:z-10" do %>
-            <div class="aspect-5/6 bg-white flex items-center justify-center p-3">
-              <% if garment.photo.attached? %>
-                <%= image_tag garment.photo.variant(resize_to_limit: [ 400, 533 ], format: :webp), class: "h-full w-full object-contain" %>
-              <% else %>
-                <span class="text-sm text-zinc-400">No photo available</span>
-              <% end %>
-            </div>
-            <div class="p-4">
-              <div class="flex items-start justify-between gap-2">
-                <h2 class="font-semibold text-zinc-900"><%= garment.name %></h2>
-                <span class="shrink-0 inline-block bg-zinc-100 text-zinc-700 text-xs font-medium px-2 py-1 rounded-full"><%= garment.category.name %></span>
-              </div>
-              <p class="text-sm text-zinc-500 mt-1"><%= garment.color %></p>
-            </div>
+    <%# Turbo Frame qui enveloppe bandeau filtres + grille %>
+    <%= turbo_frame_tag "garments_list" do %>
+      <% current = @filter_params.to_h.with_indifferent_access %>
+
+      <%# Bandeau filtres %>
+      <div class="bg-white/40 backdrop-blur-sm rounded-xl p-4 mb-6 space-y-3">
+        <%# Color %>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Color:</span>
+          <%= link_to "All", garments_path(q: current.except(:color)), class: pill_class(current[:color].blank?) %>
+          <% @available_colors.each do |color| %>
+            <%= link_to color.capitalize, garments_path(q: current.merge(color: color)), class: pill_class(current[:color] == color) %>
           <% end %>
+        </div>
+
+        <%# Category %>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Category:</span>
+          <%= link_to "All", garments_path(q: current.except(:category_id)), class: pill_class(current[:category_id].blank?) %>
+          <% @available_categories.each do |category| %>
+            <%= link_to category.name, garments_path(q: current.merge(category_id: category.id)), class: pill_class(current[:category_id].to_i == category.id)
+  %>
+          <% end %>
+        </div>
+
+        <%# Brand (affiché uniquement si au moins une brand existe) %>
+        <% if @available_brands.any? %>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Brand:</span>
+            <%= link_to "All", garments_path(q: current.except(:brand)), class: pill_class(current[:brand].blank?) %>
+            <% @available_brands.each do |brand| %>
+              <%= link_to brand, garments_path(q: current.merge(brand: brand)), class: pill_class(current[:brand] == brand) %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# Tag (affiché uniquement si au moins un tag existe) %>
+        <% if @available_tags.any? %>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Tag:</span>
+            <%= link_to "All", garments_path(q: current.except(:tag_id)), class: pill_class(current[:tag_id].blank?) %>
+            <% @available_tags.each do |tag| %>
+              <%= link_to tag.name, garments_path(q: current.merge(tag_id: tag.id)), class: pill_class(current[:tag_id].to_i == tag.id) %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# Clear all (affiché uniquement si au moins un filtre actif) %>
+        <% if current.any? %>
+          <div class="pt-2 border-t border-zinc-200/60">
+            <%= link_to "× Clear all filters", garments_path, class: "text-sm text-zinc-600 hover:text-zinc-900 underline" %>
+          </div>
         <% end %>
       </div>
+
+      <%# Grille de cards (inchangée sur la structure, juste à l'intérieur du frame maintenant) %>
+      <% if @garments.empty? %>
+        <div class="text-center py-20">
+          <% if current.any? %>
+            <p class="text-lg text-zinc-800 mb-4">No garments match these filters.</p>
+            <%= link_to "Clear filters", garments_path, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700
+  hover:text-white transition" %>
+          <% else %>
+            <p class="text-lg text-zinc-800 mb-4">You haven't added any garments yet.</p>
+            <%= link_to "Add your first piece of clothes", new_garment_path, data: { turbo_frame: "_top" }, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md
+  hover:bg-zinc-700 hover:text-white transition" %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+          <% @garments.each do |garment| %>
+            <%= link_to garment, data: { turbo_frame: "_top" }, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105
+  hover:shadow-2xl hover:z-10" do %>
+              <div class="aspect-5/6 bg-white flex items-center justify-center p-3">
+                <% if garment.photo.attached? %>
+                  <%= image_tag garment.photo.variant(resize_to_limit: [ 400, 533 ], format: :webp), class: "h-full w-full object-contain" %>
+                <% else %>
+                  <span class="text-sm text-zinc-400">No photo available</span>
+                <% end %>
+              </div>
+              <div class="p-4">
+                <div class="flex items-start justify-between gap-2">
+                  <h2 class="font-semibold text-zinc-900"><%= garment.name %></h2>
+                  <span class="shrink-0 inline-block bg-zinc-100 text-zinc-700 text-xs font-medium px-2 py-1 rounded-full"><%= garment.category.name %></span>
+                </div>
+                <p class="text-sm text-zinc-500 mt-1"><%= garment.color.capitalize %></p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
-</section>
+  </section>
