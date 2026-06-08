@@ -2,7 +2,8 @@ class GarmentsController < ApplicationController
   before_action :set_garment, only: %i[show edit update destroy]
   before_action :set_categories, only: %i[new edit create update]
   def index
-    @garments = current_user.garments.includes(:category, photo_attachment: :blob).order(created_at: :desc)
+    base = current_user.garments.includes(:category, photo_attachment: :blob)
+    @garments = GarmentFilter.new(base, filter_params).results.order(created_at: :desc)
   end
 
   def show
@@ -38,7 +39,7 @@ class GarmentsController < ApplicationController
     redirect_to garments_path, status: :see_other, notice: "Garment was successfully deleted."
   end
 
-private
+  private
 
   def set_garment
     @garment = current_user.garments.find(params.expect(:id))
@@ -52,5 +53,9 @@ private
 
   def set_categories
     @categories = Category.order(:position)
+  end
+
+  def filter_params
+    params[:q]&.permit(:color, :category_id, :tag_id, :brand) || {}
   end
 end
