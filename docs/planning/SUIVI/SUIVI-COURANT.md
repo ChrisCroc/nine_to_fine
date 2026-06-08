@@ -14,67 +14,6 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 
 ---
 
-### Sem 22 (25-31 mai 2026)
-
-**Accompli**
-
-- **Lundi 25 mai** — Conception complète (24 user stories, schéma DB, kanban GitHub, roadmap). Devise installé et configuré (username + email + password).
-
-- **Mardi 26 mai** — User model + validation username. ApplicationController (`authenticate_user!` + `configure_permitted_parameters`). PagesController (home publique). Navbar + flashes + devise views. `db:create` + `db:migrate`. Push GitHub.
-
-- **Mercredi 27 mai** — Setup environnement Claude global + projet.
-  - PR #29 (fix CI), PR #30 (upgrade image_processing 1→2), PR #31-33 (migration NOTES.md → Suivi), PR #34 (config VS Code + snippets + tabCompletion), PR #35 (1re hero responsive + refactor layout + navbar stylée).
-  - Vault Obsidian `DevJobReady` créée. Protection branche `main` activée. Mémoire `dotfiles-setup.md` créée.
-  - Apprentissage Tailwind v4 (Installation + Styling utility classes).
-  - Workflow git renforcé : Squash and merge par défaut, cycle complet branche → PR → merge → cleanup.
-
-- **Jeudi 28 mai** — **6 models structurels livrés en mode coach** (~5h, PR #38). 7 commits atomiques. ~38 tests Minitest verts. Models : Category (global, `restrict_with_error`), Garment (color obligatoire), Outfit (name unique scopé user), OutfitGarment (jointure), Tag (scopé user), Tagging (**polymorphique** — concept neuf).
-  - Matin Odin chap. 24 Active Record Queries. Avant-midi Tailwind Responsive design.
-  - Notes Obsidian : [[has_many_through - class_name, foreign_key, source]], [[styling-with-utility-classes]], [[hover-focus-and-other-states]], [[responsive-design]].
-  - Section "Mode coach" ajoutée au CLAUDE.md projet. Vault Obsidian restructurée (Rails 7 sous-dossiers, Tailwind 9 sous-dossiers). Split Ghostty shell + CLI configuré.
-  - Exos sandbox du soir reportés → `to-do.md`.
-
-- **Vendredi 29 mai (matinée)** — Matin Odin chap. 20 Form Basics + chap. 28 Advanced Forms. Avant-midi Tailwind v4 overview (blog v4.0 + docs CSS-first ; après vérification, pas de playlist Tailwind Labs v4 disponible).
-  - Notes Obsidian : [[form-basics]], [[advanced-forms]], [[tailwind-v4-overview]].
-  - PR #39 + #40 mergées (déplacement exos jeudi soir → samedi, 5 points à trancher).
-  - **Décision stratégique Option D actée pour Phases 2-3-4** → détail dans `DECISIONS/2026-05-30-refonte-strategique-phases-2-3-4.md`.
-  - Méta-leçon : vérifier la date des ressources externes avant recommandation.
-
-- **Vendredi 29 mai (après-midi)** — **CRUD Garment complet en mode coach strict, PR #42 mergée**. 7 routes RESTful + GarmentsController (7 actions) + 5 vues + flow testé end-to-end. Concepts manipulés : `params.expect`, `current_user.garments.find` (scoping IDOR), `:see_other` (303) sur destroy + update, `:unprocessable_content` (422) sur form invalide, `button_to ..., method: :delete`, `collection_select`, N+1 prevention via `.includes`.
-  - Notes Obsidian : [[form-with-html-deconstruction]], [[scoping-current-user]], [[before-action-rerenders-pitfall]], [[belongs-to-error-key-trap]], [[turbo-status-codes-303-422]], [[debugging-workflow-pro]], [[rubocop-rails-omakase]].
-  - **Dette technique** : 0 test controller écrit. Comblement RSpec rétroactif sem 24 (RSpec arrive jeudi 11-vendredi 12 juin). Voir `to-do.md`.
-  - Gem `bullet` à installer début sem 23 (voir `to-do.md`).
-
-- **Vendredi 29 mai (fin d'aprem)** — **Styling Tailwind v4 des 5 vues Garment**, PR #45. Token `@theme --color-champagne`. `_form` utility-first strict. new/edit en card centrée sur fond dégradé. show split 60/40 (`md:grid-cols-5`). index grille responsive cards cliquables hover scale. Navbar sticky. `params[:id]` → `params.expect(:id)`.
-  - Note Obsidian : [[garment-crud-styling-classes-et-structure]].
-  - Reports délibérés (`_field` partial DRY, upload Active Storage sem 23, pills cliquables sem 24) → `to-do.md`.
-
-- **Samedi 30 mai (matin + début aprem)** — **Refonte stratégique Phases 2-3-4 + restructuration documentaire**, PR #49 mergée.
-  - Architecture documentaire créée sous `docs/planning/` : PHASES/, SUIVI/ + ARCHIVE/, DECISIONS/, PROGRESSION.md, JALONS-EMPLOI.md. PLANNING.md slim 465 → 85 lignes. FEATURES_FUTURES.md racine créé.
-  - Décisions actées : **portfolio = 3 artefacts** (Nine to Fine + Outil prep entretiens React/TS + skill `job-tracker`). **N to F v1 déployée mi-juillet sem 29** (Kamal/Hetzner). **Phase 4 = sprint enrichissement Minimal**. **Structure AA Phase 4**.
-  - Détail complet : `DECISIONS/2026-05-30-refonte-strategique-phases-2-3-4.md`.
-
-- **Samedi 30 mai (après-midi)** — Rattrapage Odin lecture profonde : chap. 17 Asset Pipeline + chap. 18 Importmaps + chap. 19 Turbo Drive.
-  - Notes Obsidian : [[the-asset-pipeline]], [[importmaps]], [[turbo-drive-fundamentals]].
-  - Confusions corrigées : Turbo Drive `replace` ≠ Frames. Syntaxe Ruby vs HTML keyword args (`alt:` vs `alt=`). Migration UJS → Turbo (`turbo_method:`).
-
-- **Samedi 30 mai (fin d'aprem)** — Règle péda 11 codifiée dans PLANNING.md (note Obsidian après chaque lecture profonde), PR #50.
-
-- **Samedi 30 mai (fin de journée)** — Brainstorm skill Claude Code `/end-of-day` **interrompu** (voir Blocages).
-
-- **Dimanche 31 mai** — Dérogation Dimanche OFF #1/3 sur 6 sem glissantes (motif : exos sandbox décalés). **Aucun exo finalement fait**. Backlog inchangé → `to-do.md`.
-
-**Blocages**
-
-- **Brainstorm skill `/end-of-day` interrompu** (samedi 30 mai fin de journée) : confusion Claude entre slash command interactif vs routine planifiée nocturne générant un doc personnel SÉPARÉ du Suivi formel. À reprendre plus tard avec investigation préalable de l'onglet routine natif Claude Code par Chris. Voir `to-do.md` pour les 4 skills associés à brainstormer.
-
-**Dérogation Dimanche OFF — compteur**
-
-- #1 : dimanche 31 mai 2026 (sem 22). Motif : exos sandbox décalés (finalement non exécutés).
-- Alerte si ≥ 3 dérogations en 6 sem glissantes → signal de surcharge → revoir le rythme.
-
----
-
 ### Sem 23 (1-7 juin 2026)
 
 **Accompli**
@@ -167,3 +106,23 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 - **Setup Tom Select / importmap = ~35 min de trial-and-error** (lundi 1er juin, build modulaire 404, UMD sans export default, vendoring qui re-télécharge, typo de casse). Leçon actée en mémoire feedback `feedback-verify-external-setup.md` : pour les setups d'outils externes fragiles, vérifier l'URL/format exact (WebFetch) **avant** de faire exécuter des commandes, et expliquer chaque ligne au fil de l'eau.
 
 - **Questions de vérification floues** (mardi 2 juin matin) — 2 reprises consécutives de Chris ("ta question n'est pas claire"). Cause : questions ouvertes sur trade-offs abstraits au lieu de cas concrets. Règle mémoire `feedback-concrete-verification-questions.md` créée pour acter le pattern.
+
+---
+
+### Sem 24 (8-14 juin 2026)
+
+**Accompli**
+
+- **Lundi 8 juin (démarrage, Claude app)** — Récap sem 23 + diagnostic du retard (ven/sam non faits + 2 soirs d'exos sandbox manqués). Programme du jour annoncé : Odin Turbo + Tailwind Typography + (aprem en CLI) filtres `link_to` + tags cliquables. **Kanban GitHub réaligné** : 15 issues closes en mode coach (`gh issue close X -c "..."` exécutés par Chris) → US01/02/03/06/07/08/09/10/11/12/13/14/15/16/17. Restent ouvertes : US04/05 (sem 25 profil), US18-21 (sem 25 social), US22-24 (Phase 4 IA). **3 notes Obsidian GoRails rétroactives** rédigées par Claude (vidéos regardées jeudi 4 juin soir) : [[preserving-file-uploads-on-edit]], [[gorails-importmaps-with-rails]], [[strict-loading-activerecord]] (⚠️ vidéo > 2 ans, API Rails 8 vérifiée inchangée). Index Rails Obsidian mis à jour avec les 3 entrées. **`personal-to-do.md` créé** dans la vault Obsidian (racine `DevJobReady/`) : checkbox + jour + priorité 🔴/🟡/🟢 ; 4 items posés pour samedi 13 juin (Huntr 🔴, relire Turbo Frames/Streams 🟡, décider SPA/MPA NtF 🟡, contentieux serrurier 🔴).
+
+- **Lundi 8 juin (matin, Claude app)** — Odin chap. **36 Turbo** en lecture profonde + coaching Claude (vulgarisation prioritaire, Frames + Streams + format negotiation = avancé sous-le-capot). Couvert : modèle mental Hotwire (Drive + Frames + Streams + Stimulus + Native), **Turbo Frames** (PIP scope, `turbo_frame_tag @model` idiomatique via `dom_id`, `src` eager + `loading="lazy"`, `data-turbo-frame="_top"` pour sortir, ciblage externe, `aria-busy`), **Turbo Streams** (8 actions append/prepend/replace/update/remove/before/after/refresh, `target` singulier vs `targets` CSS selector pluriel, helpers Rails `turbo_stream.replace(..., partial:)`, templates `.turbo_stream.erb`, broadcast Action Cable via `after_create_commit { broadcast_append_to }` + `turbo_stream_from @record`), **négociation de format** (`respond_to` + `Accept:` header : Turbo n'est pas magique, il ajoute juste `text/vnd.turbo-stream.html` en tête de l'`Accept`). Bonus hors Odin : **morphing Turbo 8** (`<meta name="turbo-refresh-method" content="morph">` + `data-turbo-permanent` + `broadcasts_refreshes`). **3 questions de vérification entretien détaillées répondues par Claude** : (1) scoping frame avec lien interne ("Modifier" reste dans le frame = ✅ ; "Retour à index" reste dans le frame = ❌ frame vidé → fix `data: { turbo_frame: "_top" }`) ; (2) `update` vs `replace` avec Stimulus `data-controller` attaché (update conserve l'instance, replace fait disconnect+connect — choix prod = replace + partial self-contained) ; (3) piège `406 Not Acceptable` si on supprime `format.html` quand un client envoie `Accept: text/html` (Turbo OFF, JS désactivé, crawler) + pire : `create!` exécuté avant `respond_to` → record en DB + erreur 406 affichée. Knowledge Check Odin (4 Q : SPA, Hotwire, Frame, Stream) répondu par écrit. **Application directe Nine to Fine** : filtres `link_to` aprem sem 24 (frame `garments_list`), likes/comments sem 25 (stream replace + broadcast). Note Obsidian : [[turbo-frames-streams-and-format-negotiation]]. Index Rails Obsidian mis à jour.
+
+- **Lundi 8 juin (avant-midi, Claude app)** — Tailwind docs **Typography** en lecture profonde + coaching Claude (vulgarisation forcée — 2 reprises de Chris sur clarté pendant Turbo le matin, règle `feedback-vulgarize-advanced-rails` re-flaggée pour Tailwind v4 aussi). Couvert : **Font family** (`font-sans/serif/mono` + `ui-sans-serif`/`ui-serif` qui pointent vers la police système native, customization via `@theme --font-display/--font-body`, namespace `--font-X` génère utility `font-X`, ordre critique des `@import` Google Fonts AVANT `@import "tailwindcss"`, feature settings OpenType). **Font size** (13 tailles `text-xs` à `text-9xl`, **rupture à `text-5xl`** : line-height par défaut couplé proportionnel sur les petites/moyennes tailles, forcé à 1.0 sur les ≥48px, shorthand `text-base/7` en `--spacing` units, bundling v4 `--text-h1--line-height/--letter-spacing/--font-weight`). **Font weight** (100→900, **piège faux gras synthétique** si la font ne charge pas le poids, variable fonts `font-[450]`). **Line height** (formule `calc(--spacing × n)`, unitless vs unit héritage, `leading-*` ≠ `space-y-*`). **Letter spacing** (em-based pour scale avec font-size, conventions pro : `-tracking-tight` sur gros titres, `tracking-wider` sur majuscules). **Text decoration** (5 propriétés combinables : line, color, style, thickness, offset + pattern lien moderne). **Q1 coaching** : diagnostic du chevauchement `text-5xl + leading-7` (ratio 28/48 = 0.58 = télescope vertical) + fix (retirer `leading-7`, garder défaut). 11 pièges gravés. **Proposition design system Nine to Fine actée** dans la note (à valider en CLI cet aprem) : Playfair Display (display) + Inter (body), échelle 5 tailles sémantiques bundlées v4 (`--text-h1/h2/h3/body/caption`). Note Obsidian : [[typography-fundamentals]]. Index Tailwind Obsidian mis à jour.
+
+- **Lundi 8 juin (aprem, Claude Code CLI)** — _(à compléter en fin de journée)_ Sujets visés : filtres `link_to` (couleur + category + tag cliquables) sur index garments via Turbo Frame `garments_list`, application du design system typo Nine to Fine (`@theme --font-display/--font-body` + `--text-h1/h2/h3/body/caption`).
+
+- **Lundi 8 juin (soir)** — _(à définir en fin d'aprem en continuité avec ce que Chris aura codé en CLI)_
+
+**Blocages / méta**
+
+- **Clarté + vulgarisation insuffisante** côté Claude pendant le slot matin Turbo (2 reprises de Chris : "tes explications ne sont pas du tout claires ni vulgarisées", flaggée également sur question Tailwind Q2 "je ne comprends pas ce que tu me demandes"). Les règles mémoire `feedback-vulgarize-advanced-rails.md` et `feedback-concrete-verification-questions.md` **existent déjà** (sem 22 et sem 23), Claude a re-rechuté → pas de nouvelle règle à créer, à appliquer plus strictement. Pattern à surveiller : Tailwind v4 (concepts CSS-first + `@theme` + namespaces) tombe aussi dans la catégorie "avancé sous le capot" qui exige analogie concrète d'abord, jargon après.
