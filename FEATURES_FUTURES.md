@@ -24,11 +24,11 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 
 ### Tags cliquables → index filtré par tag
 
-- **Contexte d'origine** : jeudi 4 juin 2026, session tags comma-separated. Marquée "à faire bientôt" par Chris. Les pills de tags (sur `garment#show` et `outfit#show`, partial `shared/_tags`) sont actuellement non cliquables.
-- **Description** : rendre chaque pill cliquable → mène vers l'**index du tag**, listant tout ce qui porte ce tag. Vue éventuellement **scindée en deux sections** : Garments d'un côté, Outfits de l'autre (le tag étant polymorphe via `tagged_garments` / `tagged_outfits` déjà définis sur `Tag`).
-- **Stack** : route + `TagsController#show` (ou `#index` filtré) scopé `current_user`, deux collections (`tag.tagged_garments`, `tag.tagged_outfits`), eager loading anti-N+1, `link_to` sur les pills dans `shared/_tags`. Recoupe les filtres `link_to` par tag planifiés sem 24.
-- **Estimation** : ~0.5-1 j (les associations `tagged_garments`/`tagged_outfits` existent déjà).
-- **Slot suggéré** : sem 24 (avec les filtres par tag) ou juste après — proche, pas post-emploi.
+- **Statut** : ✅ **LIVRÉ partiel côté garments (lundi 8 juin 2026, PR #83)**. Pills tags dans `shared/_tags` deviennent `link_to garments_path(q: { tag_id: tag.id })` avec hover, navigation pleine page vers index garments filtré par tag (passe par `GarmentFilter` PR #79). Pill tag s'affiche active dans le bandeau de filtres au retour.
+- **Reste à faire (extension)** : la vision originale prévoyait **deux sections** (Garments + Outfits côté à côté). On a livré garments uniquement. Pour ajouter les outfits filtrés par tag, il faut : (a) un `OutfitFilter` Query Object miroir de `GarmentFilter` (ou un parent commun `BaseFilter`), (b) une page dédiée `TagsController#show` qui liste les deux ou un toggle, (c) UX choix entre redirect vers garments/outfits.
+- **Stack restante** : `OutfitFilter` + route `TagsController#show` ou rester sur la mécanique actuelle (les pills tag depuis show outfit vont sur l'index garments — comportement V1 qui peut suffire).
+- **Estimation restante** : ~1-1.5 j.
+- **Slot suggéré** : sem 25-26 (avec features sociales — like/follow s'inscriront dans la même session).
 
 ### Prévisualisation live de la photo à la sélection (new + edit)
 
@@ -42,11 +42,11 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 
 ### Index garments organisé (onglets catégorie / couleur)
 
-- **Contexte d'origine** : mercredi 3 juin 2026, même session design Outfit. Besoin de retrouver vite une pièce dans un grand index.
-- **Description** : index rangé avec **onglets/filtres** par catégorie, couleur, etc. NB : la **base** (filtres `link_to` un-à-la-fois + recherche par nom) est **déjà planifiée sem 24** ; la combinaison multi-filtres est déjà tracée plus bas ("Combinaison de filtres"). Le surplus *future* = présentation en onglets + sert de **socle** à la sélection par clic (entrée ci-dessus).
-- **Stack** : couvert par sem 24 + entrée "Combinaison de filtres" ; enrichissement onglets sans gem.
-- **Estimation** : base sem 24 ; enrichissement onglets ~1 j.
-- **Slot suggéré** : base sem 24, enrichissement post-emploi.
+- **Statut** : ✅ **Base LIVRÉE (lundi 8 juin 2026, PR #79 + #83)** sous forme de bandeau de pills filtres combinables AND (Color / Category / Brand / Tag) avec Turbo Frame. Recherche par nom encore à venir (mardi 9 juin matin sem 24).
+- **Reste à faire (enrichissement)** : passer du bandeau de pills à une **présentation par onglets** (Category en onglet principal, sous-pills color/brand/tag), si l'index grandit au-delà de ~50 garments et que le bandeau de pills devient surchargé. Sert aussi de **socle** à la sélection par clic dans l'index pour composer un outfit (entrée ci-dessus).
+- **Stack restante** : refactor UI vers `<nav>` à onglets (probablement via Stimulus controller `tabs_controller.js` pour le switch), enrichissement progressif au besoin.
+- **Estimation restante** : ~1 j.
+- **Slot suggéré** : post-emploi (déclencheur = nombre de garments).
 
 ### Autocomplete Stimulus sur input tags
 
@@ -58,11 +58,28 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 
 ### Combinaison de filtres (couleur ET tag ET category)
 
-- **Contexte d'origine** : sortie Q1. V1 = 1 filtre à la fois via `link_to`.
-- **Description** : combiner plusieurs filtres simultanément (ex : "tous mes tops bleus tagués weekend").
-- **Stack** : refactor du scoping côté model (chaînage de scopes) + UI checkboxes ou pills désélectionnables. Pas de gem nécessaire.
-- **Estimation** : 1-2 j.
-- **Slot suggéré** : post-emploi.
+- **Statut** : ✅ **LIVRÉ côté garments (lundi 8 juin 2026, PR #79 + #81 + #83)**. Pivot design pris dès le brainstorming (Zalando/Uniqlo l'imposent). Implémentation via `GarmentFilter` Query Object avec pipeline `inject` + dispatch dynamique `send("by_#{key}")` — pattern Open/Closed prouvé en live (ajout proactif du 4e filtre `brand`, zéro modif sur `apply`/`results`). 10 tests Minitest. Front pills cliquables dans bandeau Turbo Frame.
+- **Reste à faire (extension outfits)** : équivalent `OutfitFilter`. Recouvre l'entrée "Tags cliquables → index filtré par tag" ci-dessus.
+- **Estimation restante** : ~1 j si refactor parent `BaseFilter` au passage.
+- **Slot suggéré** : sem 25-26 avec features sociales / index outfits.
+
+### Multi-color par garment
+
+- **Contexte d'origine** : lundi 8 juin 2026 (sem 24), session normalisation des couleurs en préparation de PR #83. En passant la colonne `color` à une liste fermée (`Garment::COLORS`, 12 couleurs), Chris a découvert un garment bi-color dans ses données dev : `"light grey & purple"`. La structure actuelle (string `color` unique) ne peut représenter qu'une seule couleur. V1 normalisé arbitrairement vers `grey` (perte d'information).
+- **Description** : permettre à chaque `Garment` d'avoir **plusieurs couleurs** (couleur dominante + couleurs secondaires, ou liste plate). Le `GarmentFilter#by_color` devra passer de "equals" à "contains" (`WHERE 'red' = ANY(colors)` en Postgres ou jointure si table dédiée).
+- **Stack** : 2 options.
+  - **Postgres `string[]` array** sur la colonne `colors` (Rails 8 supporte nativement avec serializer auto + `.where("? = ANY(colors)", val)`) — léger, pas de table en plus. Migration : `add_column :garments, :colors, :string, array: true, default: []` + retirer `color`. Form : `collection_check_boxes` ou pills cliquables Stimulus pour sélection multiple.
+  - **Table `garment_colors`** (1:N) + model dédié + association `has_many :colors, class_name: 'GarmentColor'` — plus lourd mais permet d'attacher des attributs aux couleurs (intensité, ordre, pastilles hex).
+- **Estimation** : 0.5-1 j (option Postgres array recommandée pour simplicité).
+- **Slot suggéré** : post-emploi (faible bénéfice utilisateur immédiat).
+
+### Normalisation `brand` au save (callback)
+
+- **Contexte d'origine** : lundi 8 juin 2026 (sem 24), session front pills PR #83. La pill "Brand" est déduite de `current_user.garments.distinct.pluck(:brand)`. Une liste fermée des marques mondiales étant intenable, la défense contre la pollution (saisie libre type "Uniqlo"/"uniqlo"/"UNIQLO"/"Uniqlo " avec espace en trop) doit se faire **à la saisie**, pas au filtre.
+- **Description** : callback `before_save :normalize_brand` dans `Garment` qui applique `.strip.titleize` à `brand` à chaque save. Force la cohérence côté DB. Risque : `titleize` produit des résultats étranges sur certaines marques (`"a.p.c."` → `"A.P.C."` OK, mais `"levi's"` → `"Levi's"` OK aussi — à valider sur cas réels).
+- **Stack** : ActiveRecord callback + tests Minitest pour vérifier l'invariant (saisir "  uniqlo  " → "Uniqlo" en DB). Optionnel : audit des données existantes (`Garment.distinct.pluck(:brand)`) pour normaliser le legacy via `Garment.find_each { |g| g.update(brand: g.brand) }` après ajout du callback.
+- **Estimation** : ~1h (10 min code + tests + vérification données dev).
+- **Slot suggéré** : sem 24-25, faible coût. À traiter avant que la pollution `brand` ne devienne visible dans les pills filtres.
 
 ### Ransack ou équivalent (recherche full-text)
 
