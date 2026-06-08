@@ -1,5 +1,4 @@
 module GarmentsHelper
-
   def pill_class(active)
     base = "inline-block px-3 py-1 text-sm rounded-full transition whitespace-nowrap"
     if active
