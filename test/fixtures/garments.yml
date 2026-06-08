@@ -21,3 +21,10 @@ white_sneakers:
   brand: Adidas
   user: john
   category: footwear
+
+black_jacket:
+  name: Black Leather Jacket
+  color: black
+  brand: Uniqlo
+  user: john
+  category: outerwear
