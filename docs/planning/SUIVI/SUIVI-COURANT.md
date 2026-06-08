@@ -135,9 +135,11 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 
   - **Defense en profondeur** : 4 filets (scope `current_user.X` + `permit` controller + `slice(*FILTERS)` filter + `.where(col: val)` SQL paramétrisé). Une URL `?q[evil]=hack&q[user_id]=99999&foo=bar` est nettoyée en cascade : `foo` viré par `params[:q]` (hors scope), `user_id`+`evil` virés par `permit`.
 
-  - **Reports délibérés** (à faire dans la suite immédiate) : (a) **Étape 3 tests Minitest** (~9-10 cas dans `test/queries/garment_filter_test.rb` — pas encore écrit) ; (b) **front pills cliquables** + **Turbo Frame `garments_list`** + intersection vide + reset filtres ; (c) **application design system typo** (Playfair Display + Inter + `@theme --text-h1/...`) ; (d) **tags cliquables → index filtré par tag** depuis les pills (index garments + show garment + show outfit).
+  - **Reports résolus en fin d'aprem** : **Étape 3 tests Minitest livrée, PR #81 mergée** — 10 cas dans `test/queries/garment_filter_test.rb` (identité, chaque filtre seul incluant le JOIN polymorphique tag, combos AND 2 et 4 filtres, edge cases `slice` + `.blank?`, ⭐ **test de propriété de sécurité cross-user**). Fixture `black_jacket` (user=john, color=black) ajoutée à `garments.yml` pour rendre le cas 10 non-trivial (sans elle, l'isolation aurait passé par hasard). Bug vécu pédagogique : typo `result_empty` vs `results_empty` (Minitest `NameError: undefined local variable`). 10 runs, 19 assertions, 0 failure. Notes : [[minitest-garment-filter-query-object]].
 
-  - Notes Obsidian : [[query-objects-pipeline-inject-and-dynamic-dispatch]] (nouvelle). Index Rails Obsidian mis à jour (section "Active Record / Queries").
+  - **Reports restants** (front à faire aprem aujourd'hui) : (a) **front pills cliquables** (color/category/brand) sur index garments + **Turbo Frame `garments_list`** + intersection vide + reset filtres ; (b) **tags cliquables → index filtré par tag** depuis les pills existantes (`shared/_tags.html.erb` → `link_to garments_path(q: { tag_id: tag.id })`). Reporté à mardi 9 juin (déjà au programme matin polish typo) : **application design system typo** (Playfair Display + Inter + `@theme --text-h1/h2/h3/body/caption`).
+
+  - Notes Obsidian : [[query-objects-pipeline-inject-and-dynamic-dispatch]] (back) + [[minitest-garment-filter-query-object]] (tests). Index Rails Obsidian mis à jour (sections "Active Record / Queries" + "Testing").
 
 - **Lundi 8 juin (soir)** — _(à définir en fin de journée en continuité avec le back du Filter : probablement exo Minitest sandbox sur un mini Query Object OU portage des tests Minitest réels du filter — étape 3 à faire de toute façon)_
 
