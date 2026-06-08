@@ -3,7 +3,13 @@ class GarmentsController < ApplicationController
   before_action :set_categories, only: %i[new edit create update]
   def index
     base = current_user.garments.includes(:category, photo_attachment: :blob)
-    @garments = GarmentFilter.new(base, filter_params).results.order(created_at: :desc)
+    @filter_params = filter_params
+    @garments = GarmentFilter.new(base, @filter_params).results.order(created_at: :desc)
+
+    @available_colors = Garment::COLORS
+    @available_categories = Category.order(:position)
+    @available_brands = current_user.garments.where.not(brand: [ nil, "" ]).distinct.pluck(:brand).sort
+    @available_tags = current_user.tags.order(:name)
   end
 
   def show
