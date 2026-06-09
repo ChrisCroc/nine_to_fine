@@ -10,9 +10,31 @@
       </div>
     </div>
 
+    <% current = @filter_params.to_h.with_indifferent_access %>
+
+    <%# Search by name - out of the frame, static, focus preserved %>
+      <%= form_with url: garments_path,
+                    method: :get,
+                    html: { class: "mb-4" },
+                    data: { controller: "search-form",
+                    turbo_frame: "garments_list" } do |f| %>
+
+      <%# Preservation of other active filters via hidden inputs %>
+      <% current.except(:search).each do |key, value| %>
+        <%= hidden_field_tag "q[#{key}]", value %>
+      <% end %>
+
+      <%# Input text %>
+      <%= text_field_tag "q[search]", current[:search],
+            placeholder: "Search by name..",
+            autocomplete: "off",
+            data: { search_form_target: "input",
+                    action: "input->search-form#scheduleSubmit" },
+            class: "w-full bg-white/40 backdrop-blur-sm rounded-xl px-4 py-3 placeholder-zinc-500 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-yellow-700" %>
+      <% end %>
+
     <%# Turbo Frame qui enveloppe bandeau filtres + grille %>
     <%= turbo_frame_tag "garments_list" do %>
-      <% current = @filter_params.to_h.with_indifferent_access %>
 
       <%# Bandeau filtres %>
       <div class="bg-white/40 backdrop-blur-sm rounded-xl p-4 mb-6 space-y-3">
