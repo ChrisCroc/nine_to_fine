@@ -20,6 +20,7 @@ export default class extends Controller {
   }
 
   renderRow(data, escape) {
+    // console.log("Tom Select data object:", data)
     const hex = escape(data.hex || "#cccccc")
     const text = escape(data.text)
     return `<div class="flex items-center gap-2">
