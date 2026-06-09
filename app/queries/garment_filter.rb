@@ -1,5 +1,5 @@
 class GarmentFilter
-  FILTERS = %i[color category_id tag_id brand].freeze
+  FILTERS = %i[color category_id tag_id brand search].freeze
 
   def initialize(scope, params)
     @scope = scope
@@ -32,5 +32,10 @@ class GarmentFilter
 
   def by_brand(relation, value)
     relation.where(brand: value)
+  end
+
+  def by_search(relation, value)
+    escaped = ActiveRecord::Base.sanitize_sql_like(value)
+    relation.where("name ILIKE ?", "%#{escaped}%")
   end
 end

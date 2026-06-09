@@ -62,6 +62,6 @@ class GarmentsController < ApplicationController
   end
 
   def filter_params
-    params[:q]&.permit(:color, :category_id, :tag_id, :brand) || {}
+    params[:q]&.permit(:color, :category_id, :tag_id, :brand, :search) || {}
   end
 end

@@ -81,13 +81,13 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : ~1h (10 min code + tests + vérification données dev).
 - **Slot suggéré** : sem 24-25, faible coût. À traiter avant que la pollution `brand` ne devienne visible dans les pills filtres.
 
-### Ransack ou équivalent (recherche full-text)
+### Full-text search (`pg_search`)
 
-- **Contexte d'origine** : sortie Q1. V1 = recherche par nom uniquement via scope simple.
-- **Description** : recherche full-text avec gem Ransack ou pg_search sur name + brand + description.
-- **Stack** : gem `ransack` ou `pg_search` + UI search bar avancée.
-- **Estimation** : 2 j.
-- **Slot suggéré** : post-emploi.
+- **Contexte d'origine** : sortie Q1, **confirmée mardi 9 juin 2026 (sem 24)** lors de la livraison de la barre de recherche `name` simple via `GarmentFilter#by_search` (`ILIKE` + `sanitize_sql_like` + debounce Stimulus 300ms). La V1 cherche **uniquement** dans la colonne `name`. Discussion explicite avec Chris : la recherche multi-colonnes naïve (`name OR color OR brand OR description`) est rejetée pour ambiguïté UX (taper "blue" mélangerait pièces nommées "Blue dress" et toutes les pièces de couleur bleue). Option retenue = full-text search dédié.
+- **Description** : recherche full-text **multi-colonnes intelligente** sur `name + brand + description` (et plus tard `tags.name` via association). Stemming (chercher "courir" matche "course"), normalisation accents (chercher "veste" matche "véste"), ranking par pertinence. Garde la barre dédiée à `name` ET ajoute soit une 2e barre "search all" soit un toggle UX.
+- **Stack** : gem `pg_search` (recommandée vs Ransack pour ce besoin). Concern `PgSearch::Model` dans `Garment` + déclaration `pg_search_scope :search_all, against: [:name, :brand, :description], using: { tsearch: { prefix: true, dictionary: "french" } }`. Migration pour ajouter un index GIN sur `tsvector` généré ou colonne dérivée. Côté UI : extension du `GarmentFilter` avec une clé `:search_all` distincte de `:search`.
+- **Estimation** : 1.5-2 j (gem + index + UI + tests + tuning dictionary FR vs EN).
+- **Slot suggéré** : post-emploi (oct 2026+). Pas bloquant pour la V1 mi-juillet : la barre `name` simple couvre 80% des usages d'une garde-robe perso.
 
 ### Refactor partiel modèle (à identifier post-v1)
 
@@ -104,6 +104,14 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Stack** : gem `bullet` + Solid_cache (déjà dans Gemfile Rails 8) + `add_index` migrations.
 - **Estimation** : 2-3 j cumulés.
 - **Slot suggéré** : Phase 4 Standard escalation (fin sem 37 si conditions règle 3 remplies) ou post-emploi.
+
+### Sidebar filtres togglable (remplace le bandeau de pills horizontal)
+
+- **Contexte d'origine** : mardi 9 juin 2026 (sem 24), suite à la livraison de la barre de recherche `name`. Chris a explicitement qualifié le bandeau de pills horizontal actuel (PR #83, lignes 38-86 de `index.html.erb`) d'"horrible" et veut basculer vers une **sidebar verticale togglable** type Zalando/Asos/Uniqlo. La V1 reste sur les pills (cohérent fonctionnellement, suffisant pour le démontrer en entretien), refonte UI sortie de scope V1 mi-juillet.
+- **Description** : refondre l'UI de filtrage de l'index garments (et plus tard outfits) en **sidebar latérale gauche** (desktop) ou **drawer bottom-up** (mobile), togglable via un bouton "Filtres" en en-tête. Sections collapsibles dans la sidebar (Couleur / Catégorie / Marque / Tag / Recherche). Compteur de filtres actifs visible sur le bouton toggle. Mémorisation de l'état ouvert/fermé en `localStorage`. Pas de rechargement de page à l'ouverture/fermeture.
+- **Stack** : Stimulus controller `filters_sidebar_controller.js` (toggle + state localStorage + sections collapsibles via targets/values) + refonte Tailwind (transitions slide-in/out, `motion-safe:` obligatoire — cf. note [[transitions-and-animations-fundamentals]]) + Turbo Frame intacte sur la grille (la sidebar reste statique entre les submits, comme l'input search dehors de la frame). Conservation de la mécanique back inchangée (`GarmentFilter` + URL `?q[...]` + hidden inputs propagés depuis la sidebar). Recouvre fortement l'entrée "Index garments organisé (onglets catégorie / couleur)" ci-dessus — à fusionner au moment de l'implémentation pour trancher entre "onglets horizontaux" et "sidebar verticale" (probablement sidebar = winner).
+- **Estimation** : 2-3 j (Stimulus + UI Tailwind + responsive + accessibilité + tests système).
+- **Slot suggéré** : post-emploi (oct 2026+). Bonne occasion pour consolider Stimulus avancé (multi-targets + values + localStorage) et Tailwind avancé (transitions + responsive variants).
 
 ## Priorité basse
 
