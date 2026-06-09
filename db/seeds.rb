@@ -14,7 +14,10 @@ categories = [
   { name: "Bottom", position: 2 },
   { name: "Outerwear", position: 3 },
   { name: "Footwear", position: 4 },
-  { name: "Accessories", position: 5 }
+  { name: "Accessories", position: 5 },
+  { name: "Dress", position: 6 },
+  { name: "Suit", position: 7 },
+  { name: "Swimwear", position: 8 }
 ]
 
 categories.each do |attributes|

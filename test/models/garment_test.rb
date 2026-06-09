@@ -152,6 +152,11 @@ class GarmentTest < ActiveSupport::TestCase
     assert_includes garment.errors[:color], "is not included in the list"
   end
 
+  test "COLOR_HEX maps every entry of COLORS" do
+    assert_equal Garment::COLORS.sort, Garment::COLOR_HEX.keys.sort,
+      "Each colour in COLORS must have a hex value in COLOR_HEX (drift detected)"
+  end
+
 private
 
   def build_garment(attrs = {})
