@@ -74,4 +74,23 @@ class GarmentFilterTest < ActiveSupport::TestCase
     assert_includes result, garments(:black_tshirt)
     refute_includes result, garments(:black_jacket)
   end
+
+  test "results filters by search with partial ILIKE match" do
+    result = GarmentFilter.new(@chris_scope, { search: "shirt" }).results
+
+    assert_includes result, garments(:black_tshirt)
+    refute_includes result, garments(:blue_jeans)
+  end
+
+  test "results filters by search and by color with AND" do
+    result = GarmentFilter.new(@chris_scope, { search: "jea", color: "blue" }).results
+
+    assert_includes result, garments(:blue_jeans)
+    refute_includes result, garments(:black_tshirt)
+  end
+
+  test "results escapes % wildcard in search" do
+    result = GarmentFilter.new(@chris_scope, { search: "%" }).results
+    refute_equal @chris_scope.pluck(:id).sort, result.pluck(:id).sort
+  end
 end
