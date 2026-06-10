@@ -102,6 +102,7 @@ Source unique de vérité : section **"Suivi (vivant)"** dans `PLANNING.md`. À 
 
 Dès le **premier message** de Chris dans une nouvelle session sur ce projet, ta toute première action — avant de répondre à son message — est de :
 
+0. **Read obligatoire** : `docs/planning/SUIVI/SUIVI-COURANT.md`. Ce fichier n'est PAS `@import`-é automatiquement (gain tokens sub-agents). Il contient le journal de la sem en cours + la sem précédente condensée. **Les étapes 5/6/7 ne sont pas exécutables sans ce Read.** Si le Read échoue ou truncate, signaler immédiatement à Chris. **Pour les sessions non rituelles** (Chris pose une question directe sans démarrage rituel), faire ce Read à la demande dès que la question implique le contexte coaching, planning, suivi d'avancement ou état de la sem en cours.
 1. Lire la **date du jour** (fournie dans le contexte system)
 2. Déterminer la **semaine ISO** et la **phase courante** d'apprentissage selon `PLANNING.md`
 3. Annoncer à Chris la phase et la semaine en cours.
@@ -116,6 +117,7 @@ Dès le **premier message** de Chris dans une nouvelle session sur ce projet, ta
 7. **Lecture adaptée du Suivi** :
    - **Mardi à vendredi** : focus sur la journée de la veille + la semaine en cours. Annonce du programme du jour en référence directe à ce qui a été fait hier (continuité fine).
    - **Lundi (ou première session de la semaine)** : lecture intégrale de la **semaine précédente complète** + de la semaine en cours qui démarre. Annonce du démarrage de semaine avec récap des accomplissements + blocages + ajustements de la sem précédente **avant** le programme du jour. Couplé avec la routine `gh issue list` du lundi (point 6).
+   - **Routine de condensation hebdo (lundi, après lecture sem précédente)** : proposer à Chris d'archiver + condenser la sem précédente. (a) Copier la sem précédente verbatim en append à `docs/planning/SUIVI/ARCHIVE/{YYYY-MM}.md` (créer le fichier s'il n'existe pas, avec en-tête expliquant la politique du mois). (b) Remplacer la sem précédente dans `SUIVI-COURANT.md` par une version condensée selon la règle : **préserver** livraisons clés (1 ligne par PR avec lien Obsidian), décisions de design tranchées, concepts maîtrisés en live, friction/blocages capturés, reports backlog ; **supprimer** pavés techniques détaillés (vivent dans notes Obsidian par concept). Cible ≤ 8 k chars condensé par semaine (la sem 23 condensée fait déjà ~5 k ; sem 24 sera plus dense — marge nécessaire pour préserver décisions design + concepts en live + friction sans devoir trancher). Exécuter seulement après OK explicite de Chris.
 
 Si la date du jour ne correspond à aucune journée détaillée, demande à Chris ce qu'il veut prioriser.
 
@@ -147,6 +149,12 @@ Si la date du jour ne correspond à aucune journée détaillée, demande à Chri
 Le projet est utilisé comme support pour le plan d'apprentissage 18 semaines de Chris (25 mai → 27 sept 2026). Voir le fichier importé ci-dessous pour les jalons, ritual quotidien, détail des semaines en cours, règles pédagogiques et journal de suivi.
 
 @PLANNING.md
-@docs/planning/SUIVI/SUIVI-COURANT.md
 @docs/planning/PROGRESSION.md
 @docs/planning/PHASES/phase-1.md
+
+<!--
+`docs/planning/SUIVI/SUIVI-COURANT.md` n'est volontairement PAS `@import`-é ici.
+Raison : ce fichier (journal jour-par-jour) pèse ~10 k tokens et n'est utile qu'à la session principale en mode coach (pas aux sub-agents Explore/code-review/Plan).
+Le Read est codifié comme **étape 0 obligatoire** dans la routine "Démarrage de session" ci-dessus, et fait à la demande pour les sessions non rituelles qui touchent au contexte coaching/planning.
+-->
+

@@ -21,8 +21,8 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
   - 35. JS Bundling ✅ (jeudi 4 juin matin, lu en paire avec 34, voir [[bundling-vs-importmap-rails-8]])
   - 36. Turbo ✅ (lundi 8 juin matin sem 24, voir [[turbo-frames-streams-and-format-negotiation]] — Frames + Streams + format negotiation + bonus Morphing Turbo 8)
   - 37. Stimulus ✅ (mardi 9 juin matin sem 24, voir [[stimulus-fundamentals]] — handbook complet + reference + 3 exos sandbox repo `ChrisCroc/sandbox-stimulus`)
+  - 38. Mailers ✅ (mercredi 10 juin matin sem 24, voir [[mailers-fundamentals]] — pattern moderne `Mailer.with(params).action.deliver_later` + sérialisation GlobalID Active Job, distinction `*_action` vs `*_deliver` + 2 familles de callbacks, `.touch(:column)` AR direct SQL skip validations, Mailer Preview vs Letter Opener duo, lien direct [[callbacks]] pour `after_commit` mandatory sur `deliver_later` + 3 questions style entretien dans [[../../../Entretiens/Rails/mailers]])
 - **Prochain (ordre Odin officiel)** :
-  - 38. Mailers
   - 40. Advanced Topics
   - 41. Websockets and ActionCable
 - **Skip délibéré** (projets Odin redondants avec bootcamp + Nine to Fine) : 16 Micro-Reddit, 21 Forms, 23 Members Only!, 26 Private Events, 29 Flight Booker, 32-33 Kittens/Pexels APIs, 39 Confirmation Emails, 42 Odin Book. Leur valeur est récupérée via : (a) Nine to Fine l'aprem, (b) sous-portions isolées en exos sandbox le soir.
@@ -30,10 +30,9 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
 
 ## Tailwind CSS
 
-- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin) + **Theme variables + Functions & Directives** (mardi 2 juin avant-midi, voir [[theme-variables-and-directives]]) + **Customization : Dark mode + Colors palette** (mercredi 3 juin avant-midi, voir [[dark-mode]] et [[colors-palette]]) + **Backgrounds + Borders + Effects + Opacity** (jeudi 4 juin avant-midi, voir [[backgrounds-borders-effects-v4]]) + **Typography : font-family, font-size, font-weight, line-height, letter-spacing, text-decoration** (lundi 8 juin avant-midi, voir [[typography-fundamentals]]) + **Transitions & Animation : transition-property, duration, timing-function, animation + accessibilité prefers-reduced-motion** (mardi 9 juin avant-midi, voir [[transitions-and-animations-fundamentals]])
+- **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin) + **Theme variables + Functions & Directives** (mardi 2 juin avant-midi, voir [[theme-variables-and-directives]]) + **Customization : Dark mode + Colors palette** (mercredi 3 juin avant-midi, voir [[dark-mode]] et [[colors-palette]]) + **Backgrounds + Borders + Effects + Opacity** (jeudi 4 juin avant-midi, voir [[backgrounds-borders-effects-v4]]) + **Typography : font-family, font-size, font-weight, line-height, letter-spacing, text-decoration** (lundi 8 juin avant-midi, voir [[typography-fundamentals]]) + **Transitions & Animation : transition-property, duration, timing-function, animation + accessibilité prefers-reduced-motion** (mardi 9 juin avant-midi, voir [[transitions-and-animations-fundamentals]]) + **Transforms : translate, rotate, scale, skew, transform-origin + intro 3D context (perspective, transform-3d)** (mercredi 10 juin avant-midi, voir [[transforms-fundamentals]] — composition via CSS variables Tailwind v4, GPU performance vs layout reflow, application N to F card lift / pills / press effect / modal entrance, 3 questions style entretien intégrées)
 - **Prochain (à faire dans l'ordre)** :
-  1. Docs section **Transforms** (translate, rotate, scale, skew, perspective, transform-origin) — complément naturel de Transitions
-  2. Docs section **Interactivity** (cursor, scroll-behavior, scroll-snap, accent-color, etc.)
+  1. Docs section **Interactivity** (cursor, scroll-behavior, scroll-snap, accent-color, etc.)
 
 ## React (à démarrer Phase 2, sem 26)
 
