@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Nine To Fine" %></title>
+    <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} - Nine to Fine" : "Nine to Fine" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Nine To Fine">
