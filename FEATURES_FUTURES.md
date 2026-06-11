@@ -105,6 +105,29 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : 2-3 j cumulés.
 - **Slot suggéré** : Phase 4 Standard escalation (fin sem 37 si conditions règle 3 remplies) ou post-emploi.
 
+### `SuggestionsController` dédié dès V1 + futur model `Suggestion` persisté (pattern "verbe → nom")
+
+- **Contexte d'origine** : jeudi 11 juin 2026 (sem 24), lecture profonde Odin chap. 40 Advanced Topics, Section 2 (Controllers, Models & REST Principles). En décortiquant la suggestion IA Phase 4, application directe du pattern "verbe → nom" (un verbe qui mérite ≥ 2 actions ou qui mérite plus tard de devenir un model → controller dédié dès aujourd'hui).
+- **Description** : au lieu d'ajouter une action `member do post :suggest_completions end` à `OutfitsController` (qui gonflerait le controller pour chaque évolution future), créer **dès V1 Phase 4** un `SuggestionsController` nested sous Outfit :
+  ```ruby
+  resources :outfits do
+    resources :suggestions, only: [:create]   # V1 : stateless, juste create
+  end
+  ```
+  V1 (Phase 4 sem 36-37) : `#create` appelle `Ai::OutfitSuggester.new(@outfit).suggest`, renvoie 3 suggestions stateless (rien persisté en DB). **Aucun model `Suggestion` à ce stade**, juste un controller qui orchestre un service.
+- **Évolution future probable** (~6 mois post-déploiement, post-emploi) : `Suggestion` devient un **VRAI model persisté** pour adresser 5 besoins distincts qui apparaîtront avec l'usage réel :
+  1. **Tracking historique** : "Quelles suggestions ont été générées pour cet outfit ?" (audit + UX retour utilisateur)
+  2. **Feedback user** : "Garde / Rejette" sur chaque suggestion → boucle d'apprentissage (data pour fine-tuning prompt + signal IA portfolio)
+  3. **Économie d'API** : cache des suggestions récentes (< 1h) au lieu de re-payer un appel Anthropic ($$$ à l'échelle)
+  4. **Audit / debug** : stocker le prompt envoyé + la réponse brute JSON pour debugger les hallucinations IA et reprouver
+  5. **Analytics portfolio** : "% de suggestions acceptées finissant en outfit publié" → metric IA quantifiable pour entretien junior dev IA-augmenté
+- **Quand le model arrive** : `rails g model Suggestion outfit:references user:references prompt:text response:jsonb status:integer`, et le `SuggestionsController` existant **n'a qu'à étendre** ses actions (`index` historique pour un outfit, `show` détail debug, `update` pour feedback). **Zéro refactor** côté `OutfitsController` (qui n'a jamais été touché) ni côté `routes.rb`. C'est exactement ce que la section 2.6 Odin appelle "Skinny Controllers, Fat Resources".
+- **Stack V1** : `SuggestionsController` + `Ai::OutfitSuggester` service object (déjà décidé dans CLAUDE.md projet) + gem officielle `anthropic-sdk-ruby` + credentials chiffrées `credentials.yml.enc`.
+- **Stack post-V1** : migration `create_suggestions`, association `Outfit has_many :suggestions`, scope `Suggestion.recent`, enum `status: { pending: 0, accepted: 1, rejected: 2 }`, refactor `OutfitSuggester` pour qu'il `.create!` au lieu de retourner un hash en mémoire.
+- **Estimation V1** : intégrée à l'estimation Phase 4 IA suggester (~3-4 j déjà au plan). Cette entrée ne crée **pas** de charge V1 supplémentaire, c'est juste la **bonne architecture** à appliquer dès le départ.
+- **Estimation extension model** : ~1-1.5 j (migration + model + extension controller + tests).
+- **Slot suggéré** : V1 contrôleur dès **Phase 4 sem 36-37** (intégré au plan existant), extension model **post-emploi (oct 2026+)** quand le tracking + feedback + cache deviennent prioritaires.
+
 ### Sidebar filtres togglable (remplace le bandeau de pills horizontal)
 
 - **Contexte d'origine** : mardi 9 juin 2026 (sem 24), suite à la livraison de la barre de recherche `name`. Chris a explicitement qualifié le bandeau de pills horizontal actuel (PR #83, lignes 38-86 de `index.html.erb`) d'"horrible" et veut basculer vers une **sidebar verticale togglable** type Zalando/Asos/Uniqlo. La V1 reste sur les pills (cohérent fonctionnellement, suffisant pour le démontrer en entretien), refonte UI sortie de scope V1 mi-juillet.
