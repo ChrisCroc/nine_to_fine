@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe Garment, type: :model do
   describe "validations" do
-
     it "is valid with name, color, user and category" do
       garment = build(:garment)
 
@@ -60,7 +59,6 @@ RSpec.describe Garment, type: :model do
   end
 
   describe "associations" do
-
     it "can access its outfits through outfit_garments" do
       user = create(:user)
       garment = create(:garment, user: user)

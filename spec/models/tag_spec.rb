@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe Tag, type: :model do
   describe "validations" do
-
     it "is valid with a name and a user" do
       tag = build(:tag, name: "casual")
 

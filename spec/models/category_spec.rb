@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Category, type: :model do
-
   describe "validations" do
     it "is valid with a name and a position" do
       category = build(:category, name: "Loungewear", position: 99)

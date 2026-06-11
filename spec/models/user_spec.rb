@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe User, type: :model do
   describe "validations" do
-
     it "is valid with username, email and password" do
       user = build(:user)
 
@@ -33,7 +32,6 @@ RSpec.describe User, type: :model do
   end
 
   describe "associations and dependent destroy" do
-
     it "is invalid without an email" do
       user = build(:user, email: nil)
 
@@ -72,7 +70,6 @@ RSpec.describe User, type: :model do
   end
 
   describe "associations and dependent destroy" do
-
     it "destroys associated garments when destroyed" do
       user = create(:user)
       create(:garment, user: user)

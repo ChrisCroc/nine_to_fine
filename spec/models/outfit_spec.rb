@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Outfit, type: :model do
-
   describe "validations" do
-
     it "is valid with a name, a user and at least one garment" do
       outfit = build(:outfit)
 
@@ -58,7 +56,6 @@ RSpec.describe Outfit, type: :model do
     end
   end
   describe "associations" do
-
     it "can access its garments through outfit_garments" do
       user = create(:user)
       garment_a = create(:garment, user: user)
@@ -80,7 +77,6 @@ RSpec.describe Outfit, type: :model do
   end
 
   describe "Taggable concern integration" do
-
     it "creates and assigns tags through tag_names= setter" do
       user = create(:user)
       outfit = build(:outfit, user: user, tag_names: "evening, Casual")
