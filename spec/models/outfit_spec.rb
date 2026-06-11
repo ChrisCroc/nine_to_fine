@@ -1,0 +1,87 @@
+require "rails_helper"
+
+RSpec.describe Outfit, type: :model do
+  describe "validations" do
+    it "is valid with a name, a user and at least one garment" do
+      outfit = build(:outfit)
+
+      expect(outfit).to be_valid
+    end
+
+    it "is invalid without a name" do
+      outfit = build(:outfit, name: nil)
+
+      expect(outfit).not_to be_valid
+      expect(outfit.errors[:name]).to be_present
+    end
+
+    it "is invalid without a user" do
+      outfit = build(:outfit, user: nil)
+
+      expect(outfit).not_to be_valid
+      expect(outfit.errors[:user]).to be_present
+    end
+
+    it "is invalid without at least one garment" do
+      user = create(:user)
+      outfit = Outfit.new(name: "Empty outfit", user: user)
+
+      expect(outfit).not_to be_valid
+      expect(outfit.errors[:garments]).to be_present
+    end
+
+    it "rejects a name longer than 200 characters" do
+      outfit = build(:outfit, name: "a" * 201)
+
+      expect(outfit).not_to be_valid
+      expect(outfit.errors[:name]).to be_present
+    end
+
+    it "is invalid when the same user already has an outfit with that name (case-insensitive)" do
+      user = create(:user)
+      create(:outfit, name: "Casual Friday", user: user)
+      duplicate = build(:outfit, name: "Casual Friday", user: user)
+
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:name]).to be_present
+    end
+
+    it "is valid when another user already has an outfit with the same name" do
+      user1 = create(:user)
+      user2 = create(:user)
+      create(:outfit, name: "Casual Friday", user: user1)
+      outfit = build(:outfit, name: "Casual Friday", user: user2)
+
+      expect(outfit).to be_valid
+    end
+  end
+  describe "associations" do
+    it "can access its garments through outfit_garments" do
+      user = create(:user)
+      garment_a = create(:garment, user: user)
+      garment_b = create(:garment, user: user)
+      outfit = create(:outfit, user: user, garments: [ garment_a, garment_b ])
+
+      expect(outfit.garments.count).to eq(2)
+      expect(outfit.garments).to include(garment_a)
+    end
+
+    it "can have tags through taggings" do
+      user = create(:user)
+      outfit = create(:outfit, user: user)
+      tag = create(:tag, user: user)
+      create(:tagging, tag: tag, taggable: outfit)
+
+      expect(outfit.tags).to include(tag)
+    end
+  end
+
+  describe "Taggable concern integration" do
+    it "creates and assigns tags through tag_names= setter" do
+      user = create(:user)
+      outfit = build(:outfit, user: user, tag_names: "evening, Casual")
+      outfit.save!
+      expect(outfit.tags.pluck(:name).sort).to eq(%w[casual evening])
+    end
+  end
+end
