@@ -1,5 +1,7 @@
 # Phase 2 — React fondamentaux + N to F polish/deploy (sem 26-31, 22 juin → 2 août)
 
+> ⭐ **Note de continuité Phase 1 → Phase 2** : Phase 1 techniquement bouclée vendredi 12 juin 2026 (9 jours d'avance — voir [Bilan Phase 1](phase-1.md#-bilan-phase-1--bouclée-vendredi-12-juin-9-jours-en-avance)). Sem 25 (15-21 juin, fin Phase 1) inclut une **journée consolidation hybride mercredi 17 juin** (Stimulus avancé + Metaprog) + soirs sandbox dirigés (Turbo Streams, AR Queries, APIs Phase 4 prep). Démarrage Phase 2 React lundi 22 juin (sem 26) **inchangé** — la timeline emploi septembre 2026 n'est pas impactée.
+
 **Focus apprentissage** : React (Scrimba CS Career Path + react.dev officiel).
 
 **Odin Rails** : APIs Rails + Testing RSpec à fond (faiblesse classique des juniors).
