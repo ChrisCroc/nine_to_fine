@@ -1,9 +1,0 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-casual_black_tshirt:
-  outfit: casual_friday
-  garment: black_tshirt
-
-casual_blue_jeans:
-  outfit: casual_friday
-  garment: blue_jeans

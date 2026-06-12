@@ -1,0 +1,132 @@
+require "rails_helper"
+
+RSpec.describe "Outfits", type: :request do
+  let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
+  let(:garment) { create(:garment, user: user) }
+  let(:outfit) { create(:outfit, user: user) }
+
+  context "when not signed in" do
+    it "redirects to the login page" do
+      get outfits_path
+      expect(response).to redirect_to(new_user_session_path)
+    end
+  end
+
+  context "when signed in as the owner" do
+    before { sign_in user }
+
+    describe "GET /outfits" do
+      it "retruns a successful response" do
+        outfit
+        get outfits_path
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "GET /outfits/:id" do
+      it "returns a successful response" do
+        get outfit_path(outfit)
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "GET /outfits/new" do
+      it "returns a successful response" do
+        get new_outfit_path
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "POST /outfits" do
+      context "with valid params" do
+        let(:valid_params) do
+          { outfit: { name: "Look casual", garment_ids: [ garment.id ] } }
+        end
+
+        it "creates the outfit, redirects to its show, and sets the flash" do
+          expect {
+            post outfits_path, params: valid_params
+        }.to change(Outfit, :count).by(1)
+
+        expect(response).to redirect_to(outfit_path(Outfit.last))
+        expect(flash[:notice]).to match(/created/i)
+        end
+      end
+
+      context "with invalid params" do
+        let(:invalid_params) do
+          { outfit: { name: "", garment_ids: [ garment.id ] } }
+        end
+
+        it "does not create the outfit and re-renders :new with 422" do
+          expect {
+            post outfits_path, params: invalid_params
+          }.not_to change(Outfit, :count)
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+      end
+    end
+
+    describe "GET /outfits/:id/edit" do
+      it "returns a successful response" do
+        get edit_outfit_path(outfit)
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "PATCH /outfits/:id" do
+      context "with valid params" do
+        it "updates the outfit, redirects to its show, and sets the flash" do
+          patch outfit_path(outfit), params: { outfit: { name: "New Name" } }
+
+          expect(response).to redirect_to(outfit_path(outfit))
+          expect(flash[:notice]).to match(/updated/i)
+          expect(outfit.reload.name).to eq("New Name")
+        end
+      end
+
+      context "with invalid params" do
+        it "does not update the outfit and re-renders :edit with 422" do
+          patch outfit_path(outfit), params: { outfit: { name: "" } }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(outfit.reload.name).not_to eq("")
+        end
+      end
+    end
+
+    describe "DELETE /outfits/:id" do
+      it "destroys the outfit, redirects to index, and sets the flash" do
+        outfit
+        expect {
+          delete outfit_path(outfit)
+      }.to change(Outfit, :count).by(-1)
+
+      expect(response).to redirect_to(outfits_path)
+      expect(flash[:notice]).to match(/deleted/i)
+      end
+    end
+  end
+
+  context "when signed in is another user (IDOR sentinels)" do
+    let(:other_outfit) { create(:outfit, user: other_user) }
+
+    before { sign_in user }
+
+    it "returns 404 when trying to show another user's outfit" do
+      get outfit_path(other_outfit)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns 404 when trying to update another user's outfit" do
+      patch outfit_path(other_outfit), params: { outfit: { name: "Hacked" } }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns 404 when trying to destroy another user's outfit" do
+      delete outfit_path(other_outfit)
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+end
