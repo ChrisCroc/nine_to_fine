@@ -8,6 +8,15 @@ Rails.application.configure do
     Bullet.console       = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
+    Bullet.stacktrace_includes = [ "app/" ]
+    # Faux positif géré : active_storage_validations + spoofing_protection: true
+    # télécharge le blob pour vérifier le magic byte de chaque Garment associé au
+    # moment du save Outfit (cascade via autosave OutfitGarment + has_many :through).
+    # Le fix .includes n'est pas accessible : la query qui charge les Garments est
+    # interne à l'assignation garment_ids= de Rails. Overhead ~6 queries par save
+    # Outfit (3 attachments + 3 blobs pour 3 garments), négligeable en V1.
+    # À ré-évaluer si le coût devient mesurable en prod ou si l'upstream change.
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Garment", association: :photo_attachment
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
