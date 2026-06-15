@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_02_122028) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_15_082801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,6 +61,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_02_122028) do
     t.bigint "user_id", null: false
     t.index ["category_id"], name: "index_garments_on_category_id"
     t.index ["user_id"], name: "index_garments_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "likeable_id", null: false
+    t.string "likeable_type", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
+    t.index ["user_id", "likeable_type", "likeable_id"], name: "index_likes_uniqueness", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "outfit_garments", force: :cascade do |t|
@@ -120,6 +131,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_02_122028) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "garments", "categories"
   add_foreign_key "garments", "users"
+  add_foreign_key "likes", "users"
   add_foreign_key "outfit_garments", "garments"
   add_foreign_key "outfit_garments", "outfits"
   add_foreign_key "outfits", "users"
