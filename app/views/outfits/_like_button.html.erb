@@ -1,0 +1,17 @@
+<% user_like = outfit.like_of(current_user) %>
+  <% liked = user_like.present? %>
+
+  <div id="<%= dom_id(outfit, :like_button) %>" class="inline-block">
+    <%= form_with url: liked ? outfit_like_path(outfit, user_like) :
+  outfit_likes_path(outfit),
+                  method: liked ? :delete : :post,
+                  data: {
+                    controller: "like-button",
+                    like_button_liked_value: liked,
+                    action: "submit->like-button#flip turbo:submit-end->like-button#confirm"
+                  } do %>
+      <button type="submit" data-like-button-target="button" class="btn-like">
+        <span data-like-button-target="icon"><%= liked ? "♥" : "♡" %></span>
+      </button>
+    <% end %>
+  </div>

@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :garments
-  resources :outfits
+  resources :outfits do
+    resources :likes, only: %i[create destroy]
+  end
   root to: "pages#home"
 end

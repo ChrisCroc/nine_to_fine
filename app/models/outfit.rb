@@ -8,4 +8,9 @@ class Outfit < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 200 }, uniqueness: { scope: :user_id, case_sensitive: false }
   validates :garments, presence: true
+
+  def like_of(user)
+    return nil unless user
+    likes.find_by(user: user)
+  end
 end
