@@ -20,7 +20,7 @@ RSpec.describe Like, type: :model do
       expect(like.errors[:likeable]).to be_present
     end
   end
-  describe "uniqueness scopded to (user_id, likeable_type, likeable_id)" do
+  describe "uniqueness scoped to (user_id, likeable_type, likeable_id)" do
     let(:user) { create(:user) }
     let(:outfit) { create(:outfit) }
     it "is invalid when the same user likes the same outfit" do
