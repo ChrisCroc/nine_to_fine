@@ -24,7 +24,7 @@ Stack cible à maîtriser à un niveau employable :
 
 | Phase | Dates | Focus | Détail |
 |---|---|---|---|
-| **Phase 1** | 25 mai → 21 juin (sem 22-25) | Rails pro + Tailwind | [`docs/planning/PHASES/phase-1.md`](docs/planning/PHASES/phase-1.md) |
+| **Phase 1** | 25 mai → 21 juin (sem 22-25) — ⭐ **techniquement bouclée 12 juin (9 j d'avance)**, sem 25 = consolidation dispersée + features sociales N to F + lancement emploi | Rails pro + Tailwind | [`docs/planning/PHASES/phase-1.md`](docs/planning/PHASES/phase-1.md) |
 | **Phase 2** | 22 juin → 2 août (sem 26-31) | React fondamentaux + N to F polish/deploy | [`docs/planning/PHASES/phase-2.md`](docs/planning/PHASES/phase-2.md) |
 | **Phase 3** | 3 août → 30 août (sem 32-35) | TypeScript + N to F maintenance + démarrage projet React/TS vitrine | [`docs/planning/PHASES/phase-3.md`](docs/planning/PHASES/phase-3.md) |
 | **Phase 4** | 31 août → 27 sept (sem 36-39) | Sprint enrichissement N to F + projet React/TS prep entretiens + emploi intensif (structure AA) | [`docs/planning/PHASES/phase-4.md`](docs/planning/PHASES/phase-4.md) |
