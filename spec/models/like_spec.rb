@@ -55,7 +55,6 @@ RSpec.describe Like, type: :model do
   end
 
   describe "polymorphic association" do
-
     it "resolves likeable to the actual outfit instance" do
       outfit = create(:outfit)
       like = create(:like, likeable: outfit)
