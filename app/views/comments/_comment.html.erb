@@ -1,0 +1,12 @@
+<% viewer_id = local_assigns[:viewer_id] %>
+<div id="<%= dom_id(comment) %>" class="py-3">
+  <div class="flex items-center justify-between">
+    <span class="text-sm font-semibold text-zinc-900"><%= comment.user.username %></span>
+    <span class="text-xs text-zinc-400"><%= time_ago_in_words(comment.created_at) %> ago</span>
+  </div>
+  <p class="text-sm text-zinc-700 mt-1 whitespace-pre-line"><%= comment.body %></p>
+  <% if comment.user_id == viewer_id %>
+    <%= button_to "Delete", outfit_comment_path(comment.outfit, comment), method: :delete,
+        class: "text-xs text-red-500 hover:text-red-700 mt-1 cursor-pointer", form_class: "inline" %>
+  <% end %>
+</div>

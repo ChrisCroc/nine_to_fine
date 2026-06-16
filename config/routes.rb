@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :garments
   resources :outfits do
     resources :likes, only: %i[create destroy]
+    resources :comments, only: %i[create destroy]
   end
   root to: "pages#home"
 end

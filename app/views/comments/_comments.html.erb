@@ -1,0 +1,3 @@
+<div id="<%= dom_id(outfit, :comments) %>" class="divide-y divide-zinc-100">
+  <%= render partial: "comments/comment", collection: outfit.comments, locals: { viewer_id: current_user.id } %>
+</div>
