@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_15_141810) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_16_092852) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_141810) do
     t.index "lower((name)::text)", name: "index_categories_on_lower_name", unique: true
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.bigint "outfit_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["outfit_id"], name: "index_comments_on_outfit_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "garments", force: :cascade do |t|
     t.string "brand"
     t.bigint "category_id", null: false
@@ -85,6 +95,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_141810) do
   end
 
   create_table "outfits", force: :cascade do |t|
+    t.integer "comments_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.text "description"
     t.integer "likes_count", default: 0, null: false
@@ -272,6 +283,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_141810) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "outfits"
+  add_foreign_key "comments", "users"
   add_foreign_key "garments", "categories"
   add_foreign_key "garments", "users"
   add_foreign_key "likes", "users"

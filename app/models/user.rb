@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :outfits, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
   validates :username, presence: true, uniqueness: true, length: { minimum: 3 }
 end
