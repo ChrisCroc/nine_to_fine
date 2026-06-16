@@ -50,8 +50,8 @@ Garment has_many Tags, through: Taggings
 
 Outfit belongs_to User
 Outfit has_many Garments, through: OutfitGarments
-Outfit has_many Likes
-Outfit has_many Comments
+Outfit has_many Likes, as: :likeable                  # Like polymorphic ; counter_cache likes_count
+Outfit has_many Comments                              # Comment FK directe outfit_id ; counter_cache comments_count
 Outfit has_many Taggings, as: :taggable               # polymorphic
 Outfit has_many Tags, through: Taggings
 
@@ -65,8 +65,9 @@ Tag has_many :tagged_outfits,  through: :taggings, source: :taggable, source_typ
 Tagging belongs_to Tag
 Tagging belongs_to :taggable, polymorphic: true       # taggable = Garment OU Outfit
 
-Like belongs_to User, Outfit
-Comment belongs_to User, Outfit
+Like belongs_to User
+Like belongs_to :likeable, polymorphic: true          # likeable = Outfit (Garment possible plus tard)
+Comment belongs_to User, Outfit                       # FK directe — PAS polymorphic (décision sem 25, YAGNI)
 WishlistItem belongs_to User
 Follow belongs_to User
 ```
