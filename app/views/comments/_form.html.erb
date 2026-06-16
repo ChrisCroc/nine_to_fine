@@ -1,0 +1,9 @@
+<div id="<%= dom_id(outfit, :new_comment) %>">
+  <%= form_with model: [outfit, comment] do |f| %>
+    <% if comment.errors.any? %>
+      <p class="text-sm text-red-600 mb-1"><%= comment.errors.full_messages_for(:body).first %></p>
+    <% end %>
+    <%= f.text_area :body, rows: 2, placeholder: "Add a comment...", class: "w-full border border-zinc-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-zinc-900 focus:outline-none" %>
+    <%= f.submit "Comment", class: "btn-base bg-zinc-900 text-champagne mt-2 cursor-pointer" %>
+  <% end %>
+</div>

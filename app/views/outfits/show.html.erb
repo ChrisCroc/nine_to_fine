@@ -20,7 +20,7 @@
       <%= render "outfits/like_button", outfit: @outfit %>
       <%= render "outfits/likes_count", outfit: @outfit %>
     </div>
-    
+
       <dl class="space-y-3 mb-6">
         <div>
           <dt class="text-xs font-medium uppercase tracking-wide text-zinc-400">Description</dt>
@@ -44,6 +44,18 @@
 
       <%# Tags %>
       <%= render "shared/tags", taggable: @outfit %>
+
+      <%# COmments %>
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-3">
+          <h2 class="text-xs font-medium uppercase tracking-wide text-zinc-400">Comments</h2>
+          <%= render "comments/comments_count", outfit: @outfit %>
+        </div>
+        <%= render "comments/form", outfit: @outfit, comment: Comment.new %>
+        <div class="mt-4">
+          <%= render "comments/comments", outfit: @outfit %>
+        </div>
+      </div>
 
       <%# Actions %>
       <div class="flex items-center gap-3 md:mt-auto">
