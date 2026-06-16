@@ -136,6 +136,29 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : 2-3 j (Stimulus + UI Tailwind + responsive + accessibilité + tests système).
 - **Slot suggéré** : post-emploi (oct 2026+). Bonne occasion pour consolider Stimulus avancé (multi-targets + values + localStorage) et Tailwind avancé (transitions + responsive variants).
 
+### Édition inline des commentaires (action `update`)
+
+- **Contexte d'origine** : mardi 16 juin 2026 (sem 25), brainstorm de la feature commentaires (`docs/superpowers/specs/2026-06-16-comments-design.md`). V1 livre **create + destroy** seulement (décision tranchée) ; Chris a noté l'édition comme évolution **certaine**.
+- **Description** : éditer son propre commentaire **en place** (inline). Un form d'édition remplace l'affichage du commentaire ; action `update` scopée `current_user.comments.find` ; broadcast `replace` du commentaire édité (sur son `dom_id`). Indicateur « edited » optionnel.
+- **Stack** : route `:update` nested + action `CommentsController#update` + toggle/form inline (Stimulus ou turbo_stream `replace` vers un `_edit_form`) + `after_update_commit { broadcast_replace_to }` + request spec + sentinel IDOR sur `update`.
+- **Estimation** : ~0.5-1 j.
+- **Slot suggéré** : post-emploi (oct 2026+), ou sem 26+ si polish social prioritaire.
+
 ## Priorité basse
 
-_(à compléter au fil du temps quand de nouvelles idées émergent)_
+### Gestion gracieuse de `RecordNotFound` (UX back-button sur ressource supprimée)
+
+- **Contexte d'origine** : mardi 16 juin 2026 (sem 25), pendant l'implémentation des commentaires. Constaté : supprimer un outfit redirige bien vers l'index, mais cliquer "back" navigateur recharge `/outfits/:id` (supprimé) → `current_user.outfits.find` (`OutfitsController#show`) → `RecordNotFound` → 404. En dev = page d'exception verbeuse (artefact `consider_all_requests_local`) ; en prod = `public/404.html` statique (acceptable, beaucoup moins alarmant).
+- **Description** : lisser l'UX du 404 sur ressource introuvable / supprimée. Deux pistes : (a) **personnaliser `public/404.html`** à la charte (statique, zéro risque, à faire en premier) ; (b) **`rescue_from ActiveRecord::RecordNotFound`** dans `ApplicationController` → redirection vers l'index avec flash ("Cette tenue n'existe plus").
+- **⚠️ Trade-off central** : l'option (b) est **transverse** et **change le pattern IDOR**. `RecordNotFound` ne distingue pas "supprimée" de "pas à toi" (les deux passent par `current_user.X.find`). Un rescue global transformerait **tous** les sentinels IDOR de 404 → redirection (garments / outfits / likes / comments). Sécurité équivalente (une redirection + flash générique ne fuite pas plus qu'un 404), mais oblige à réécrire ces specs (`:not_found` → `redirect_to`). Décision à prendre consciemment, pas par accident.
+- **Stack** : `public/404.html` (option a) ; ou `rescue_from` + handler `record_not_found` dans `ApplicationController` + réécriture des request specs IDOR (option b).
+- **Estimation** : option (a) ~0.5h (quick win) ; option (b) ~1-1.5 j (rescue + flash + réécriture de toutes les specs IDOR + revalidation sécurité).
+- **Slot suggéré** : post-emploi (oct 2026+). Option (a) faisable à tout moment ; option (b) seulement si décision tranchée de migrer le pattern IDOR de 404 vers redirect.
+
+### Bouton Delete des commentaires en temps réel (sans reload)
+
+- **Contexte d'origine** : mardi 16 juin 2026 (sem 25), implémentation commentaires temps réel (Task 3 du plan commentaires). Le broadcast rend `_comment` **hors requête** → pas de `current_user` → `viewer_id` nil → le bouton Delete n'apparaît qu'au **reload** (trade-off V1 « Option A » accepté).
+- **Description** : afficher le bouton Delete **en live**, même sur l'insertion broadcast, sans recharger.
+- **Stack (Option B)** : rendre le bouton **toujours** dans le HTML mais **masqué** par défaut + `<meta name="current-user-id" content="<%= current_user&.id %>">` dans le layout + Stimulus `comment_controller` comparant le `data-user-id` du commentaire à l'id du meta et révélant le bouton si match (décision **côté client** → pas besoin de `current_user` serveur dans le broadcast).
+- **Estimation** : ~0.5 j.
+- **Slot suggéré** : post-emploi, couplable avec l'édition inline ci-dessus.
