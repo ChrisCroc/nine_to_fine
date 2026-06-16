@@ -64,4 +64,23 @@ RSpec.describe Like, type: :model do
       expect(like.likeable_type).to eq("Outfit")
     end
   end
+
+  describe "counter_cache on likeable" do
+    it "increments the outfit's likes_count when a like is created" do
+      outfit = create(:outfit)
+
+      expect {
+        create(:like, likeable: outfit)
+    }.to change { outfit.reload.likes_count }.from(0).to(1)
+    end
+
+    it "decrements the outfit's likes_count when a like is destroyed" do
+      outfit = create(:outfit)
+      like = create(:like, likeable: outfit)
+
+      expect {
+        like.destroy
+    }.to change { outfit.reload.likes_count }.by(-1)
+    end
+  end
 end
