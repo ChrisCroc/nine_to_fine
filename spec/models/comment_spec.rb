@@ -55,7 +55,7 @@ RSpec.describe Comment, type: :model do
       older = create(:comment, outfit: outfit, created_at: 2.hours.ago)
       newer = create(:comment, outfit: outfit, created_at: 1.minute.ago)
 
-      expect(outfit.comments.to_a).to eq([newer, older])
+      expect(outfit.comments.to_a).to eq([ newer, older ])
     end
   end
 end

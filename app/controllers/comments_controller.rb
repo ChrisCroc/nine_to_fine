@@ -47,6 +47,6 @@ private
   end
 
   def comment_params
-    params.expect(comment: [:body])
+    params.expect(comment: [ :body ])
   end
 end

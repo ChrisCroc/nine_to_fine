@@ -14,7 +14,6 @@ RSpec.describe "Comments", type: :request do
   end
 
   context "when signed in" do
-
     before { sign_in user }
 
     describe "POST /outfits/:outfit_id/comments" do
