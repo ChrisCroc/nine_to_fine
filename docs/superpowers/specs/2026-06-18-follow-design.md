@@ -14,7 +14,7 @@ Le profil riche envisagé (lister les outfits **publics** du user, gating « obl
 
 ## Objectif
 
-Permettre à un utilisateur connecté de suivre / ne plus suivre un autre utilisateur (relation **instantanée**, pas d'approbation), avec un profil public minimal (`UsersController#show` : username + compteurs followers/following + bouton Follow/Unfollow). **Pas de listing de contenu, pas d'édition de profil aujourd'hui.**
+Permettre à un utilisateur connecté de suivre / ne plus suivre un autre utilisateur (relation **instantanée**, pas d'approbation), avec un profil minimal visible par tout user connecté (`UsersController#show` : username + compteurs followers/following + bouton Follow/Unfollow). Le site entier exige la connexion (pas d'accès anonyme). **Pas de listing de contenu, pas d'édition de profil aujourd'hui.**
 
 ## Décisions tranchées (et pourquoi)
 
@@ -147,14 +147,12 @@ end
 
 ```ruby
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: :show
-
   def show
     @user = User.find(params[:id])
   end
 end
 ```
-- `skip_before_action :authenticate_user!, only: :show` : le profil est public (l'auth est globale dans `ApplicationController`).
+- **Tout le site exige la connexion** (`authenticate_user!` global). Le profil n'est donc PAS anonyme : il est visible par **n'importe quel user connecté**, qu'il suive ou non. Pas de `skip_before_action`, pas de scoping `current_user` (profil consultable par tous, pas « mes » données).
 - Pas d'eager loading de contenu (rien à lister V1).
 
 ## Vue profil + partial `_follow_button`
@@ -162,7 +160,7 @@ end
 `app/views/users/_follow_button.html.erb`
 ```erb
 <div id="<%= dom_id(user, :follow) %>">
-  <% if user_signed_in? && current_user != user %>
+  <% if current_user != user %>
     <% if current_user.following?(user) %>
       <%= button_to "Unfollow", user_follow_path(user), method: :delete %>
     <% else %>
@@ -173,7 +171,7 @@ end
 </div>
 ```
 - Compteur DANS le `div` remplacé → bouton + compteur changent ensemble au clic.
-- Bouton masqué sur son propre profil et pour les anonymes ; compteur toujours visible.
+- Page auth-gated → `current_user` toujours présent → condition simple `current_user != user` (bouton masqué sur son propre profil). Compteurs visibles par tout user connecté.
 
 `app/views/users/show.html.erb`
 ```erb
