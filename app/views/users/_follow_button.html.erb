@@ -1,0 +1,16 @@
+<div id="<%= dom_id(user, :follow) %>" class="flex flex-col items-center gap-3">
+  <% if current_user != user %>
+    <% if current_user.following?(user) %>
+      <%= button_to "Unfllow", user_follow_path(user), method: :delete,
+            class: "btn-base bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-100" %>
+    <% else %>
+      <%= button_to "Follow", user_follow_path(user), method: :post,
+            class: "btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover-text-white" %>
+    <% end %>
+  <% end %>
+  <p class="text-caption text-zinc-600">
+    <span class="font semibold text-zinc-900"><%= user.followers_count %></span> <%= "Follower".pluralize(user.followers_count) %>
+    •
+    <span class="font semibold text-zinc-900"><%= user.following_count %></span> Following
+  </p>
+</div>
