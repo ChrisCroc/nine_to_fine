@@ -39,8 +39,11 @@ Cette règle s'applique au code de production de Nine to Fine. Pour les fichiers
 ```
 Category has_many Garments                            # Category : globale (non scopée user)
 
-User has_many Garments, Outfits, Likes, Comments, WishlistItems, Follows
+User has_many Garments, Outfits, Likes, Comments, WishlistItems
 User has_many Tags                                    # Tag : scopé user
+User has_many :active_follows, :passive_follows        # Follow self-join (follower_id / followed_id) ; dependent: :destroy
+User has_many :followed_users, through: :active_follows, source: :followed   # ceux qu'il suit
+User has_many :followers,      through: :passive_follows, source: :follower  # ceux qui le suivent
 
 Garment belongs_to User
 Garment belongs_to Category
@@ -69,7 +72,8 @@ Like belongs_to User
 Like belongs_to :likeable, polymorphic: true          # likeable = Outfit (Garment possible plus tard)
 Comment belongs_to User, Outfit                       # FK directe — PAS polymorphic (décision sem 25, YAGNI)
 WishlistItem belongs_to User
-Follow belongs_to User
+Follow belongs_to :follower, class_name: "User"        # self-join user→user (PAS polymorphic — décision sem 25)
+Follow belongs_to :followed, class_name: "User"        # counter_cache following_count / followers_count
 ```
 
 ## Conventions de ce projet
