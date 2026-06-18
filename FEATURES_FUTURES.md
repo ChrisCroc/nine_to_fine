@@ -38,6 +38,21 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : ~0.5 j (un seul Stimulus controller, pas de back).
 - **Slot suggéré** : proche (sem 24-25), bon exercice Stimulus autonome.
 
+### Profil public riche + outfits publics + gating par follow (US18 — brief)
+
+- **Contexte d'origine** : jeudi 18 juin 2026 (sem 25), brainstorm de la feature Follow (`docs/superpowers/specs/2026-06-18-follow-design.md`). En posant la primitive `Follow`, Chris a décrit sa vision complète du profil public. Elle dépend **entièrement** de la notion **public/privé** des outfits (US18), délibérément reportée sem 26+ le lundi 15 (« brainstorm produit dédié requis sur la sémantique public »). On a livré aujourd'hui **uniquement la primitive invariante** (Follow + profil nu : username + compteurs + bouton) pour ne produire que du code qui survit à la décision US18.
+- **Vision produit à trancher au brainstorm** (exemple concret donné par Chris) : *« je cherche de l'inspi pour mes tenues de travail, je vais sur le profil de Jean que je suis (obligé de suivre pour voir son contenu), je clique sur son tag "work" et j'ai l'index de ses tenues taggées work — seulement celles qu'il a rendues publiques »*.
+- **Sous-décisions à prendre (chacune porte du design)** :
+  1. **Sémantique « public »** : `is_public:boolean` par-outfit ? Visibilité par défaut (privé ou public) ? Notion de feed / URL directe partageable ?
+  2. **Gating par follow** : faut-il **suivre** un user pour voir son contenu ? (profil privé type Instagram privé). Si oui : le profil nu reste-t-il visible (nom + compteurs) mais le contenu masqué tant qu'on ne follow pas ? Follow **instantané** (V1 actuel) ou **par approbation** (colonne `status` pending/accepted, additive sur `Follow`) ?
+  3. **Listing du contenu** : grille des outfits publics sur le profil → extraire des partials card réutilisables (`outfits/_outfit`, `garments/_garment`) depuis les index actuels (markup inline aujourd'hui) pour DRY index + profil.
+  4. **Navigation par tag publique** : depuis le profil, cliquer un tag → index des outfits **publics** de CE user taggés ainsi → `OutfitFilter` Query Object (miroir de `GarmentFilter`) scopé `public + user` (recoupe l'entrée « Tags cliquables → index filtré par tag »).
+  5. **Photo de profil** : avatar Active Storage sur `User` (recoupe US04 édition profil).
+  6. **US04 édition profil** : `UsersController#edit/update` scopé `current_user` (sentinel IDOR) — username + futurs bio/avatar.
+- **Stack** : migration `is_public` sur Outfit + scope `Outfit.public_outfits` + `OutfitFilter` + `UsersController` enrichi (show gated + edit/update) + extraction partials card + `has_one_attached :avatar` sur User + éventuelle colonne `Follow#status`.
+- **Estimation** : 3-5 j (le brainstorm produit US18 d'abord, puis l'implémentation par sous-briques).
+- **Slot suggéré** : sem 26+ (brainstorm produit dédié US18), avant l'implémentation. **Ne rien coder de ce bloc avant le brainstorm** (sinon rework garanti).
+
 ## Priorité moyenne
 
 ### Index garments organisé (onglets catégorie / couleur)

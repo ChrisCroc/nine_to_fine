@@ -8,7 +8,7 @@
   </div>
   <div class="flex gap-4">
     <% if user_signed_in? %>
-      <span class="text-champagne hover:text-white text-caption"><%= current_user.username %></span>
+      <span class="text-champagne hover:text-white text-caption"><%= link_to current_user.username, user_path(current_user) %></span>
       <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-champagne hover:text-white text-caption" %>
     <% else %>
       <%= link_to "Login", new_user_session_path, class: "text-champagne hover:text-white text-caption" %>
