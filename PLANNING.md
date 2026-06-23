@@ -25,9 +25,12 @@ Stack cible à maîtriser à un niveau employable :
 | Phase | Dates | Focus | Détail |
 |---|---|---|---|
 | **Phase 1** | 25 mai → 21 juin (sem 22-25) — ⭐ **techniquement bouclée 12 juin (9 j d'avance)**, sem 25 = consolidation dispersée + features sociales N to F + lancement emploi | Rails pro + Tailwind | [`docs/planning/PHASES/phase-1.md`](docs/planning/PHASES/phase-1.md) |
-| **Phase 2** | 22 juin → 2 août (sem 26-31) | React fondamentaux + N to F polish/deploy | [`docs/planning/PHASES/phase-2.md`](docs/planning/PHASES/phase-2.md) |
-| **Phase 3** | 3 août → 30 août (sem 32-35) | TypeScript + N to F maintenance + démarrage projet React/TS vitrine | [`docs/planning/PHASES/phase-3.md`](docs/planning/PHASES/phase-3.md) |
-| **Phase 4** | 31 août → 27 sept (sem 36-39) | Sprint enrichissement N to F + projet React/TS prep entretiens + emploi intensif (structure AA) | [`docs/planning/PHASES/phase-4.md`](docs/planning/PHASES/phase-4.md) |
+| **Sem 26 (transition)** | 22-28 juin — ⚠️ **semaine vacances régime réduit (3-4h/j, actée 23 juin)** : lancement recherche emploi + polish NtF + consolidation GoRails. Phase 2 React décalée à sem 27. | Emploi + polish | [`docs/planning/PHASES/phase-1.md`](docs/planning/PHASES/phase-1.md) (fin sem 25 + sem 26) |
+| **Phase 2** | 29 juin → 9 août (sem 27-32) | React fondamentaux + N to F polish/deploy | [`docs/planning/PHASES/phase-2.md`](docs/planning/PHASES/phase-2.md) |
+| **Phase 3** | 10 août → 6 sept (sem 33-36) | TypeScript + N to F maintenance + démarrage projet React/TS vitrine | [`docs/planning/PHASES/phase-3.md`](docs/planning/PHASES/phase-3.md) |
+| **Phase 4** | 7 sept → 4 oct (sem 37-40) | Sprint enrichissement N to F + projet React/TS prep entretiens + emploi intensif (structure AA) | [`docs/planning/PHASES/phase-4.md`](docs/planning/PHASES/phase-4.md) |
+
+> ⚠️ **Décalage +1 semaine acté mardi 23 juin 2026.** Semaine de vacances (22-28 juin, régime réduit) insérée en sem 26 : Chris n'a pas travaillé depuis ven 19 et part en vacances. Décision : **découpler** la recherche emploi (lancée cette semaine, à l'heure — c'est le vrai livrable borné fin sept) de l'**apprentissage React** (décalé d'1 sem pour le faire à plein régime, pas « construire sur du flou »). Toutes les phases glissent de +1 sem (fin de plan ~4 oct au lieu du 27 sept). **Cible emploi fin septembre inchangée** : le job search tourne en continu dès maintenant ; le décalage d'apprentissage est absorbable via **Next.js (Phase 4 optionnel)** comme amortisseur de re-convergence, à trancher en Phase 3/4. Les dates internes de phase-3/phase-4 sont à recaler en début de phase.
 
 ## Ritual quotidien fixe
 

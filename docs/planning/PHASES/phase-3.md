@@ -1,4 +1,6 @@
-# Phase 3 — TypeScript + N to F maintenance + démarrage projet React/TS vitrine (sem 32-35, 3-30 août)
+# Phase 3 — TypeScript + N to F maintenance + démarrage projet React/TS vitrine (sem 33-36, 10 août → 6 sept)
+
+> ⚠️ **Décalage +1 semaine acté 23 juin 2026** (semaine vacances sem 26, cf. [PLANNING.md](../../../PLANNING.md)). Dates de phase mises à jour ci-dessus ; **les sem/dates internes (tables, jour par jour) sont à recaler de +1 semaine en début de phase** — non réécrites maintenant (2+ mois d'horizon, re-convergence possible via Next.js Phase 4 optionnel).
 
 **Focus apprentissage** : TypeScript (Total TypeScript "Beginner's TypeScript" de Matt Pocock).
 

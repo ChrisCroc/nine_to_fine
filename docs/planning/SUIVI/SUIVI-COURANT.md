@@ -201,4 +201,26 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
   - ⭐ **Résolution du render** (découverte en live sur 2 rouges) : action **vide** → render **implicite** → template manquant lève `ActionController::UnknownFormat` → **406** ; `render :edit` **explicite** → template manquant lève `ActionView::MissingTemplate` → 500. Même cause (vue absente), 2 chemins de code.
   - `form_with model: @user` persisté → infère **PATCH** + `user_path` automatiquement (record nouveau → POST `users_path`).
 
-- ⭐ **PROCHAINE SESSION (vendredi 19) — lancement recherche emploi** : 3 premières candidatures Rails + LinkedIn polish + GitHub README pinned `nine-to-fine` updaté (cf. `phase-1.md` sem 25). Soir : exo sandbox APIs Phase 4 prep (`anthropic-sdk-ruby` warmup ou mini service object `WeatherApi`). **Sam 20-21** : skill `job-tracker`. **US18 toujours reporté** (brainstorm produit sem 26+ : public/privé outfits, gating par follow, avatar, nav par tag, profil riche — brief `FEATURES_FUTURES.md`). **US04 ✅ done.**
+- ~~⭐ **PROCHAINE SESSION (vendredi 19) — lancement recherche emploi**~~ **❌ PÉRIMÉ** — ven 19 + sam 20 non travaillés, Chris part en vacances. Recherche emploi reportée à la semaine vacances sem 26 (voir ci-dessous). Skill `job-tracker` reportée au retour. **US18 toujours reporté** (brainstorm produit : public/privé outfits, gating par follow, avatar, nav par tag, profil riche — brief `FEATURES_FUTURES.md`). **US04 ✅ done.**
+
+---
+
+### Sem 26 (22-28 juin 2026) — ⚠️ semaine transition vacances (régime réduit)
+
+⭐ **Démarrage mardi 23 juin** — Chris n'a rien fait depuis ven 19 et part en vacances cette semaine (retour dim soir 28). Veut travailler en **régime fortement réduit (3-4h/j)**, pas rien faire. Session de cadrage stratégique (pas de code de feature côté Claude).
+
+**Décision stratégique tranchée (23 juin) — ne pas re-litiger** :
+- ⭐ **Découpler recherche emploi et apprentissage React.** La recherche emploi (LinkedIn + README pinned + 3 candidatures Rails) est **le vrai livrable borné fin sept** ET la tâche la plus compatible régime réduit (profil/admin, bursty) → **faite cette semaine**. L'apprentissage React (Phase 2) est **décalé d'1 sem** pour le faire à plein régime, pas « construire sur du flou ».
+- **Phase 2 React → sem 27 (lundi 29 juin)**, plein régime. Toutes les phases glissent +1 sem (fin de plan ~4 oct). Cible emploi fin sept préservée (job search continu + **Next.js Phase 4 optionnel = amortisseur de re-convergence**). Docs planning MAJ : `PLANNING.md` (table + note), `phase-1.md` (clôture sem 25 + section sem 26), `phase-2.md` (header + table +1 sem), `phase-3/4.md` (headers +1 sem, dates internes à recaler en début de phase).
+- **Skill `job-tracker` reportée au retour** (atelier 1-2 j, demande du focus continu, pas pour des vacances).
+- **Apprentissage de la semaine = consolidation passive GoRails** (Rails = stack qui décroche le job ; angle forward **Kamal/déploiement** = dé-risque le jalon deploy de Phase 2). React/Scrimba autorisé **uniquement en amorçage léger** (pas de notes Obsidian de conso, pas « j'ai fait la semaine 1 ») — sinon piège « construire sur du flou ».
+
+**Polish NtF sélectionné depuis `to-do.md`** (vacances-compatible, ~1h30 cumulé) :
+- Layout SEO/a11y (`feat/layout-seo-polish`) — `<html lang>` + `<title>`/meta dynamiques + body class scoping. ~30-45 min, zéro test, recruiter-visible.
+- `_field` partial DRY sur `garments/_form.html.erb`. ~30-45 min.
+- (optionnel léger : 4e sentinel IDOR `GET /outfits/:id/edit`).
+
+**5 nouveaux items NtF relevés par Chris (23 juin) → ajoutés `to-do.md`** (à évaluer faisables cette semaine, pas forcément) : (a) ⚠️ **warning bullet régression depuis Follow PR #125** à corriger ; (b) **filtre recherche sur Outfit** (porter `GarmentFilter` sur les outfits) ; (c) **preview photo à la création (new)** garment + outfit (dispo seulement à l'edit) ; (d) **sidebar filtres togglable** (élève l'entrée existante `FEATURES_FUTURES.md` en near-term) ; (e) **toggle select/déselect d'un même filtre** (hidden field true/false, clic sur filtre actif = retire au lieu de forcer Clear all).
+
+**Accompli**
+- **Mardi 23 juin (Claude Code CLI)** — Read SUIVI obligatoire (étape 0). **Journée = écriture/réécriture des programmes planning** (semaine vacances sem 26 + décalage +1 sem des semaines à venir — docs MAJ : PLANNING + phase-1/2/3/4 + SUIVI + to-do) + décision découplage emploi/React + **3 vidéos GoRails**. ⭐ **0 code aujourd'hui.** Programme actif (emploi + polish NtF) dès mer 24. _(à compléter en fin de journée)_
