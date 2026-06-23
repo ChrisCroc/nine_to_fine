@@ -58,8 +58,8 @@ Voir tableau détaillé jour par jour ci-dessous.
   - Matin + avant-midi ✅ : **Cours Stimulus avancé + 7 exos sandbox** dans `ChrisCroc/sandbox-stimulus` (a pris les 2 créneaux, démarrage très laborieux côté méthode — voir SUIVI). **Échelle des 7 patterns** du plus simple au plus complexe (Chris écrit tout, Claude relit) : controller de base target+action → targets multiples `this.xTargets` → Values → ⭐ `XValueChanged` réactif → `disconnect()` + timer fantôme → `dispatch()` + ⭐ piège bubbling/`@window` → Outlets. Couvre les 3 cibles prévues (Outlets + dispatch + state machine `XValueChanged`) + 4 barreaux de fondation. Note Obsidian rédigée [[stimulus-advanced-patterns]] ✅ (français clair + code de chaque exo). 2 techniques gardées pour N to F (bouton masqué via `valueChanged`, clic sur élément + a11y).
   - Aprem ✅ : **Cours Metaprog Priorité 1 + 6 exos sandbox + capstone** `~/code/sandbox/rails/metaprogramming/` (1 fichier par exo, Ruby pur) : `define_method` (1 méthode + boucle) → réimplémenter `attr_accessor` (rouvrir `class Class` + `instance_variable_get/set`) → `send` (dispatch dynamique) → `method_missing` + `respond_to_missing?` → reconstruire `OpenStruct` soi-même (`@table` + `method_missing(name, value = nil)`). **Capstone `GarmentFilter`** : explication complète du vrai code (`relation` lazy, `inject`, `slice(*FILTERS)` whitelist, jointure, `ILIKE`/`sanitize`) + ⭐ **jugement tranché : ne PAS refactorer avec `define_method` (cargo cult), `send` au bon endroit → GarmentFilter inchangé**. Q6 (chap 40) ainsi résolue. Note Obsidian [[metaprogramming-deep-dive]] ✅ (remplace le 1er passage, marqué superseded) + index Rails MAJ. **Démarrage laborieux côté méthode aussi** (concepts neufs imposés dans variantes, chaos de fichiers — corrigé en « 1 fichier/exo + jamais de concept non montré », voir SUIVI). **Décalé du créneau avant-midi vers l'aprem** car Stimulus a pris les 2 premiers créneaux. (Le « Likes broadcast Turbo Streams » initialement prévu cet aprem est **déjà livré lundi 15**, PR #114/#115.) **Backlog** : repratiquer GarmentFilter en sandbox (mini Query Object from scratch).
 - **Jeudi 18** ✅ : feature **Follow complète + profil minimal** (**PR #125 mergée**), pipeline superpowers. ⭐ **Self-join user→user, PAS polymorphic** (le « polymorphic » du PLANNING était une imprécision — un follow user→user est un self-join) : `Follow belongs_to :follower/:followed, class_name: "User"` + counter_cache 2 colonnes + `followed_users`/`followers` via `through` + `source:` + `dependent: :destroy` des 2 côtés + `following?`. `FollowsController` create/destroy (instantané, idempotent, IDOR structurel sur destroy). Profil nu `UsersController#show` **auth-gated** (pas anonyme) + bouton Follow/Unfollow **Turbo Stream controller-only** (pas de broadcast ni Stimulus) + lien navbar→profil. Refacto Tailwind `@utility page-shell`. ⭐⭐ **Découplage US18 tranché** : profil **riche** (outfits publics + gating par follow + avatar + nav par tag) **reporté** au brainstorm produit US18 sem 26+ (`FEATURES_FUTURES.md`) — on n'a construit que la **primitive invariante**. **US04 (édition profil) livrée — PR #127** (session bonus jeudi 18 aprem, TDD coach) : page profil dédiée `UsersController#edit/update` (Option B) + `require_self` (IDOR **redirect**, 3e forme) + vue design system + 5 request specs (2 sentinels IDOR). Note : [[profile-edit-idor-redirect-and-render-resolution]]. Soir/exo sandbox AR Queries : non fait (journée dense, pipeline complet + fin de session). 5 notes Obsidian (voir PROGRESSION).
-- **Vendredi 19** : polish profil + ⭐ **lancement recherche emploi** = 3 premières candidatures Rails + LinkedIn polish + GitHub README pinned `nine-to-fine` updaté. Soir : exo sandbox APIs Phase 4 prep (`anthropic-sdk-ruby` warmup ou mini service object `WeatherApi`).
-- **Samedi 20-21 juin** : création skill Claude Code `job-tracker` (~1-2 j, atelier Claude). Slash commands `/candidatures add|list|relance|stats`. Stockage markdown ou JSON.
+- **Vendredi 19** ❌ **non fait** — Chris n'a pas travaillé ven 19 + sam 20. Lancement recherche emploi **reporté à la semaine vacances sem 26** (voir ci-dessous) : compatible régime réduit (profil/admin/candidatures, pas du code profond) + c'est le vrai livrable borné fin sept → ne pas le décaler avec l'apprentissage.
+- **Samedi 20-21 juin** ❌ **non fait** — skill `job-tracker` **reportée au retour de vacances** (atelier 1-2 j qui demande du focus continu, pas adapté au régime réduit vacances).
 
 **Bilan sem 25 attendu** :
 - 5 exos sandbox dirigés (1 par soir lun-ven) — routine soir réamorcée après 4 soirs cumulés sem 24
@@ -70,7 +70,26 @@ Voir tableau détaillé jour par jour ci-dessous.
 - Recherche emploi lancée (3 candidatures + LinkedIn)
 - Skill `job-tracker` créée
 
-**Phase 2 React démarre sem 26 (22 juin) inchangée** — ne pas décaler la timeline emploi septembre.
+**Bilan sem 25 réel** : programme social complet livré (Likes + Comments + Follow + profil + US04, PR #112→#127) + consolidation Stimulus avancé + Metaprog. ❌ **Non fait** : lancement recherche emploi (ven 19) + skill `job-tracker` (sam 20-21) + plusieurs exos sandbox soir → reportés (voir sem 26).
+
+## Sem 26 (22-28 juin) — ⚠️ semaine transition vacances (régime réduit), actée mardi 23 juin
+
+⭐ **Contexte** : Chris n'a pas travaillé depuis ven 19 et part en vacances cette semaine (retour dimanche soir 28). Il veut travailler en **régime fortement réduit (3-4h/j)**, pas rien faire. Décision stratégique : **découpler** la recherche emploi (le vrai livrable borné fin sept) de l'apprentissage React.
+
+- **Recherche emploi = cette semaine** (reprise du backlog ven 19) : LinkedIn polish + GitHub README pinned `nine-to-fine` + 3 premières candidatures Rails. Parfait pour régime réduit (profil/admin, bursty). **C'est l'ancre de la semaine.**
+- **Polish NtF ciblé** (depuis `to-do.md`, vacances-compatible) : layout SEO/a11y (`feat/layout-seo-polish`) + `_field` partial DRY. Items lourds (features/ateliers/prod) exclus.
+- **Apprentissage = consolidation passive GoRails** (Rails = stack qui décroche le job ; angle forward Kamal/déploiement = dé-risque le jalon deploy). React/Scrimba autorisé **uniquement en amorçage léger** (pas de notes de conso, pas « j'ai fait la semaine 1 ») — sinon piège « construire sur du flou ».
+- **Skill `job-tracker` reportée** au retour (atelier focus).
+
+**Programme jour par jour** :
+- **Mardi 23 (auj)** : 📋 **écriture du programme de la semaine + réécriture des semaines à venir** (décalage +1 sem : PLANNING + phase-1/2/3/4 + SUIVI + to-do) + **3 vidéos GoRails**. **0 code.**
+- **Mer 24** : 🎯 emploi setup — LinkedIn polish + GitHub README pinned `nine-to-fine` (angle dev-first + profil pont PM) + 🛠️ **1h code** polish NtF (1 item léger : layout SEO/a11y ou démarrage preview photo garment).
+- **Jeu 25** : 🎯 emploi — 3 premières candidatures (dev junior Rails + PM/APM si offre pertinente) + 🛠️ **1-2h code** polish NtF (preview photo garment ou bullet fix).
+- **Ven 26** : candidatures au fil de l'eau + finir le polish entamé si besoin + (option : deep-dive stratégie PM).
+- **Sam 27** : buffer — finir polish/candidatures + GoRails conso. Léger.
+- **Dim 28** : retour le soir. OFF.
+
+⭐ **Conséquence planning** : Phase 2 React décalée à **sem 27 (lundi 29 juin)**, plein régime. Toutes les phases glissent +1 sem (fin de plan ~4 oct). Cible emploi fin sept préservée (job search continu + Next.js Phase 4 optionnel = amortisseur). Voir [PLANNING.md](../../../PLANNING.md) + [phase-2.md](phase-2.md).
 
 ## Détail jour par jour — Sem 22 (en cours)
 
@@ -129,10 +148,11 @@ Détail dans la section "Sem 25 (15-21 juin)" ci-dessus.
 ### Lien stratégique avec timeline emploi
 
 - **Phase 1 bouclée 12 juin** ✅
-- **Phase 1 consolidée + features sociales N to F livrées + recherche emploi lancée** = fin sem 25 (21 juin)
-- **Phase 2 React démarre sem 26** (22 juin) inchangée
-- **Jalon mi-juillet N to F v1 déployée** (sem 29) inchangé
-- **Jalon fin septembre 2026** (job offer Rails junior Paris ou full remote) inchangé
+- **Phase 1 consolidée + features sociales N to F livrées** = fin sem 25 (21 juin) ✅. Recherche emploi **décalée à sem 26** (vacances, voir ci-dessus).
+- ⚠️ **Sem 26 (22-28 juin) = semaine transition vacances** (régime réduit) : recherche emploi + polish NtF + GoRails. Phase 2 React décalée à **sem 27 (29 juin)**.
+- **Phase 2 React démarre sem 27** (29 juin) — décalé +1 sem (décision 23 juin)
+- **Jalon N to F v1 déployée** : ~fin juillet (sem 30, était mi-juillet sem 29 — +1 sem)
+- **Jalon fin septembre 2026** (job offer Rails junior Paris ou full remote) : cible tenue (job search continu dès sem 26 + Next.js Phase 4 optionnel comme amortisseur de re-convergence)
 
 ### Conditions d'alerte sem 25
 

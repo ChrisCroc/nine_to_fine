@@ -1,4 +1,6 @@
-# Phase 4 — Sprint enrichissement N to F + projet React/TS prep entretiens + emploi intensif (sem 36-39, 31 août → 27 sept)
+# Phase 4 — Sprint enrichissement N to F + projet React/TS prep entretiens + emploi intensif (sem 37-40, 7 sept → 4 oct)
+
+> ⚠️ **Décalage +1 semaine acté 23 juin 2026** (semaine vacances sem 26, cf. [PLANNING.md](../../../PLANNING.md)). Dates de phase mises à jour ci-dessus ; **les sem/dates internes sont à recaler de +1 semaine en début de phase**. ⭐ **Next.js est l'amortisseur de re-convergence** : s'il faut tenir la cible fin sept, on sacrifie Next.js (déjà optionnel) pour rattraper la semaine décalée — décision à trancher en fin de Phase 3.
 
 **Focus apprentissage** : Next.js (Learn Next.js officiel) si dans les temps. Sinon, vanilla React + TS + Vite.
 
