@@ -38,10 +38,20 @@ Source de vérité pour savoir **exactement** où Chris en est sur chaque ressou
 - **Fait** : Installation + Styling with utility classes + Hover, focus and other states + Responsive design + Tailwind v4 overview + **Layout : Flexbox & Grid + Spacing & Sizing** (lundi 1 juin) + **Theme variables + Functions & Directives** (mardi 2 juin avant-midi, voir [[theme-variables-and-directives]]) + **Customization : Dark mode + Colors palette** (mercredi 3 juin avant-midi, voir [[dark-mode]] et [[colors-palette]]) + **Backgrounds + Borders + Effects + Opacity** (jeudi 4 juin avant-midi, voir [[backgrounds-borders-effects-v4]]) + **Typography : font-family, font-size, font-weight, line-height, letter-spacing, text-decoration** (lundi 8 juin avant-midi, voir [[typography-fundamentals]]) + **Transitions & Animation : transition-property, duration, timing-function, animation + accessibilité prefers-reduced-motion** (mardi 9 juin avant-midi, voir [[transitions-and-animations-fundamentals]]) + **Transforms : translate, rotate, scale, skew, transform-origin + intro 3D context (perspective, transform-3d)** (mercredi 10 juin avant-midi, voir [[transforms-fundamentals]] — composition via CSS variables Tailwind v4, GPU performance vs layout reflow, application N to F card lift / pills / press effect / modal entrance, 3 questions style entretien intégrées) + **Interactivity : 19 utilities (cursor, pointer-events, select, touch-action, scroll-behavior, scroll-snap-*, scrollbar-*, accent-color, caret-color, color-scheme, appearance, field-sizing, will-change, resize)** (jeudi 11 juin avant-midi, voir [[interactivity-fundamentals]] — ⭐ `touch-manipulation` anti delay 300ms iOS Safari, scroll-snap patterns carousel + full-page sections, `accent-color` héritable form parent, ⭐ `will-change-transform` JAMAIS partout = explosion mémoire GPU, anti-pattern `select-none` sur contenu copiable, application N to F quick wins, 3 questions style entretien intégrées) + **Customization avancé v4 : `@apply`, `@utility`, `@custom-variant`, `@variant` + Functions & Directives v4 (`--value`, `--modifier`, `--default`, `--spacing`, `--alpha`)** (vendredi 12 juin avant-midi, voir [[customization-advanced-v4]] — ⭐ paradigm shift v3 → v4 CSS-first détaillé, 5 directives en escalier d'apprentissage, ordre canonique fichier CSS Tailwind v4, **application directe Nine to Fine PR #104 anti-double-submit** = `@custom-variant data-loading` + `@utility btn-base` + Stimulus `submit_button_controller` + ⭐ 3 pièges majeurs vécus en live = typo `@apply` casse TOUTE la directive / `pointer-events-none` bloque `cursor-wait` / Stimulus target manquant mutation silencieuse / décisions design : `data-*` attribute > `.is-loading` classe + controller sur form > button + scope C btn-base (forme + focus ring, peinture en HTML) + pas de `pointer-events-none` car Turbo gère disabled natif / 3 questions style entretien : `@utility` vs `@layer components` cascade prédictible + code review `pointer-events-none` + `cursor-wait` anti-pattern + paradigm shift CSS-first DHH-style)
 - ⭐ **Phase 1 Tailwind bouclée** ✅ — toutes les étapes de l'index Tailwind couvertes en lecture profonde + applications directes Nine to Fine. **Prochain Tailwind** : néant — transition Phase 2 React fondamentaux (sem 26, 22 juin).
 
-## React (à démarrer Phase 2, sem 26)
+## React (démarré Phase 2, sem 27 — lundi 29 juin 2026)
 
-- **Fait** : rien
-- **Prochain** : Scrimba "Learn React" (CS Career Path) + react.dev "Learn" en parallèle
+- **Support principal** : Scrimba **"Learn React"** (gratuit, Bob Ziroll, React moderne à hooks) = fil conducteur, on code les challenges dans l'ordre. **react.dev/learn = référence ponctuelle**, PAS une lecture parallèle linéaire.
+- **⚠️ À éviter** : le cours Scrimba "Learn Class Components" = LEGACY (API pré-hooks). React Router = cours Pro séparé, à prendre en **sem 31**.
+- **Sections réelles du cours + mapping phase** (confirmées sur l'écran de Chris le 29 juin) :
+  - **Static pages** → JSX, composants, props (**sem 27**)
+  - **Data-driven react** → props + `.map()` listes (**sem 27**)
+  - **React state** → `useState`, events (**sem 28**)
+  - **Side effects** → `useEffect`, fetch (**sem 29**)
+  - **Capstone #1 — Tenzies** → composition, lifting state (**sem 30**)
+  - **Capstone #2 — Assembly: Endgame** → projet final + Context (**sem 32**)
+  - **Turn your certificate into an asset** → bonus carrière (LinkedIn/CV)
+- **Fait** : démarrage **lundi 29 juin** — section « Static pages » en cours.
+- **Prochain** : finir « Static pages » + entamer « Data-driven react ». S'arrêter avant « React state » (sem 28).
 - **URLs** : https://scrimba.com/learn/learnreact + https://react.dev/learn
 
 ## TypeScript (à démarrer Phase 3, sem 32)

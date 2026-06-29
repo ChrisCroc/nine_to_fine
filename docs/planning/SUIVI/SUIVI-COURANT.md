@@ -219,4 +219,39 @@ Journal de bord récent. À mettre à jour à la fin de chaque journée via la r
 **5 nouveaux items NtF relevés par Chris (23 juin) → ajoutés `to-do.md`** (à évaluer faisables cette semaine, pas forcément) : (a) ⚠️ **warning bullet régression depuis Follow PR #125** à corriger ; (b) **filtre recherche sur Outfit** (porter `GarmentFilter` sur les outfits) ; (c) **preview photo à la création (new)** garment + outfit (dispo seulement à l'edit) ; (d) **sidebar filtres togglable** (élève l'entrée existante `FEATURES_FUTURES.md` en near-term) ; (e) **toggle select/déselect d'un même filtre** (hidden field true/false, clic sur filtre actif = retire au lieu de forcer Clear all).
 
 **Accompli**
-- **Mardi 23 juin (Claude Code CLI)** — Read SUIVI obligatoire (étape 0). **Journée = écriture/réécriture des programmes planning** (semaine vacances sem 26 + décalage +1 sem des semaines à venir — docs MAJ : PLANNING + phase-1/2/3/4 + SUIVI + to-do) + décision découplage emploi/React + **3 vidéos GoRails**. ⭐ **0 code aujourd'hui.** Programme actif (emploi + polish NtF) dès mer 24. _(à compléter en fin de journée)_
+- **Mardi 23 juin (Claude Code CLI)** — Read SUIVI obligatoire (étape 0). **Journée = écriture/réécriture des programmes planning** (semaine vacances sem 26 + décalage +1 sem des semaines à venir — docs MAJ : PLANNING + phase-1/2/3/4 + SUIVI + to-do) + décision découplage emploi/React + **3 vidéos GoRails**. ⭐ **0 code aujourd'hui.** Programme actif (emploi + polish NtF) dès mer 24.
+
+**Clôture sem 26 (constatée lundi 29 juin)** : ⚠️ semaine vacances quasi non travaillée — **seul le polish SEO livré** (`<html lang>` + `<meta description>`, PR #136 mergée lun 29). ❌ **Recherche emploi NON lancée** (le vrai livrable borné fin sept), `_field` DRY non fait, conso GoRails non faite → tout **reporté sem 27**.
+
+---
+
+### Sem 27 (29 juin - 5 juillet 2026) — ⭐ démarrage Phase 2 React (plein régime)
+
+⭐ **Démarrage lundi 29 juin** — première session Phase 2. Parcours Odin Rails + Phase 1 Tailwind terminés. L'apprentissage bascule sur **React**. NtF passe à 1.5 j/sem (polish + déploiement Kamal visé fin juillet sem 30). Cf. `phase-2.md`.
+
+**Structure jour-type Phase 2** : matin **Odin Rails** (API + RSpec « à fond » = approfondissement, parcours terminé donc pas de nouveau chapitre) / avant-midi **React Scrimba** / aprem **prod React** mini-projet (1 demi-aprem/sem sur NtF) / soir sandbox Rails / ven PM emploi.
+
+⭐ **Cursus React = Scrimba « Learn React » (gratuit, Bob Ziroll, React moderne à hooks) comme FIL PRINCIPAL ; [react.dev/learn](https://react.dev/learn) = référence ponctuelle, PAS une lecture parallèle.** Vraies sections du cours (confirmées par Chris sur son écran le 29 juin) + mapping phase :
+
+| Sem | Notion | Section Scrimba |
+|---|---|---|
+| **27** | JSX, composants, props | **Static pages** + **Data-driven react** |
+| 28 | `useState`, events, listes | **React state** |
+| 29 | `useEffect`, fetch | **Side effects** |
+| 30 | composition, lifting state | **Capstone #1 — Tenzies** |
+| 31 | React Router | cours Pro séparé **Learn React Router** |
+| 32 | Context + projet final | **Capstone #2 — Assembly: Endgame** |
+
+- ⚠️ **Cours « Learn Class Components » = LEGACY, à éviter** (API pré-hooks ; juste pour lire du vieux code plus tard).
+- Section finale « Turn your certificate into an asset » = bonus carrière (certificat → LinkedIn/CV, rejoint la recherche emploi).
+- ⚠️ Ne PAS confondre « JSX » avec un chapitre : c'est une notion **dans** la section « Static pages », pas une section nommée.
+
+**Recasage slot Rails** : le slot matin « API Rails + RSpec à fond » (déplacé du lun 29, pris par React) → **mardi 30 matin** (1er créneau Rails du jour-type, n'empiète pas sur React). Bascule samedi seulement si mardi déborde.
+
+**Accompli**
+
+- **Lundi 29 juin (matin, Claude Code CLI) — démarrage de session + gros ménage.** Read SUIVI (étape 0). Routine lundi : (1) `gh issue list` → **4 issues d'US livrées fermées** (#23 US20 Like, #22 US19 Follow, #7 US04 profil, #24 US21 Comment via PR #121) ; restent ouvertes #21 US18 (reporté, brainstorm produit), #8 US05 delete account (candidat polish NtF P2), #25/26/27 US22-24 (IA Phase 4). (2) **Condensation hebdo sem 25** (étape 7) : archivée verbatim `ARCHIVE/2026-06.md` + condensée dans SUIVI (**PR #138**, fichier 58,7k → 35,3k chars). **3 PR mergées au total** : **#136** `feat(seo)` (lang + meta description — seul livrable sem 26, branche `feat/SEO` finalisée) ; **#137** `fix(security)` bump **crass 1.0.6 → 1.0.7** (2 CVE DoS transitive via `rails-html-sanitizer`/`loofah`, `bundle update crass --conservative` ; bloquait `scan_ruby` sur **toute** PR — même cas que net-imap #111) ; **#138** condensation. Working tree propre, `main` à jour. ⭐ Setup technique noté en mémoire : `bundle`/`rails` via Bash tool exigent `export PATH="$HOME/.rbenv/shims:$PATH"` (sinon Ruby système 2.6).
+- **Lundi 29 juin (avant-midi)** — React : démarrage section **« Static pages »** Scrimba (JSX + composants + props). _(à compléter)_
+- **Lundi 29 juin (aprem)** — **lancement recherche emploi** (README pinned `nine-to-fine` + LinkedIn headline dev-first + 3 candidatures Rails) = ancre de la semaine. _(à compléter)_
+
+**Reports / à garder en tête** : lancement emploi (ancre semaine, démarré lun aprem), skill `job-tracker` (atelier au retour), US18 brainstorm produit, US05 delete account, polish NtF `_field` DRY + warning bullet régression depuis Follow #125, PR Dependabot `tailwindcss-rails 4.6.0` ouverte.
