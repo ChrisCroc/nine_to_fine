@@ -29,6 +29,15 @@ RSpec.describe "Outfits", type: :request do
         get outfit_path(outfit)
         expect(response).to have_http_status(:success)
       end
+
+      it "doesn't trigger any N+1 when loading the comments's authors" do
+        create(:comment, outfit: outfit, user: create(:user))
+        create(:comment, outfit: outfit, user: create(:user))
+
+        get outfit_path(outfit)
+
+        expect(response).to have_http_status(:success)
+      end
     end
 
     describe "GET /outfits/new" do

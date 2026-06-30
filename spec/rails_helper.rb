@@ -66,4 +66,12 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.include Devise::Test::IntegrationHelpers, type: :request
+
+  config.before(:each) { Bullet.start_request if defined?(Bullet) && Bullet.enable? }
+  config.after(:each) do
+    if defined?(Bullet) && Bullet.enable?
+      Bullet.perform_out_of_channel_notifications if Bullet.notification?
+      Bullet.end_request
+    end
+  end
 end

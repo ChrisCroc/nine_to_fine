@@ -7,7 +7,7 @@ class OutfitsController < ApplicationController
   end
 
   def show
-    @outfit = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ]).find(params.expect(:id))
+    @outfit = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ], comments: :user).find(params.expect(:id))
   end
 
   def new
