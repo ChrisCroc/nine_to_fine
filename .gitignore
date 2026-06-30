@@ -40,6 +40,12 @@
 # Ignore Superpowers brainstorming mockups (ephemeral design artifacts).
 /.superpowers/
 
+# Internal coaching & planning docs — kept on disk as working context, not published.
+/CLAUDE.md
+/PLANNING.md
+/docs/planning/
+/docs/superpowers/
+
 # Kamal raw secret files (never commit)
 /.kamal/registry_password
 /.kamal/postgres_password
