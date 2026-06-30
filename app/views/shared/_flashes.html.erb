@@ -1,7 +1,11 @@
-<% if notice %>
-  <p><%= notice %></p>
-<% end %>
-
-<% if alert %>
-  <p><%= alert %></p>
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div data-turbo-temporary role="alert"
+       data-controller="flash"
+       data-flash-dismiss-after-value="2000"
+       class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between gap-3 w-[90%] max-w-md rounded-lg border px-4 py-3 text-caption shadow-lg <%= type.to_sym == :alert ? "bg-red-50 border-red-200 text-red-700" : "bg-green-50 border-green-200 text-green-700" %>">
+    <span><%= message %></span>
+    <button type="button" data-action="flash#dismiss"
+            class="text-lg leading-none opacity-60 hover:opacity-100 cursor-pointer" aria-label="Dismiss">&times;</button>
+  </div>
 <% end %>
