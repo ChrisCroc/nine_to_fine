@@ -21,5 +21,8 @@ Rails.application.routes.draw do
   resources :users, only: %i[show edit update] do
     resource :follow, only: %i[create destroy]
   end
+  authenticated :user do
+    root to: "garments#index", as: :authenticated_root
+  end
   root to: "pages#home"
 end
