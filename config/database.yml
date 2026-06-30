@@ -85,15 +85,15 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary:
+  primary: &primary_production
     <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    host: nine_to_fine-db
+    database: nine_to_fine_production
+    username: nine_to_fine
+    password: <%= ENV["POSTGRES_PASSWORD"] %>
   cache:
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    <<: *primary_production
   queue:
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    <<: *primary_production
   cable:
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    <<: *primary_production
