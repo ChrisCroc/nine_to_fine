@@ -1,34 +1,21 @@
-<h2>Sign up</h2>
+<% content_for :page_title, "Sign up" %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "flex flex-col gap-4" }) do |f| %>
+  <%= render "devise/shared/field", form: f, attribute: :username, type: :text, label: "Username", options: { autofocus: true, autocomplete: "username" } %>
 
-  <div class="field">
-    <p><%= f.label :username %></p>
-    <p><%= f.text_field :username, autofocus: true, autocomplete: "username" %></p>
-  </div>
+  <%= render "devise/shared/field", form: f, attribute: :email, type: :email, label: "Email", options: { autocomplete: "email" } %>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autocomplete: "email" %></p>
-  </div>
+  <div>
+    <%= render "devise/shared/field", form: f, attribute: :password, type: :password, label: "Password", options: { automplete: "new-password" } %>
 
-  <div class="field">
-    <p><%= f.label :password %></p>
     <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
+      <p class="text-caption text-zinc-500 mt-1"><%= @minimum_password_length %> characters minimum</p>
     <% end %>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
   </div>
 
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
-  </div>
+  <%= render "devise/shared/field", form: f, attribute: :password_confirmation, type: :password, label: "Confirm password", options: { autocomplete: "new-password" } %>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
+  <%= f.submit "Sign up", class: "btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 w-full" %>
 <% end %>
 
 <%= render "devise/shared/links" %>
