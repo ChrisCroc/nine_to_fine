@@ -22,7 +22,9 @@ servers:
 #
 proxy:
   ssl: true
-  host: ninetofine.app
+  hosts:
+    - ninetofine.app
+    - www.ninetofine.app
 
 # Where you keep your container images.
 registry:
