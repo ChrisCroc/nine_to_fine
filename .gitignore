@@ -39,3 +39,7 @@
 
 # Ignore Superpowers brainstorming mockups (ephemeral design artifacts).
 /.superpowers/
+
+# Kamal raw secret files (never commit)
+/.kamal/registry_password
+/.kamal/postgres_password
