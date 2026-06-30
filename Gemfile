@@ -60,6 +60,9 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  # Detect N+1 queries and unused loading [https://github.com/flyerhzm/bullet]
+  gem "bullet"
+
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
@@ -72,8 +75,6 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   # Use console on exceptions pages [https://github.Com/rails/web-console]
-  gem "bullet"
-  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
 end
 
 group :test do

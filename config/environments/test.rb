@@ -50,4 +50,14 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.raise  = true # fait échouer la suite si un N+1 (ou eager loading inutile) apparaît
+    Bullet.bullet_logger = true
+
+    # Faux positif géré (idem development.rb) : active_storage_validations +
+    # spoofing_protection télécharge le blob de chaque Garment au save Outfit.
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Garment", association: :photo_attachment
+  end
 end
