@@ -4,6 +4,7 @@
 
     <% if current_user == @user %>
       <%= link_to "Edit profile", edit_user_path(@user), class: "text-caption text-zinc-600 hover:text-zinc-900" %>
+      <%= link_to "Account settings", edit_user_registration_path, class: "text-caption text-zinc-600 hover:text-zinc-900" %>
     <% end %>
     <%= render "users/follow_button", user: @user %>
   </div>
