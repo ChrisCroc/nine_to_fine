@@ -15,6 +15,9 @@
 
   <div class="mb-4" data-controller="garment-select">
     <%= f.label :garment_ids, "Pieces", class: "block text-sm font-medium text-zinc-700 mb-1" %>
+
+    <div data-garment-select-target="board" class="mb-3 grid grid-cols-3 gap-2 md:grid-cols-4"></div>
+
     <%= f.select :garment_ids,
           options_for_select(
             @garments.map { |garment| [garment.name, garment.id, { "data-thumb": garment_thumb_url(garment) }] },
@@ -25,7 +28,7 @@
     <% if outfit.errors[:garments].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= outfit.errors[:garments].first %></span>
     <% end %>
-    <div data-garment-select-target="board" class="mt-3 grid grid-cols-3 gap-2 md:grid-cols-4"></div>
+
   </div>
 
   <div class="mb-4">
