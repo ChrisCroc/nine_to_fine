@@ -122,6 +122,8 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 
 ### `SuggestionsController` dédié dès V1 + futur model `Suggestion` persisté (pattern "verbe → nom")
 
+> ⚠️ **Partiellement révisé par le brainstorm du 2 juillet 2026** (`docs/superpowers/specs/2026-07-02-ia-outfit-suggester-design.md`, voir la section IA suggester ci-dessous). La V1 est codée **maintenant** (jalon « avant mi-juillet », décision 30 juin), en **`SuggestionsController` top-level** (`resources :suggestions` — **pas** nested sous Outfit, le mode « composer » ne part d'aucun outfit) et avec **tool use structuré** (pas de marqueur texte `SELECTED:`). Le **model `Suggestion` persisté** décrit ci-dessous reste backlog inchangé.
+
 - **Contexte d'origine** : jeudi 11 juin 2026 (sem 24), lecture profonde Odin chap. 40 Advanced Topics, Section 2 (Controllers, Models & REST Principles). En décortiquant la suggestion IA Phase 4, application directe du pattern "verbe → nom" (un verbe qui mérite ≥ 2 actions ou qui mérite plus tard de devenir un model → controller dédié dès aujourd'hui).
 - **Description** : au lieu d'ajouter une action `member do post :suggest_completions end` à `OutfitsController` (qui gonflerait le controller pour chaque évolution future), créer **dès V1 Phase 4** un `SuggestionsController` nested sous Outfit :
   ```ruby
@@ -142,6 +144,19 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation V1** : intégrée à l'estimation Phase 4 IA suggester (~3-4 j déjà au plan). Cette entrée ne crée **pas** de charge V1 supplémentaire, c'est juste la **bonne architecture** à appliquer dès le départ.
 - **Estimation extension model** : ~1-1.5 j (migration + model + extension controller + tests).
 - **Slot suggéré** : V1 contrôleur dès **Phase 4 sem 36-37** (intégré au plan existant), extension model **post-emploi (oct 2026+)** quand le tracking + feedback + cache deviennent prioritaires.
+
+### IA Outfit Suggester — évolutions post-V1 (brainstorm 2 juillet 2026)
+
+- **Contexte d'origine** : jeudi 2 juillet 2026 (sem 27), brainstorm produit de l'IA suggester (`docs/superpowers/specs/2026-07-02-ia-outfit-suggester-design.md`). La V1 (2 modes composer + ancre, garde-robe entière dans le prompt, 1 suggestion + régénérer, stateless, tool use, typewriter client) est en cours. Les items ci-dessous ont été délibérément sortis du scope V1.
+- ⭐ **RAG connaissance mode (`pgvector`)** — *priorité haute / near-term* (voulu vite par Chris). Base de connaissances style **externe** (règles d'association de couleurs, guides de style, tendances) → embeddings + recherche vectorielle **`pgvector` sur le Postgres existant** (zéro nouvelle infra) → retrieval injecté dans le prompt. Comble le trou « tendances post-cutoff » du LLM et réduit l'hallucination. ⚠️ Le RAG **n'est pas** sur la garde-robe (petite → tient dans le contexte ; RAG dessus = cargo cult), il est sur le savoir mode. Stack : `pgvector` + ingestion d'un corpus mode + génération d'embeddings + retrieval. Estimation : ~2-3 j. Slot : near-term.
+- **Multi-suggestion** (plusieurs tenues d'un coup au choix). Au lieu d'une suggestion → le form, l'IA en propose 2-3, l'user en choisit une → pré-remplissage. Impact : affichage multi-cartes dans la modale + un bouton « Créer » par carte + prompt demandant N variantes. Estimation : ~1 j. Slot : post-V1 proche.
+- **Mode « Que porter aujourd'hui ? »** — suggestion globale non liée à une création d'outfit (« tenue du jour » selon occasion/météo, façon dashboard), 3e mode annoncé au brainstorm. Estimation : ~1 j. Slot : post-V1.
+- **Mode shopping (pièces à acheter hors garde-robe)** — l'IA suggère des vêtements **à acquérir** pour compléter la garde-robe (vs piocher dedans). Mode fondamentalement différent : la sortie n'est plus des `garment_ids` existants mais des descriptions/pistes d'achat (jamais persistées comme outfit). Estimation : 1-2 j. Slot : post-emploi. Croise une éventuelle marketplace/wishlist.
+- **API météo auto-injectée** — géoloc navigateur + service météo tiers → météo réelle injectée dans le prompt (vs l'user qui la tape en texte libre en V1). Résout « été à 13°C ≠ habillé été ». Stack : Geolocation API + API météo (clé, quota, cache) + gestion permission/erreur. Estimation : ~1 j. Slot : post-V1.
+- **Vrai token streaming SSE + Redis** — consommer le flux SSE d'Anthropic (`stream: true`) et le rediffuser en temps réel via Turbo Streams. ⚠️ Nécessite **Redis** comme backend Action Cable : Solid Cable est DB-backed et martèlerait la DB à haute fréquence. Remplace le typewriter client de la V1 par du vrai streaming. Bon signal entretien (SSE + Redis + Turbo Streams) — Redis ajouté **parce que le streaming l'exige** (pas cargo cult). Estimation : 1-2 j + provisioning Redis. Slot : post-V1.
+- **Mode ancre depuis le form en cours** (injection live) — en plus du déclencheur depuis l'index vêtements (V1), déclencher « Compléter avec l'IA » depuis un form outfit déjà ouvert, avec **injection en direct** des pièces suggérées dans le Tom Select courant (vs pré-remplissage d'un nouveau form). Plus lourd (manipuler l'état interne de Tom Select en JS au retour du broadcast). Estimation : ~0.5-1 j. Slot : post-V1.
+- **Rate limiting API par user** — throttle des appels IA (au-delà du bouton désactivé pendant le job en V1) pour maîtriser les coûts à l'échelle. Stack : `rack-attack` ou throttle maison. Estimation : ~0.5 j. Slot : selon usage réel.
+- **Model `Suggestion` persisté** : voir la section précédente (tracking / feedback / cache / audit / analytics) — inchangé.
 
 ### Sidebar filtres togglable (remplace le bandeau de pills horizontal)
 
