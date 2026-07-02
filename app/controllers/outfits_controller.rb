@@ -49,6 +49,6 @@ private
   end
 
   def set_garments
-    @garments = current_user.garments.order(created_at: :desc)
+    @garments = current_user.garments.with_attached_photo.order(created_at: :desc)
   end
 end

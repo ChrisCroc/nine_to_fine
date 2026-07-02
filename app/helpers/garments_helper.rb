@@ -7,4 +7,10 @@ module GarmentsHelper
       "#{base} bg-white/70 text-zinc-700 hover:bg-white"
     end
   end
+
+  def garment_thumb_url(garment)
+    return nil unless garment.photo.attached?
+
+    url_for(garment.photo.variant(resize_to_limit: [ 120, 120 ], format: :webp))
+  end
 end
