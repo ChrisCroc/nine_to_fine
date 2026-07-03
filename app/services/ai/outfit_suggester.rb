@@ -8,6 +8,7 @@ module Ai
     class Error < StandardError; end
     class TooFewGarments < Error; end
     class NoValidGarments < Error; end
+    class DuplicateOutfit < Error; end
 
     def initialize(user:, context:, anchor_garment_ids: [], client: nil)
       @user = user
@@ -26,6 +27,7 @@ module Ai
       proposal = tool_input(message)
       validated_ids = valid_ids(proposal["garment_ids"])
       raise NoValidGarments if validated_ids.empty?
+      raise DuplicateOutfit if duplicate?(validated_ids)
       Result.new(
         rationale: proposal["rationale"],
         garment_ids: validated_ids,
@@ -73,6 +75,13 @@ module Ai
 
     def outfit_ids(outfit)
       outfit.outfit_garments.map(&:garment_id)
+    end
+
+    # "Already present" = the EXACT same set of garment ids (order-agnostic)
+    # A shared piece is fine; only an identical combination counts as a duplicate.
+    def duplicate?(ids)
+      target = ids.sort
+      existing_outfits.any? { |o| outfit_ids(o).sort == target }
     end
   end
 end
