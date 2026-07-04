@@ -91,5 +91,14 @@ RSpec.describe Ai::OutfitSuggester do
         expect(prompt).to include("Casual Friday")
       end
     end
+
+    it "raises DuplicateOutfit when the proposed set is one the user already owns" do
+      pieces = create_list(:garment, 3, user: user)
+      create(:outfit, user: user, name: "Casual Friday", garments: pieces)
+      client = client_returning(fake_response(garment_ids: pieces.map(&:id)))
+
+      expect { described_class.new(user: user, context: "x", client: client).suggest }
+        .to raise_error(described_class::DuplicateOutfit)
+    end
   end
 end
