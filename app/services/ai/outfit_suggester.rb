@@ -109,7 +109,7 @@ module Ai
     end
 
     def outfit_ids(outfit)
-      outfit.outfit_garments.map(&:garment_id)
+      outfit_ids_map[outfit.id] || []
     end
 
     # "Already present" = the EXACT same set of garment ids (order-agnostic)
@@ -117,6 +117,14 @@ module Ai
     def duplicate?(ids)
       target = ids.sort
       existing_outfits.any? { |o| outfit_ids(o).sort == target }
+    end
+
+    def outfit_ids_map
+      @outfit_ids_map ||= OutfitGarment
+        .where(outfit_id: existing_outfits.map(&:id))
+        .pluck(:outfit_id, :garment_id)
+        .group_by(&:first)
+        .transform_values { |pairs| pairs.map(&:last) }
     end
   end
 end
