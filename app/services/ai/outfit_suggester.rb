@@ -2,7 +2,7 @@ module Ai
   class OutfitSuggester
     MODEL = "claude-sonnet-5"
     MIN_GARMENTS = 3
-    MAX_CONTENT = 300 # cap free-text length (light prompt injection guard)
+    MAX_CONTEXT = 300 # cap free-text length (light prompt injection guard)
 
     Result = Data.define(:rationale, :garment_ids, :name)
 
@@ -43,7 +43,7 @@ module Ai
 
     def initialize(user:, context:, anchor_garment_ids: [], client: nil)
       @user = user
-      @context = context.to_s.strip.first(MAX_CONTENT)
+      @context = context.to_s.strip.first(MAX_CONTEXT)
       @anchor_garment_ids = Array(anchor_garment_ids).map(&:to_i)
       @client = client || Anthropic::Client.new(api_key: Rails.application.credentials.dig(:anthropic, :api_key))
     end
