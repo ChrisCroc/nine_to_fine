@@ -5,9 +5,9 @@ RSpec.describe Ai::OutfitSuggester do
 
   def fake_response(garment_ids:, name: "Sharp & Warm", rationale: "Layers for 13°C.")
     block = double("ToolUseBlock",
-                    type: "tool_use",
+                    type: :tool_use,
                     name: "propose_outfit",
-                    input: { "garment_ids" => garment_ids, "name" => name, "rationale" => rationale })
+                    input: { garment_ids:, name:, rationale: })
     double("Message", content: [ block ])
   end
 
