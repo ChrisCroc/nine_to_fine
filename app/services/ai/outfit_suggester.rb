@@ -2,7 +2,7 @@ module Ai
   class OutfitSuggester
     MODEL = "claude-sonnet-5"
     MIN_GARMENTS = 3
-    MAX_CONTENT = 300 # cap free-text length (light prompt injection guard)
+    MAX_CONTEXT = 300 # cap free-text length (light prompt injection guard)
 
     Result = Data.define(:rationale, :garment_ids, :name)
 
@@ -43,7 +43,7 @@ module Ai
 
     def initialize(user:, context:, anchor_garment_ids: [], client: nil)
       @user = user
-      @context = context.to_s.strip.first(MAX_CONTENT)
+      @context = context.to_s.strip.first(MAX_CONTEXT)
       @anchor_garment_ids = Array(anchor_garment_ids).map(&:to_i)
       @client = client || Anthropic::Client.new(api_key: Rails.application.credentials.dig(:anthropic, :api_key))
     end
@@ -109,7 +109,7 @@ module Ai
     end
 
     def outfit_ids(outfit)
-      outfit.outfit_garments.map(&:garment_id)
+      outfit_ids_map[outfit.id] || []
     end
 
     # "Already present" = the EXACT same set of garment ids (order-agnostic)
@@ -117,6 +117,14 @@ module Ai
     def duplicate?(ids)
       target = ids.sort
       existing_outfits.any? { |o| outfit_ids(o).sort == target }
+    end
+
+    def outfit_ids_map
+      @outfit_ids_map ||= OutfitGarment
+        .where(outfit_id: existing_outfits.map(&:id))
+        .pluck(:outfit_id, :garment_id)
+        .group_by(&:first)
+        .transform_values { |pairs| pairs.map(&:last) }
     end
   end
 end
