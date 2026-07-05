@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :garments
+  resources :suggestions, only: %i[create]
   resources :outfits do
     resources :likes, only: %i[create destroy]
     resources :comments, only: %i[create destroy]
