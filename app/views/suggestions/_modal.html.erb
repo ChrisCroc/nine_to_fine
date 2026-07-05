@@ -1,8 +1,9 @@
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      data-controller="modal" data-action="click->modal#backdrop">
   <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
     <div id="ai_suggestion">
       <div class="flex flex-col items-center gap-3 py-6 text-center">
-        <span class="inline-block h---8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900"></span>
+        <span class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900"></span>
         <p class="text-sm text-zinc-600">The stylist is thinking...</p>
       </div>
     </div>

@@ -1,6 +1,25 @@
 <% content_for :page_title, "My outfits" %>
 
 <section class="page-shell">
+  <%# Per-user signed stream - the job broadcasts the suggestion here. %>
+  <%= turbo_stream_from current_user, :outfit_suggestions %>
+
+  <%# Empty container: the controller respionse injects the modal into it. %>
+  <div id="ai_suggestion_modal"></div>
+  <div class="mb-8 rounded-xl bg-white/70 p-4 shadow-sm md:p-6">
+    <h2 class="mb-2 text-lg font-semibold text-zinc-900">Ask the stylist ✨</h2>
+    <%= form_with url: suggestions_path, method: :post,
+                  data: { controller: "submit-button",
+                          action: "submit->submit-button#start turbo:submit-end->submit-button#end" } do |f| %>
+      <%= f.text_area :context, rows: 2, required: true,
+            placeholder: "e.g. interview in Paris, 13°C and rainy",
+            class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+      <%= f.submit "Compose an outfit",
+            data: { "submit-button-target": "button" },
+            class: "btn-base mt-3 bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white data-loading:cursor-wait data-loading:opacity-50" %>
+    <% end %>
+  </div>
+
   <%# En-tête de page %>
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
       <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30">My Outfits</h1>
