@@ -5,6 +5,12 @@ module Taggable
     has_many :taggings, as: :taggable, dependent: :destroy
     has_many :tags, through: :taggings
     after_save :sync_tags
+    scope :tagged_with_all, ->(tag_ids) {
+      where(id: joins(:tags).where(tags: { id: tag_ids })
+                    .group(:id)
+                    .having("COUNT(DISTINCT tags.id) = ?", Array(tag_ids).size)
+                    .select(:id))
+    }
   end
 
   def tag_names=(value)
