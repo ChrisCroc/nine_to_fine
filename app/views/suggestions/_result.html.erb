@@ -1,0 +1,18 @@
+<%# Rendered inside #ai_suggestion by the broadcast. `result` is the Data object.
+    Renders pieces NAMES (not photos - no host in a request-less broadcast).
+    Photos appear on /outfits/new via the existing preview board. %>
+<div class="flex flex-col gap-4">
+  <h3 class="text-lg font-semibold text-zinc-900"><%= result.name %></h3>
+
+  <p class="text-sm leading-relaxed text-zinc-700"
+      data-controller="typewriter"
+      data-typewriter-text-value="<%= result.rationale %>"></p>
+  <ul class="flex flex-wrap gap-2">
+    <% Garment.where(id: result.garment_ids).each do |garment| %>
+      <li class="rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-700"><%= garment.name %></li>
+    <% end %>
+  </ul>
+
+  <%= link_to "Create this outfit", new_outfit_path(garment_ids: result.garment_ids, name: result.name),
+        class: "btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white text-center" %>
+</div>
