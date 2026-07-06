@@ -13,6 +13,8 @@ RSpec.describe "Suggestions", type: :request do
                                             headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(OutfitSuggestionJob)
         expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+        expect(response.body).to include('<turbo-stream action="update"')
+        expect(response.body).to include('target="ai_suggestion_modal"')
       end
 
       it "does not enqueued when context and anchors are both blank" do

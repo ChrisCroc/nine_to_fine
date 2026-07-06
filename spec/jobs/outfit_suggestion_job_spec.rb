@@ -22,4 +22,23 @@ RSpec.describe OutfitSuggestionJob do
 
     described_class.perform_now(user: user, context: "x")
   end
+
+  it "broadcasts a non-retryable error for TooFewGarments" do
+    allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest)
+      .and_raise(Ai::OutfitSuggester::TooFewGarments)
+
+    expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      .with(user, :outfit_suggestions, hash_including(locals: hash_including(retryable: false, context: "x")))
+
+      described_class.perform_now(user: user, context: "x")
+  end
+
+  it "passes the context to the result partial" do
+    allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest).and_return(result)
+
+    expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      .with(user, :outfit_suggestions, hash_including(locals: hash_including(context: "rainy interview")))
+
+    described_class.perform_now(user: user, context: "rainy interview")
+  end
 end

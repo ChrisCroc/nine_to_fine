@@ -9,8 +9,8 @@
   <div class="mb-8 rounded-xl bg-white/70 p-4 shadow-sm md:p-6">
     <h2 class="mb-2 text-lg font-semibold text-zinc-900">Ask the stylist ✨</h2>
     <%= form_with url: suggestions_path, method: :post,
-                  data: { controller: "submit-button",
-                          action: "submit->submit-button#start turbo:submit-end->submit-button#end" } do |f| %>
+                  data: { controller: "submit-button reset-form",
+                          action: "submit->submit-button#start turbo:submit-end->submit-button#end turbo:submit-end->reset-form#reset" } do |f| %>
       <%= f.text_area :context, rows: 2, required: true,
             placeholder: "e.g. interview in Paris, 13°C and rainy",
             class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
