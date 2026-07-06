@@ -1,4 +1,7 @@
 <% content_for :page_title, "My outfits" %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
 
 <section class="page-shell">
   <%# Per-user signed stream - the job broadcasts the suggestion here. %>
