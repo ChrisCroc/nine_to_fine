@@ -1,7 +1,13 @@
 <div class="flex flex-col gap-4 py-4 text-center">
   <p class="text-sm text-zinc-700"><%= message %></p>
-  <button type="button" data-action="modal#close"
-          class="btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white">
-    Close
-  </button>
+  <div class="flex justify-center gap-2">
+    <% if retryable %>
+      <%= button_to "Regenerate", suggestions_path, params: { context: context },
+            class: "btn-base border border-zinc-300 text-zinc-900 hover:bg-zinc-100" %>
+    <% end %>
+    <button type="button" data-action="modal#close"
+            class="btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white">
+      Close
+    </button>
+  </div>
 </div>

@@ -10,7 +10,7 @@ class OutfitSuggestionJob < ApplicationJob
       user, :outfit_suggestions,
       target: "ai_suggestion",
       partial: "suggestions/result",
-      locals: { result: result }
+      locals: { result: result, context: context }
     )
   rescue => e
     Rails.logger.error("[OutfitSuggestionJob] #{e.class}: #{e.message}")
@@ -18,7 +18,7 @@ class OutfitSuggestionJob < ApplicationJob
       user, :outfit_suggestions,
       target: "ai_suggestion",
       partial: "suggestions/error",
-      locals: { message: friendly_message(e) }
+      locals: { message: friendly_message(e), retryable: !e.is_a?(Ai::OutfitSuggester::TooFewGarments), context: context }
     )
   end
 
