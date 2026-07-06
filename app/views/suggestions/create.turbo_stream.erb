@@ -1,5 +1,5 @@
-<%# Replace the always-present container on th epage with th emodal shell.
+<%# Update the always-present container on the page with the modal shell.
     The modal holds #ai_suggestion (spinner) - the job broadcast replace that %>
-<%= turbo_stream.replace "ai_suggestion_modal" do %>
+<%= turbo_stream.update "ai_suggestion_modal" do %>
   <%= render "suggestions/modal" %>
 <% end %>
