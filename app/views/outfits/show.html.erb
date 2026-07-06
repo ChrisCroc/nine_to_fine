@@ -1,4 +1,7 @@
 <% content_for :page_title, @outfit.name %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
 
 <%= turbo_stream_from @outfit %>
 
