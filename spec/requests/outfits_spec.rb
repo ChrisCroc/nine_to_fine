@@ -45,6 +45,17 @@ RSpec.describe "Outfits", type: :request do
         get new_outfit_path
         expect(response).to have_http_status(:success)
       end
+
+      it "pre-selects the user's own garments and the name" do
+        mine = create_list(:garment, 2, user: user)
+        get new_outfit_path(garment_ids: mine.map(&:id), name: "AI pick")
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("AI pick")
+        mine.each do |garment|
+          expect(response.body).to include("selected=\"selected\" value=\"#{garment.id}\"")
+        end
+      end
     end
 
     describe "POST /outfits" do
@@ -73,6 +84,21 @@ RSpec.describe "Outfits", type: :request do
             post outfits_path, params: invalid_params
           }.not_to change(Outfit, :count)
           expect(response).to have_http_status(:unprocessable_content)
+        end
+      end
+
+      context "with a foreign garment id (IDOR)" do
+        it "does not attach a garment the user doesn't own" do
+          mine = create(:garment, user: user)
+          stranger_piece = create(:garment)
+
+          post outfits_path, params: {
+            outfit: { name: "Sneaky", garment_ids: [ mine.id, stranger_piece.id ] }
+          }
+
+          outfit = user.outfits.find_by(name: "Sneaky")
+          expect(outfit).to be_present
+          expect(outfit.garment_ids).to eq([ mine.id ])
         end
       end
     end
