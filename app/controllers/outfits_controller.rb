@@ -11,11 +11,13 @@ class OutfitsController < ApplicationController
   end
 
   def new
-    @outfit = current_user.outfits.new
+    @outfit = current_user.outfits.new(name: params[:name])
+    @outfit.garment_ids = owned_garment_ids(params[:garment_ids]) if params[:garment_ids].present?
   end
 
   def create
-    @outfit = current_user.outfits.new(outfit_params)
+    @outfit = current_user.outfits.new(outfit_params.except(:garment_ids))
+    @outfit.garment_ids = owned_garment_ids(outfit_params[:garment_ids])
     if @outfit.save
       redirect_to @outfit, notice: "Outfit successfully created."
     else
@@ -27,6 +29,8 @@ class OutfitsController < ApplicationController
   end
 
   def update
+    @outfit.assign_attributes(outfit_params.except(:garment_ids))
+    @outfit.garment_ids = owned_garment_ids(outfit_params[:garment_ids]) if outfit_params[:garment_ids].present?
     if @outfit.update(outfit_params)
       redirect_to @outfit, status: :see_other, notice: "Outfit successfully updated."
     else
@@ -50,5 +54,9 @@ private
 
   def set_garments
     @garments = current_user.garments.includes(photo_attachment: :blob).order(created_at: :desc)
+  end
+
+  def owned_garment_ids(ids)
+    current_user.garments.where(id: Array(ids).reject(&:blank?)).ids
   end
 end
