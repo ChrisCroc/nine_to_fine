@@ -7,7 +7,7 @@
   <%# Per-user signed stream - the job broadcasts the suggestion here. %>
   <%= turbo_stream_from current_user, :outfit_suggestions %>
 
-  <%# Empty container: the controller respionse injects the modal into it. %>
+  <%# Empty container: the controller response injects the modal into it. %>
   <div id="ai_suggestion_modal"></div>
   <div class="mb-8 rounded-xl bg-white/70 p-4 shadow-sm md:p-6">
     <h2 class="mb-2 text-lg font-semibold text-zinc-900">Ask the stylist ✨</h2>
@@ -74,7 +74,7 @@
       <%#  Etat vide %>
         <div class="text-center py-20">
           <p class="text-lg text-zinc-800 mb-4">You haven't added any outfits yet.</p>
-          <%= link_to "Create your first outfit", new_outfit_path, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+          <%= link_to "Create your first outfit", new_outfit_path, data: { turbo_frame: "_top" }, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
         </div>
       <% end %>
     <% else %>
@@ -82,7 +82,7 @@
       <%# Grille de cards %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <% @outfits.each do |outfit| %>
-          <%= link_to outfit, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:z-10" do %>
+          <%= link_to outfit, data: { turbo_frame: "_top" }, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:z-10" do %>
             <div class="h-48">
               <%= render "collage", outfit: outfit %>
             </div>
