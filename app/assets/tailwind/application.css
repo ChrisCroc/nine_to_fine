@@ -4,6 +4,8 @@
 
 @theme {
   --color-champagne: #E7DBC4;
+  --color-champagne-light: #EFE6CE;
+  --color-champagne-deep:  #C6AC79;
 
   --font-display: "Playfair Display", serif;
   --font-body: "Inter", system-ui, sans-serif;

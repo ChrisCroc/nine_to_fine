@@ -1,8 +1,10 @@
 <nav class="bg-zinc-800 py-4 px-8 flex items-center justify-between">
-  <div class="flex items-center gap-2">
-    <!-- Logo -->
+  <div class="flex items-center gap-4">
+    <%= link_to root_path, class: "shrink-0", aria: { label: "Nine to Fine, accueil" } do %>
+      <%= image_tag "icon.svg", alt: "Nine to Fine", class: "h-9 w-9" %>
+    <% end %>
     <% if user_signed_in? %>
-      <%= link_to "Closet /", garments_path, class: "text-champagne hover:text-white text-h2 font-display" %>
+      <%= link_to "Closet", garments_path, class: "text-champagne hover:text-white text-h2 font-display mx-2" %>
       <%= link_to "Dressing", outfits_path, class: "text-champagne hover:text-white text-h2 font-display" %>
     <% end %>
   </div>
