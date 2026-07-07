@@ -84,4 +84,36 @@ RSpec.describe Outfit, type: :model do
       expect(outfit.tags.pluck(:name).sort).to eq(%w[casual evening])
     end
   end
+
+  describe ".tagged_with_all" do
+    let(:chris) { create(:user) }
+    let(:summer) { create(:tag, name: "summer", user: chris) }
+    let(:chic) { create(:tag, name: "chic", user: chris) }
+    let(:summer_and_chic) { create(:outfit, user: chris) }
+    let(:summer_only) { create(:outfit, user: chris) }
+
+    before do
+      create(:tagging, tag: summer, taggable: summer_and_chic)
+      create(:tagging, tag: chic, taggable: summer_and_chic)
+      create(:tagging, tag: summer, taggable: summer_only)
+    end
+    it "keeps outfits that have ALL requested tags" do
+      result = Outfit.tagged_with_all([ summer.id, chic.id ])
+
+      expect(result).to include(summer_and_chic)
+    end
+
+    it "excludes an outfit that has only one of the requested tags (AND, not OR)" do
+      result = Outfit.tagged_with_all([ summer.id, chic.id ])
+
+      expect(result).not_to include(summer_only)
+    end
+
+    it "matches an outfit that has the requested tags plus extra ones" do
+      create(:tagging, tag: create(:tag, name: "winter", user: chris), taggable: summer_and_chic)
+      result = Outfit.tagged_with_all([ summer.id, chic.id ])
+
+      expect(result).to include(summer_and_chic)
+    end
+  end
 end

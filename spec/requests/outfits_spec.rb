@@ -24,6 +24,46 @@ RSpec.describe "Outfits", type: :request do
       end
     end
 
+    describe "GET /outfits with filters" do
+      let(:summer) { create(:tag, name: "summer", user: user) }
+      let(:chic) { create(:tag, name: "chic", user: user) }
+
+      it "keeps only outfits having all requested tags" do
+        both = create(:outfit, user: user, name: "SummerChicFit")
+        one = create(:outfit, user: user, name: "SummerOnlyFit")
+        create(:tagging, tag: summer, taggable: both)
+        create(:tagging, tag: chic, taggable: both)
+        create(:tagging, tag: summer, taggable: one)
+
+        get outfits_path(q: { tag_ids: [ summer.id, chic.id ] })
+
+        expect(response.body).to include("SummerChicFit")
+        expect(response.body).not_to include("SummerOnlyFit")
+      end
+
+      it "filters by contained garment via q[garment_id]" do
+        piece = create(:garment, user: user, name: "White shirt")
+        with_piece = create(:outfit, user: user, name: "ShirtFit")
+        without = create(:outfit, user: user, name: "OtherFit")
+        with_piece.garments << piece
+
+        get outfits_path(q: { garment_id: piece.id })
+
+        expect(response.body).to include("ShirtFit")
+        expect(response.body).not_to include("OtherFit")
+      end
+
+      it "does not leak another user's outfit when passing a foreign garment_id (IDOR sentinel)" do
+        stranger_piece = create(:garment)
+        stranger_outfit = create(:outfit, user: stranger_piece.user, name: "StrangerFit")
+        stranger_outfit.garments << stranger_piece
+
+        get outfits_path(q: { garment_id: stranger_piece.id })
+
+        expect(response.body).not_to include("StrangerFit")
+      end
+    end
+
     describe "GET /outfits/:id" do
       it "returns a successful response" do
         get outfit_path(outfit)
