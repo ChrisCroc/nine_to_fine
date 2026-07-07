@@ -31,14 +31,53 @@
       </div>
     </div>
 
-    <% if @outfits.empty? %>
+    <% current = @filter_params.to_h.with_indifferent_access %>
+    <% active_tag_ids = Array(current[:tag_ids]).map(&:to_i) %>
 
-      <%#  Etat vide %>
-      <div class="text-center py-20">
-        <p class="text-lg text-zinc-800 mb-4">You haven't added any outfits yet.</p>
-        <%= link_to "Create your first outfit", new_outfit_path, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+    <%= turbo_frame_tag "outfits_list" do %>
+      <div class="bg-white/40 backdrop-blur-sm rounded-xl p-4 mb-6 space-y-3">
+        <% if @available_tags.any? %>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Tags:</span>
+            <% @available_tags.each do |tag| %>
+              <% toggled = active_tag_ids.include?(tag.id) ? active_tag_ids - [ tag.id] : active_tag_ids + [ tag.id ] %>
+              <%= link_to tag.name, outfits_path(q: current.merge(tag_ids: toggled)), class: pill_class(active_tag_ids.include?(tag.id)) %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <% if @filter_garment %>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Piece:</span>
+            <span class="inline-flex items-center gap-2 rounded-full bg-zinc-900 text-champagne px-3 py-1 text-sm">
+              <%= @filter_garment.name %>
+              <%= link_to "×", outfits_path(q: current.except(:garment_id)), class: "hover:text-white" %>
+            </span>
+          </div>
+        <% end %>
+
+        <% if current.any? %>
+          <div class="pt-2 border-t border-zinc-200/60">
+            <%= link_to "× Clear all filters", outfits_path, class: "text-sm text-zinc-600 hover:text-zinc-900 underline" %>
+          </div>
+        <% end %>
       </div>
+
+    <% if @outfits.empty? %>
+      <% if current.any? %>
+        <%# Empty list because of one filter %>
+        <div class="text-center py-20">
+          <p class="text-lg text-zinc-800 mb-4">No outfit matches these filters.</p>
+          <%= link_to "× Clear all filters", outfits_path, class: "inline-block text-zinc-700 underline hover:text-zinc-900"%>
+        </div>
       <% else %>
+      <%#  Etat vide %>
+        <div class="text-center py-20">
+          <p class="text-lg text-zinc-800 mb-4">You haven't added any outfits yet.</p>
+          <%= link_to "Create your first outfit", new_outfit_path, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+        </div>
+      <% end %>
+    <% else %>
 
       <%# Grille de cards %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -66,5 +105,6 @@
           <% end %>
         <% end %>
       </div>
+    <% end %>
     <% end %>
 </section>

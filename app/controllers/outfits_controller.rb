@@ -7,7 +7,7 @@ class OutfitsController < ApplicationController
     @filter_params = filter_params
     @outfits = OutfitFilter.new(base, @filter_params).results.order(created_at: :desc)
 
-    @available_tags = current_user.tags.order(:name)
+    @available_tags = current_user.tags.joins(:taggings).where(taggings: { taggable_type: "Outfit" }).distinct.order(:name)
     @filter_garment = current_user.garments.find_by(id: @filter_params[:garment_id])
   end
 
