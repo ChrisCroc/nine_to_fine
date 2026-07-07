@@ -3,7 +3,12 @@ class OutfitsController < ApplicationController
   before_action :set_garments, only: %i[new edit create update]
 
   def index
-    @outfits = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ]).order(created_at: :desc)
+    base = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ])
+    @filter_params = filter_params
+    @outfits = OutfitFilter.new(base, @filter_params).results.order(created_at: :desc)
+
+    @available_tags = current_user.tags.order(:name)
+    @filter_garment = current_user.garments.find_by(id: @filter_params[:garment_id])
   end
 
   def show
@@ -58,5 +63,9 @@ private
 
   def owned_garment_ids(ids)
     current_user.garments.where(id: Array(ids).reject(&:blank?)).ids
+  end
+
+  def filter_params
+    params[:q]&.permit(:garment_id, tag_ids: []) || {}
   end
 end
