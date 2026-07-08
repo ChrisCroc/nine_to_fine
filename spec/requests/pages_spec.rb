@@ -16,6 +16,13 @@ RSpec.describe "Pages", type: :request do
       it "renders the three blocks as <h2> headings" do
         expect(response.body.scan("<h2").size).to be >=3
       end
+
+      it "renders the marketing footer with contact links" do
+        expect(response.body).to include("Christophe Crokaert")
+        expect(response.body).to include("mailto:croc1014@me.com")
+        expect(response.body).to include("github.com/ChrisCroc")
+        expect(response.body).to include("linkedin.com/in/christophe-crokaert")
+      end
     end
 
     context "when the user is signed in" do
