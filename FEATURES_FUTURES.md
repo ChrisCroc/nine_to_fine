@@ -174,6 +174,18 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation** : ~0.5-1 j.
 - **Slot suggéré** : post-emploi (oct 2026+), ou sem 26+ si polish social prioritaire.
 
+### Shell applicatif mobile — bottom-nav responsive + footer scopé marketing (direction produit)
+
+- **Contexte d'origine** : mardi 8 juillet 2026 (sem 28), brainstorm de la home page (`docs/superpowers/specs/2026-07-08-home-page-design.md`). En cadrant le footer, Chris a soulevé qu'à terme il veut faire de Nine to Fine une **app mobile** — or une app mobile n'a pas de footer mais une **barre de navigation en bas** (type Instagram). Distinction tranchée pendant le brainstorm : ce sont **deux surfaces différentes**, à ne pas confondre.
+- **Décision structurante actée** :
+  1. **Surface marketing / landing** (home en logged-out, vue par recruteurs + visiteurs non inscrits) = reste une **page web avec footer classique** (contact, copyright, liens pro). Même les apps 100% mobiles ont ça (`instagram.com` a un footer).
+  2. **Le footer doit être scopé à la surface marketing, PAS global.** Il vit dans `home.html.erb` (ou un partial rendu uniquement sur les pages vitrine), **jamais dans `application.html.erb`** — sinon il apparaîtrait dans tout le shell authentifié et rentrerait en conflit direct avec la future bottom-nav.
+  3. **Shell applicatif authentifié** (Closet, Dressing, show outfit) = à terme, navigation **responsive** : la navbar top actuelle devient une **bottom tab bar sur mobile** (type Instagram) / reste une **top-nav sur desktop**.
+- **Description (travail futur)** : refondre `shared/_navbar` en composant responsive (top sur `md:+`, bottom-nav fixe sur mobile via Tailwind responsive + `fixed bottom-0`), avec icônes + labels pour les destinations principales (Closet / Dressing / Profil / +). Trancher la techno de "mise en app mobile" : **Hotwire Native** (réutilise les vues Rails existantes — le plus cohérent avec la stack actuelle), PWA (installable, offline-light), ou app native séparée (React Native — le plus lourd, redéveloppement UI). Non tranché.
+- **Stack** : décision UI (pas de model). Refonte `_navbar` responsive (Tailwind + éventuel Stimulus pour l'état actif). Décision techno mobile séparée (Hotwire Native = candidat par défaut vu la stack Rails/Hotwire).
+- **Estimation** : refonte nav shell responsive ~1-2 j ; décision + setup techno mobile = chantier distinct à chiffrer le moment venu.
+- **Slot suggéré** : post-emploi (oct 2026+). Le footer marketing (aujourd'hui) est posé de façon à **ne pas bloquer** cette direction : il est scopé, donc rien à défaire côté shell app.
+
 ## Priorité basse
 
 ### Gestion gracieuse de `RecordNotFound` (UX back-button sur ressource supprimée)
