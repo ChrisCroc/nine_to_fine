@@ -1,0 +1,20 @@
+<footer class="bg-zinc-900 text-champagne px-4 py-10 md:px-8">
+  <div class="max-w-3xl mx-auto flex flex-col items-center gap-3 text-center">
+    <div>
+      <p class="font-display text-h3">Nine to Fine</p>
+      <p class="font-body text-caption text-champagne/70 mt-1">Built by Christophe Crokaert</p>
+    </div>
+    <nav class="flex flex-wrap justify-center items-center gap-4 md:gap-6" aria-label="Contact">
+      <%= link_to "mailto:croc1014@me.com", aria: { label: "Email" }, class: "text-xl hover:text-white transition-colors" do %>
+        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+      <% end %>
+      <%= link_to "https://github.com/ChrisCroc", target: "_blank", rel: "noopener", aria: { label: "GitHub" }, class: "text-xl hover:text-white transition-colors" do %>
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+      <% end %>
+      <%= link_to "https://www.linkedin.com/in/christophe-crokaert", target: "_blank", rel: "noopener", aria: { label: "LinkedIn" }, class: "text-xl hover:text-white transition-colors" do %>
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+      <% end %>
+    </nav>
+  </div>
+  <p class="font-body text-caption text-champagne/50 text-center mt-8">© 2026 Nine to Fine. All rights reserved.</p>
+</footer>
