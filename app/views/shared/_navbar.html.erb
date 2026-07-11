@@ -1,20 +1,19 @@
-<nav class="bg-zinc-800 py-4 px-8 flex items-center justify-between">
-  <div class="flex items-center gap-4">
-    <%= link_to root_path, class: "shrink-0", aria: { label: "Nine to Fine, accueil" } do %>
-      <%= image_tag "icon.svg", alt: "Nine to Fine", class: "h-9 w-9" %>
-    <% end %>
-    <% if user_signed_in? %>
-      <%= link_to "Closet", garments_path, class: "text-champagne hover:text-white text-h2 font-display mx-2" %>
-      <%= link_to "Dressing", outfits_path, class: "text-champagne hover:text-white text-h2 font-display" %>
-    <% end %>
-  </div>
-  <div class="flex gap-4">
-    <% if user_signed_in? %>
-      <span class="text-champagne hover:text-white text-caption"><%= link_to current_user.username, user_path(current_user) %></span>
-      <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-champagne hover:text-white text-caption" %>
-    <% else %>
+<nav class="bg-zinc-800 py-4 px-4 md:px-8 flex items-center justify-between">
+  <%= link_to root_path, class: "shrink-0", aria: { label: "Nine to Fine, home" } do %>
+    <%= image_tag "icon.svg", alt: "Nine to Fine", class: "h-9 w-9" %>
+  <% end %>
+  <% if user_signed_in? %>
+    <div class="hidden md:flex items-center gap-6">
+      <% nav_destinations.each do |dest| %>
+        <%= link_to dest[:label], dest[:path],
+               class: "text-h3 font-display hover:text-white transition #{nav_active?(dest[:controller]) ? 'text-champagne' : 'text-champagne/60'}",
+               aria: { current: (nav_active?(dest[:controller]) ? "page" : nil) } %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="flex gap-4">
       <%= link_to "Login", new_user_session_path, class: "text-champagne hover:text-white text-caption" %>
       <%= link_to "Sign Up", new_user_registration_path, class: "text-champagne hover:text-white text-caption" %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </nav>

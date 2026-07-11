@@ -10,9 +10,14 @@
     </header>
 
 
-    <main>
+    <main class="<%= "pb-13 md:pb-0" if user_signed_in? %>">
       <%= render "shared/flashes" %>
       <%= yield %>
     </main>
+    <% if user_signed_in? %>
+      <div data-controller="bottom-sheet">
+        <%= render "shared/bottom_nav" %>
+      </div>
+    <% end %>
   </body>
 </html>

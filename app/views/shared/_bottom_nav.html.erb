@@ -1,0 +1,34 @@
+<nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-zinc-800 border-t border-zinc-700 pb-[env(safe-area-inset-bottom)]"
+      aria-label="Primary">
+  <ul class="flex items-stretch justify-around">
+    <% nav_destinations.first(2).each do |dest| %>
+      <li class="flex-1">
+        <%= link_to dest[:path],
+                class: "flex flex-col items-center gap-1 py-2 touch-manipulation hover:text-white transition #{nav_active?(dest[:controller]) ? 'text-champagne' : 'text-champagne/60'}",
+                aria: { current: (nav_active?(dest[:controller]) ? "page" : nil) } do %>
+          <i class="fa-solid <%= dest[:icon] %> text-lg" aria-hidden="true"></i>
+          <span class="text-xs font-body"><%= dest[:label] %></span>
+        <% end %>
+      </li>
+    <% end %>
+      <li class="flex-1 flex items-center justify-center">
+        <button type="button"
+                data-bottom-sheet-target="trigger"
+                data-action="bottom-sheet#open"
+                aria-haspopup="dialog" aria-expanded="false" aria-label="Create"
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-champagne text-zinc-900 shadow-md touch-manipulation hover:bg-champagne-light transition">
+          <i class="fa-solid fa-plus text-lg" aria-hidden="true"></i>
+        </button>
+      </li>
+    <% nav_destinations.drop(2).each do |dest| %>
+      <li class="flex-1">
+        <%= link_to dest[:path],
+              class: "flex flex-col items-center gap-1 py-2 touch-manipulation hover:text-white transition #{nav_active?(dest[:controller]) ? 'text-champagne' : 'text-champagne/60' }",
+              aria: { current: (nav_active?(dest[:controller]) ? "page" : nil) } do %>
+          <i class="fa-solid <%= dest[:icon] %> text-lg" aria-hidden="true"></i>
+          <span class="text-xs font-body"><%= dest[:label] %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
