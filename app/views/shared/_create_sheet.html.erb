@@ -1,0 +1,14 @@
+<div data-bottom-sheet-target="overlay"
+      data-action="click->bottom-sheet#backdrop"
+      role="dialog" aria-modal="true" aria-label="Create"
+      class="hidden md:hidden fixed inset-0 z-[60] bg-black/40">
+  <div class="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+    <h2 class="text-h3 font-display text-zinc-900 mb-3 px-1">Create</h2>
+    <%= link_to new_garment_path, class: "btn-base w-full bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white mb-2" do %>
+      <i class="fa-solid fa-shirt mr-2" aria-hidden="true"></i>New garment
+    <% end %>
+    <%= link_to new_outfit_path, class: "btn-base w-full bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white" do %>
+      <i class="fa-solid fa-layer-group mr-2" aria-hidden="true"></i> New outfit
+    <% end %>
+  </div>
+</div>
