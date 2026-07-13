@@ -1,0 +1,41 @@
+<div data-controller="filter-drawer" class="flex items-center gap-2">
+  <%= local_assigns[:beside] %>
+
+  <button type="button"
+          data-action="filter-drawer#open"
+          data-filter-drawer-target="trigger"
+          aria-haspopup="dialog" aria-expanded="false" aria-label="Open filters"
+          class="inline-flex items-center gap-2 rounded-md bg-zinc-900 text-champagne
+  font-semibold py-2 px-4 hover:bg-zinc-700 hover:text-white transition touch-manipulation
+  whitespace-nowrap">
+    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+    Filters<% if active_count.positive? %> · <%= active_count %><% end %>
+  </button>
+
+
+  <div data-filter-drawer-target="overlay"
+        data-action="click->filter-drawer#backdrop"
+        role="dialog" aria-model="true" aria-label="Filters"
+        class="hidden fixed inset-0 z-[60] bg-black/40">
+    <aside data-filter-drawer-target="panel" tabindex="-1"
+            class="absolute inset-y-0 right-0 w-[78%] max-w-sm bg-white shadow-2xl flex
+    flex-col translate-x-full transition-transform duration-300 ease-out motion-reduce:transition-none focus:outline-none">
+      <header class="flex items-center justify-between p-4 border-b border-zinc-200">
+        <h2 class="text-lg font-semibold text-zinc-900">Filters</h2>
+        <button type="button" data-action="filter-drawer#close" aria-label="Close filters"
+                class="text-2xl leading-none text-zinc-500 hover:text-zinc-900">&times;
+        </button>
+      </header>
+
+      <%= form_with url: url, method: :get, class: "flex flex-col flex-! min-h-0" do %>
+        <div class="flex-1 overflow-y-auto p-4 space-y-6">
+          <%= yield %>
+        </div>
+        <footer class="sticky bottom-0 bg-white border-t border-zinc-200 p-4 flex items-center gap-3">
+          <%= link_to "Clear all", url, class: "text-sm text-zinc-600 underline hover:text-zinc-900" %>
+          <button type="submit" class="btn-base flex-1 bg-zinc-900 text-champagne hover;bg-zinc-700 hover:text-white">Show results</button>
+        </footer>
+      <% end %>
+    </aside>
+  </div>
+</div>

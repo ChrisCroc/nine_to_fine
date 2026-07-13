@@ -1,0 +1,19 @@
+<div>
+  <h3 class="mb-2 text-sm font-semibold text-zinc-700">Tags</h3>
+  <% if @available_tags.any? %>
+    <div class="flex flex-wrap gap-2">
+      <% @available_tags.each do |tag| %>
+        <label class="cursor-pointer">
+          <input type="checkbox" name="q[tag_ids][]" value="<%= tag.id %>" <%= "checked" if active_tag_ids.include?(tag.id) %> class="peer sr-only">
+          <span class="<%= filter_pill_class %>"><%= tag.name %></span>
+        </label>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-sm text-zinc-500">No tags yet.</p>
+  <% end %>
+</div>
+
+<% if current[:garment_id].present? %>
+  <%= hidden_field_tag "q[garment_id]", current[:garment_id] %>
+<% end %>

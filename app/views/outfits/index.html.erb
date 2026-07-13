@@ -35,31 +35,11 @@
     <% active_tag_ids = Array(current[:tag_ids]).map(&:to_i) %>
 
     <%= turbo_frame_tag "outfits_list" do %>
-      <div class="bg-white/40 backdrop-blur-sm rounded-xl p-4 mb-6 space-y-3">
-        <% if @available_tags.any? %>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Tags:</span>
-            <% @available_tags.each do |tag| %>
-              <% toggled = active_tag_ids.include?(tag.id) ? active_tag_ids - [ tag.id] : active_tag_ids + [ tag.id ] %>
-              <%= link_to tag.name, outfits_path(q: current.merge(tag_ids: toggled)), class: pill_class(active_tag_ids.include?(tag.id)) %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <% if @filter_garment %>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Piece:</span>
-            <span class="inline-flex items-center gap-2 rounded-full bg-zinc-900 text-champagne px-3 py-1 text-sm">
-              <%= @filter_garment.name %>
-              <%= link_to "×", outfits_path(q: current.except(:garment_id)), class: "hover:text-white" %>
-            </span>
-          </div>
-        <% end %>
-
-        <% if current.any? %>
-          <div class="pt-2 border-t border-zinc-200/60">
-            <%= link_to "× Clear all filters", outfits_path, class: "text-sm text-zinc-600 hover:text-zinc-900 underline" %>
-          </div>
+      <% beside = @filter_garment ? render("outfits/piece_chip", garment: @filter_garment, current: current) : nil %>
+      <div class="flex justify-end mb-6">
+        <%= render layout: "shared/filter_drawer",
+              locals: { url: outfits_path, active_count: outfits_filter_count(current), beside: beside } do %>
+          <%= render "outfits/filters_fields", current: current, active_tag_ids: active_tag_ids %>
         <% end %>
       </div>
 
