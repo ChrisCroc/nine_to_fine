@@ -10,4 +10,10 @@ module FiltersHelper
     params = params.to_h.with_indifferent_access
     Array(params[:tag_ids]).count(&:present?) + (params[:garment_id].present? ? 1 : 0)
   end
+
+  def filter_pill_class
+    "inline-block px-3 py-1 text-sm rounded-full whitespace-nowrap cursor-pointer " \
+    "bg-white/70 text-zinc-700 hover:bg-white " \
+    "peer-checked:bg-zinc-900 peer-checked:hover:bg-zinc-900 peer-checked:text-champagne peer-checked:font-semibold"
+  end
 end

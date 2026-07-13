@@ -38,54 +38,10 @@
     <%# Turbo Frame qui enveloppe bandeau filtres + grille %>
     <%= turbo_frame_tag "garments_list" do %>
 
-      <%# Bandeau filtres %>
-      <div class="bg-white/40 backdrop-blur-sm rounded-xl p-4 mb-6 space-y-3">
-        <%# Color %>
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Color:</span>
-          <%= link_to "All", garments_path(q: current.except(:color)), class: pill_class(current[:color].blank?) %>
-          <% @available_colors.each do |color| %>
-            <%= link_to color.capitalize, garments_path(q: current.merge(color: color)), class: pill_class(current[:color] == color) %>
-          <% end %>
-        </div>
-
-        <%# Category %>
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Category:</span>
-          <%= link_to "All", garments_path(q: current.except(:category_id)), class: pill_class(current[:category_id].blank?) %>
-          <% @available_categories.each do |category| %>
-            <%= link_to category.name, garments_path(q: current.merge(category_id: category.id)), class: pill_class(current[:category_id].to_i == category.id)
-  %>
-          <% end %>
-        </div>
-
-        <%# Brand (affiché uniquement si au moins une brand existe) %>
-        <% if @available_brands.any? %>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Brand:</span>
-            <%= link_to "All", garments_path(q: current.except(:brand)), class: pill_class(current[:brand].blank?) %>
-            <% @available_brands.each do |brand| %>
-              <%= link_to brand, garments_path(q: current.merge(brand: brand)), class: pill_class(current[:brand] == brand) %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%# Tag (affiché uniquement si au moins un tag existe) %>
-        <% if @available_tags.any? %>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm font-semibold text-zinc-700 w-20 shrink-0">Tag:</span>
-            <%= link_to "All", garments_path(q: current.except(:tag_id)), class: pill_class(current[:tag_id].blank?) %>
-            <% @available_tags.each do |tag| %>
-              <%= link_to tag.name, garments_path(q: current.merge(tag_id: tag.id)), class: pill_class(current[:tag_id].to_i == tag.id) %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%# Clear all (affiché uniquement si au moins un filtre actif) %>
-        <% if current.any? %>
-          <div class="pt-2 border-t border-zinc-200/60">
-            <%= link_to "× Clear all filters", garments_path, class: "text-sm text-zinc-600 hover:text-zinc-900 underline" %>
-          </div>
+      <div class="flex justify-end mb-6">
+        <%= render layout: "shared/filter_drawer",
+              locals: { url: garments_path, active_count: garments_filter_count(current) } do %>
+          <%= render "garments/filters_fields", current: current %>
         <% end %>
       </div>
 
