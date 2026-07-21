@@ -1,0 +1,20 @@
+<% has_photo = garment.photo.attached? && garment.photo.blob&.persisted? %>
+<div class="h-75 bg-zinc-100 flex items-center justify-center overflow-hidden relative">
+  <% if has_photo %>
+    <img data-photo-preview-target="image"
+          src="<%= url_for(garment.photo.variant(resize_to_limit: [ 600, 600 ], format: :webp)) %>"
+          alt="<%= garment.name %>"
+          class="h-full w-full object-contain">
+    <span data-photo-preview-target="placeholder" class="hidden text-sm text-zinc-400">Choose a photo</span>
+  <% else %>
+    <img data-photo-preview-target="image" alt="Photo preview" class="hidden h-full w-full object-contain">
+    <span data-photo-preview-target="placeholder" class="text-sm text-zinc-400">Choose a photo below</span>
+  <% end %>
+  <button type="button"
+          data-photo-preview-target="clear"
+          data-action="click->photo-preview#clear"
+          aria-label="Remove selected photo"
+          class="invisible absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900/60 text-white hover:bg-zinc-900">
+    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+  </button>
+</div>
