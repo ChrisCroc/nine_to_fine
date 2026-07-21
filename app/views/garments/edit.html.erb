@@ -1,7 +1,7 @@
 <section class="page-shell flex items-center justify-center">
-  <div class="w-full max-w-lg bg-white rounded-xl shadow-xl overflow-hidden">
+  <div class="w-full max-w-lg bg-white rounded-xl shadow-xl overflow-hidden" data-controller="photo-preview">
     <div class="h-75 bg-zinc-100 flex items-center justify-center">
-      <span class="text-sm text-zinc-400">Photo (coming soon)</span>
+      <%= render "photo_preview", garment: @garment %>
     </div>
     <div class="p-6 md:p-8">
       <h1 class="text-2xl font-bold text-zinc-900 mb-6">Edit Garment</h1>

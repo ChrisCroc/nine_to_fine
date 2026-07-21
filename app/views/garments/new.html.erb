@@ -1,8 +1,8 @@
 <section class="page-shell flex items-center justify-center">
-  <div class="w-full max-w-lg bg-white rounded-xl shadow-xl overflow-hidden">
+  <div class="w-full max-w-lg bg-white rounded-xl shadow-xl overflow-hidden" data-controller="photo-preview">
     <%# Card header : zone photo (Active storage semaine 23) %>
     <div class="h-75 bg-zinc-100 flex items-center justify-center">
-      <span class="text-sm text-zinc-400">Photo (coming soon)</span>
+      <%= render "photo_preview", garment: @garment %>
     </div>
 
     <%# Card Body : Formulaire %>
