@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "image", "placeholder"]
+  static targets = ["input", "image", "placeholder", "clear"]
 
   connect() {
     this.initialSrc = this.imageTarget.getAttribute("src")
@@ -11,9 +11,11 @@ export default class extends Controller {
   update() {
     const file = this.inputTarget.files[0]
     this.revoke()
+    this.clearTarget.classList.add("invisible")
     if (file) {
       this.currentUrl = URL.createObjectURL(file)
       this.showImage(this.currentUrl)
+      this.clearTarget.classList.remove("invisible")
     } else if (this.initialSrc) {
       this.showImage(this.initialSrc)
     } else {
@@ -42,5 +44,10 @@ export default class extends Controller {
 
   disconnect() {
     this.revoke()
+  }
+
+  clear() {
+    this.inputTarget.value = ""
+    this.update()
   }
 }
