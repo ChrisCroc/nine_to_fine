@@ -41,11 +41,9 @@
 
   <div class="mb-4">
     <%= f.label :photo, "Photo", class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <% if garment.photo.attached? && garment.photo.blob&.persisted? %>
-      <%= image_tag garment.photo.variant(resize_to_limit: [ 120, 120 ], format: :webp), class: "mb-2 h-24 w-24 rounded-md object-cover ring-1 ring-zinc-200" %>
-    <% end %>
     <%= f.file_field :photo,
                       accept: "image/*",
+                      data: { photo_preview_target: "input", action: "change->photo-preview#update" },
                       class: "block w-full text-sm text-zinc-700 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-900 file:px-4 file:py-2 file:text-champagne file:font-semibold file:cursor-pointer hover:file:bg-zinc-700" %>
     <% if garment.errors[:photo].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:photo].first %></span>
