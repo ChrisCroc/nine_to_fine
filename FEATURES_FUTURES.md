@@ -50,10 +50,20 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
   5. **Photo de profil** : avatar Active Storage sur `User` (recoupe US04 édition profil).
   6. **US04 édition profil** : `UsersController#edit/update` scopé `current_user` (sentinel IDOR) — username + futurs bio/avatar.
 - **Stack** : migration `is_public` sur Outfit + scope `Outfit.public_outfits` + `OutfitFilter` + `UsersController` enrichi (show gated + edit/update) + extraction partials card + `has_one_attached :avatar` sur User + éventuelle colonne `Follow#status`.
-- **Estimation** : 3-5 j (le brainstorm produit US18 d'abord, puis l'implémentation par sous-briques).
-- **Slot suggéré** : sem 26+ (brainstorm produit dédié US18), avant l'implémentation. **Ne rien coder de ce bloc avant le brainstorm** (sinon rework garanti).
+- **⚠️ STATUT (mis à jour 2026-07-21, sem 30)** : le brainstorm produit US18 a eu lieu → spec `docs/superpowers/specs/2026-07-21-us18-outfit-public-design.md`. La **V1 est en cours d'implémentation** avec un scope volontairement resserré : visibilité **par-tenue** `private`/`public` (enum), tenue + profil publics ouvrables **anonyme via lien**, bascule publier + profil-vitrine (grille des tenues publiques), recherche de users. **Ce qui reste backlog de ce brief riche** : (2) followers-only + **follows à approbation**, (4) navigation par tag publique sur le profil, (5) avatar profil + listes followers/following cliquables.
+- **⭐ Décision brainstorm 2026-07-21 (sous-décision 2)** : followers-only et follows à approbation forment **un seul chantier cohérent**. Avec le Follow instantané actuel, un contenu followers-only n'est restreint que d'un clic → il n'a de sens que **couplé à l'approbation** (colonne `status` pending/accepted sur `Follow` + écran de demandes reçues + actions accept/refuse). À faire ensemble, post-V1.
+- **Estimation restante** : 2-4 j (followers-only + approbation ~1,5-2 j ; tag navigation publique ~1 j ; avatar + listes cliquables ~0,5-1 j).
+- **Slot suggéré** : post-emploi (oct 2026+), ou plus tôt si le social devient un axe de démonstration en entretien.
 
 ## Priorité moyenne
+
+### Fil global / Explore des tenues publiques
+
+- **Contexte d'origine** : mardi 21 juillet 2026 (sem 30), brainstorm US18 (`docs/superpowers/specs/2026-07-21-us18-outfit-public-design.md`). En cadrant la surface de découverte des tenues publiques, on a retenu **le profil** comme foyer V1 et sorti le fil global du scope : c'est un produit de discovery à part entière, inutile tant qu'il y a peu de contenu (un fil vide = mauvais signal produit).
+- **Description** : une page « Explore » listant les tenues **publiques** de tous les users (pas seulement celles qu'on suit), point d'entrée de découverte de contenu. Tri par récence (puis plus tard par popularité via `likes_count`). Pagination.
+- **Stack** : `ExploreController#index` (ou `outfits#index` avec un scope public global distinct du dressing owner-scoped) + scope `Outfit.visibility_public` cross-user + eager-loading anti-N+1 (pattern des index existants) + pagination (`pagy` ou offset simple) + réutilise `outfits/_card` (extrait en V1 US18). Onglet « Discover » dans la navbar, couplé à la refonte navbar flottante (backlog « Shell applicatif mobile »).
+- **Estimation** : ~1-1,5 j (controller + scope + pagination + UI + tests).
+- **Slot suggéré** : post-V1, quand il y a assez de tenues publiques pour que le fil soit vivant. Couplé à l'onglet Discover / navbar flottante.
 
 ### Index garments organisé (onglets catégorie / couleur)
 
