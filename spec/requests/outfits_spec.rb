@@ -243,5 +243,12 @@ RSpec.describe "Outfits", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "prompts an anonymous visitor to log in instead of showing the comment form" do
+      get outfit_path(public_outfit)
+
+      expect(response.body).not_to include("Add a comment...")
+      expect(response.body).to include("Log in")
+    end
   end
 end
