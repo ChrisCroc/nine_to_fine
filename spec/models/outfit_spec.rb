@@ -146,7 +146,7 @@ RSpec.describe Outfit, type: :model do
     it "returns only public outfits" do
       owner = create(:user)
       pub = create(:outfit, user: owner, visibility: :public)
-      create(:outfit, user:owner, visibility: :private)
+      create(:outfit, user: owner, visibility: :private)
       expect(Outfit.visibility_public).to eq [ pub ]
     end
   end
