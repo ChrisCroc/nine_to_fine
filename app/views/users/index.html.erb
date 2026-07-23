@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "user_search_results" do %>
+  <% if @query.present? %>
+    <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-xl divide-y divide-zinc-100">
+      <% if @users.any? %>
+        <%= render @users %>
+      <% else %>
+        <p class="px-4 py-3 text-sm text-zinc-500">No user found</p>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
