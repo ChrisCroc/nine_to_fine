@@ -14,10 +14,21 @@ RSpec.describe "Users", type: :request do
     end
 
     context "when not signed in" do
-      it "redirects to the login page" do
+      it "is viewable by an anonymous visitor" do
         get user_path(user)
 
-        expect(response).to redirect_to(new_user_session_path)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(user.username)
+      end
+
+      it "lists the owner's public outfits, never the private ones" do
+        create(:outfit, user: user, name: "PublicLook", visibility: :public)
+        create(:outfit, user: user, name: "SecretLook", visibility: :private)
+
+        get user_path(user)
+
+        expect(response.body).to include("PublicLook")
+        expect(response.body).not_to include("SecretLook")
       end
     end
   end

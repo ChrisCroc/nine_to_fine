@@ -9,4 +9,21 @@
     <% end %>
     <%= render "users/follow_button", user: @user %>
   </div>
+
+  <div class="max-w-6xl mx-auto mt-10 px-4">
+    <% if @outfits.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% @outfits.each do |outfit| %>
+          <%= render "outfits/card", outfit: outfit %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-lg text-zinc-700">No public outfits yet.</p>
+        <% if current_user == @user %>
+          <%= link_to "Manage your closet", outfits_path, class: "inline-block mt-3 text-zinc-600 underline hover:text-zinc-900" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </section>
