@@ -107,4 +107,19 @@ RSpec.describe "Users", type: :request do
       expect(response.body).not_to include("henrystyle")
     end
   end
+
+  describe "user search bar in the navbar" do
+    it "is shown to anonymous visitors" do
+      get root_path
+
+      expect(response.body).to include('name="query"')
+    end
+
+    it "is shown to the signed_in users" do
+      sign_in create(:user)
+      get garments_path
+
+      expect(response.body).to include('name="query"')
+    end
+  end
 end
