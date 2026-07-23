@@ -1,7 +1,14 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: :show
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_user, only: %i[show edit update]
   before_action :require_self, only: %i[edit update]
+
+  def index
+    @query = params[:query]
+    @users = User.search_by_username(@query)
+    render :index, layout: false
+  end
+
   def show
     @outfits = @user.outfits.visibility_public
                     .includes(garments: [ :category, { photo_attachment: :blob } ])

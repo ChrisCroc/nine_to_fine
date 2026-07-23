@@ -76,4 +76,50 @@ RSpec.describe "Users", type: :request do
       expect(other.reload.username).not_to eq("hacked")
     end
   end
+
+  describe "GET /users (user search)" do
+    let!(:henry) { create(:user, username: "henrystyle") }
+    let!(:bob) { create(:user, username: "bob") }
+
+    it "is accessible to an anonymous visitor" do
+      get users_path, params: { query: "hen" }
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders only the matching usernames" do
+      get users_path, params: { query: "hen" }
+
+      expect(response.body).to include("henrystyle")
+      expect(response.body).not_to include("bob")
+    end
+
+    it "includes the searchers themselves when they match" do
+      sign_in henry
+      get users_path, params: { query: "hen" }
+
+      expect(response.body).to include("henrystyle")
+    end
+
+    it "lists no user for a blank query" do
+      get users_path, params: { query: "" }
+
+      expect(response.body).not_to include("henrystyle")
+    end
+  end
+
+  describe "user search bar in the navbar" do
+    it "is shown to anonymous visitors" do
+      get root_path
+
+      expect(response.body).to include('name="query"')
+    end
+
+    it "is shown to the signed_in users" do
+      sign_in create(:user)
+      get garments_path
+
+      expect(response.body).to include('name="query"')
+    end
+  end
 end

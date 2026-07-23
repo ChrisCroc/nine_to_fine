@@ -16,6 +16,12 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: true, length: { minimum: 3 }
 
+  def self.search_by_username(query)
+    return none if query.blank?
+
+    where("username ILIKE ?", "%#{sanitize_sql_like(query)}%").limit(10)
+  end
+
   def following?(user)
     followed_users.exists?(user.id)
   end

@@ -1,19 +1,42 @@
-<nav class="bg-zinc-800 py-4 px-4 md:px-8 flex items-center justify-between">
-  <%= link_to root_path, class: "shrink-0", aria: { label: "Nine to Fine, home" } do %>
-    <%= image_tag "icon.svg", alt: "Nine to Fine", class: "h-9 w-9" %>
-  <% end %>
-  <% if user_signed_in? %>
-    <div class="hidden md:flex items-center gap-6">
-      <% nav_destinations.each do |dest| %>
-        <%= link_to dest[:label], dest[:path],
-               class: "text-h3 font-display hover:text-white transition #{nav_active?(dest[:controller]) ? 'text-champagne' : 'text-champagne/60'}",
-               aria: { current: (nav_active?(dest[:controller]) ? "page" : nil) } %>
+<nav class="bg-zinc-800 py-4 px-4 md:px-8 flex items-center gap-3 md:gap-6">
+  <%# LEFT AREA (1/3) : logo %>
+  <div class="flex-none md:flex-1 flex justify-start">
+    <%= link_to root_path, class: "shrink-0", aria: { label: "Nine to Fine, home" } do %>
+      <%= image_tag "icon.svg", alt: "Nine to Fine", class: "h-9 w-9" %>
+    <% end %>
+  </div>
+
+  <%# CENTER AREA (2/3) : search centered %>
+  <div class="flex-1 flex justify-center">
+    <%# Users search - permanent, visible for all %>
+    <div class="relative w-full max-w-sm">
+      <%= form_with url: users_path, method: :get,
+            data: { controller: "search-form", turbo_frame: "user_search_results" } do %>
+        <%= text_field_tag :query, params[:query],
+              placeholder: "Search users...",
+              autocomplete: "off",
+              data: { search_form_target: "input", action: "input->search-form#scheduleSubmit" },
+              class: "w-full rounded-lg bg-white/10 px-4 py-2 text-champagne placeholder-champagne/40 focus:outline-none focus:ring-2 focus:ring-champagne/40" %>
       <% end %>
+      <%= turbo_frame_tag "user_search_results", class: "absolute left-0 right-0 top-full mt-2 z-50" %>
     </div>
-  <% else %>
-    <div class="flex gap-4">
-      <%= link_to "Login", new_user_session_path, class: "text-champagne hover:text-white text-caption" %>
-      <%= link_to "Sign Up", new_user_registration_path, class: "text-champagne hover:text-white text-caption" %>
-    </div>
-  <% end %>
+  </div>
+
+  <%# RIGHT AREA (3/3) : nav/auth %>
+  <div class="flex-none md:flex-1 flex justify-end">
+    <% if user_signed_in? %>
+      <div class="hidden md:flex items-center gap-6 shrink-0">
+        <% nav_destinations.each do |dest| %>
+          <%= link_to dest[:label], dest[:path],
+                class: "text-h3 font-display hover:text-white transition #{nav_active?(dest[:controller]) ? 'text-champagne' : 'text-champagne/60'}",
+                aria: { current: (nav_active?(dest[:controller]) ? "page" : nil) } %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="flex gap-4 shrink-0">
+        <%= link_to "Login", new_user_session_path, class: "text-champagne hover:text-white text-caption" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "text-champagne hover:text-white text-caption" %>
+      </div>
+    <% end %>
+  </div>
 </nav>

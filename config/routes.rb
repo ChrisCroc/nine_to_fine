@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     resources :likes, only: %i[create destroy]
     resources :comments, only: %i[create destroy]
   end
-  resources :users, only: %i[show edit update] do
+  resources :users, only: %i[index show edit update] do
     resource :follow, only: %i[create destroy]
   end
   authenticated :user do
