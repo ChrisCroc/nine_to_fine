@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :garments
   resources :suggestions, only: %i[create]
   resources :outfits do
+    resource :publication, only: %i[create destroy]
     resources :likes, only: %i[create destroy]
     resources :comments, only: %i[create destroy]
   end

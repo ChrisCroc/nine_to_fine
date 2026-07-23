@@ -15,14 +15,21 @@
 
     <%# Colonne infos (~40%) %>
     <div class="md:row-span-2 p-6 md:p-8 flex flex-col md:overflow-y-auto">
-      <h1 class="text-2xl md:text-3xl font-bold text-zinc-900"><%= @outfit.name %></h1>
+      <div class="flex items-start justify-between gap-3">
+        <h1 class="text-2xl md:text-3xl font-bold text-zinc-900"><%= @outfit.name %></h1>
+        <% if current_user == @outfit.user %>
+          <%= render "outfits/visibility_toggle", outfit: @outfit %>
+        <% end %>
+      </div>
       <span class="inline-block self-start bg-zinc-100 text-zinc-700 text-xs font-medium px-3 py-1 rounded-full mt-2 mb-6">Outfit</span>
 
-    <%# Likes %>
-    <div class="flex items-center gap-3 mb-6">
-      <%= render "outfits/like_button", outfit: @outfit %>
-      <%= render "outfits/likes_count", outfit: @outfit %>
-    </div>
+      <%# Likes %>
+      <div class="flex items-center gap-3 mb-6">
+        <% if user_signed_in? %>
+          <%= render "outfits/like_button", outfit: @outfit %>
+        <% end %>
+        <%= render "outfits/likes_count", outfit: @outfit %>
+      </div>
 
       <dl class="space-y-3 mb-6">
         <div>
@@ -54,18 +61,26 @@
           <h2 class="text-xs font-medium uppercase tracking-wide text-zinc-400">Comments</h2>
           <%= render "comments/comments_count", outfit: @outfit %>
         </div>
-        <%= render "comments/form", outfit: @outfit, comment: Comment.new %>
+        <% if user_signed_in? %>
+          <%= render "comments/form", outfit: @outfit, comment: Comment.new %>
+        <% else %>
+          <p class="text-sm text-zinc-500">
+            <%= link_to "Log in", new_user_session_path, class: "underline hover:text-zinc-900" %> to like or comment.
+          </p>
+        <% end %>
         <div class="mt-4">
           <%= render "comments/comments", outfit: @outfit %>
         </div>
       </div>
 
-      <%# Actions %>
-      <div class="flex items-center gap-3 md:mt-auto">
-        <%= link_to "Edit", edit_outfit_path(@outfit), class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
-        <%= button_to "Delete", outfit_path(@outfit), method: :delete, data: { turbo_confirm: "Are you sure?" }, form_class: "flex-1", class: "w-full text-center bg-white text-red-600 border border-red-300 font-semibold py-2 px-5 rounded-md hover:bg-red-50 transition cursor-pointer" %>
-      </div>
-      <%= link_to "My Outfits", outfits_path, class: "block text-center text-sm text-zinc-500 hover:text-zinc-700 mt-4" %>
+      <% if current_user == @outfit.user %>
+        <%# Actions %>
+        <div class="flex items-center gap-3 md:mt-auto">
+          <%= link_to "Edit", edit_outfit_path(@outfit), class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+          <%= button_to "Delete", outfit_path(@outfit), method: :delete, data: { turbo_confirm: "Are you sure?" }, form_class: "flex-1", class: "w-full text-center bg-white text-red-600 border border-red-300 font-semibold py-2 px-5 rounded-md hover:bg-red-50 transition cursor-pointer" %>
+        </div>
+        <%= link_to "My Outfits", outfits_path, class: "block text-center text-sm text-zinc-500 hover:text-zinc-700 mt-4" %>
+      <% end %>
     </div>
   </div>
 </section>

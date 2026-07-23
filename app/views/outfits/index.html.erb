@@ -24,67 +24,46 @@
   </div>
 
   <%# En-tête de page %>
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
-      <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30">My Outfits</h1>
-      <div class="flex flex-wrap gap-3">
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+    <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30">My Outfits</h1>
+    <div class="flex flex-wrap gap-3">
       <%= link_to "Create an outfit", new_outfit_path, class: "bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition whitespace-nowrap" %>
-      </div>
     </div>
+  </div>
 
-    <% current = @filter_params.to_h.with_indifferent_access %>
-    <% active_tag_ids = Array(current[:tag_ids]).map(&:to_i) %>
+  <% current = @filter_params.to_h.with_indifferent_access %>
+  <% active_tag_ids = Array(current[:tag_ids]).map(&:to_i) %>
 
-    <%= turbo_frame_tag "outfits_list" do %>
-      <% beside = @filter_garment ? render("outfits/piece_chip", garment: @filter_garment, current: current) : nil %>
-      <div class="flex justify-end mb-6">
-        <%= render layout: "shared/filter_drawer",
-              locals: { url: outfits_path, active_count: outfits_filter_count(current), beside: beside } do %>
-          <%= render "outfits/filters_fields", current: current, active_tag_ids: active_tag_ids %>
-        <% end %>
-      </div>
+  <%= turbo_frame_tag "outfits_list" do %>
+    <% beside = @filter_garment ? render("outfits/piece_chip", garment: @filter_garment, current: current) : nil %>
+    <div class="flex justify-end mb-6">
+      <%= render layout: "shared/filter_drawer",
+            locals: { url: outfits_path, active_count: outfits_filter_count(current), beside: beside } do %>
+        <%= render "outfits/filters_fields", current: current, active_tag_ids: active_tag_ids %>
+      <% end %>
+    </div>
 
     <% if @outfits.empty? %>
       <% if current.any? %>
         <%# Empty list because of one filter %>
         <div class="text-center py-20">
           <p class="text-lg text-zinc-800 mb-4">No outfit matches these filters.</p>
-          <%= link_to "× Clear all filters", outfits_path, class: "inline-block text-zinc-700 underline hover:text-zinc-900"%>
+          <%= link_to "× Clear all filters", outfits_path, class: "inline-block text-zinc-700 underline hover:text-zinc-900" %>
         </div>
       <% else %>
-      <%#  Etat vide %>
+        <%# Etat vide %>
         <div class="text-center py-20">
           <p class="text-lg text-zinc-800 mb-4">You haven't added any outfits yet.</p>
           <%= link_to "Create your first outfit", new_outfit_path, data: { turbo_frame: "_top" }, class: "inline-block bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
         </div>
       <% end %>
     <% else %>
-
       <%# Grille de cards %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <% @outfits.each do |outfit| %>
-          <%= link_to outfit, data: { turbo_frame: "_top" }, class: "block bg-white rounded-xl shadow-xl overflow-hidden relative transition duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:z-10" do %>
-            <div class="h-48">
-              <%= render "collage", outfit: outfit %>
-            </div>
-            <div class="p-4 flex flex-col gap-2">
-              <%# ligne nom + tags %>
-              <div class="flex items-start justify-between gap-2">
-                <h2 class="font-semibold text-zinc-900"><%= outfit.name %></h2>
-              </div>
-
-              <%# description, sous la ligne nom/tags %>
-              <p class="text-sm text-zinc-500 line-clamp-2"><%= outfit.description %></p>
-
-              <%# garments, toujours sous la description %>
-              <div class="flex flex-wrap gap-2">
-                <% outfit.garments.each do |garment| %>
-                  <span class="inline-block bg-zinc-100 text-zinc-700 text-xs px-3 py-1 rounded-full"><%= garment.name %></span>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
+          <%= render "outfits/card", outfit: outfit %>
         <% end %>
       </div>
     <% end %>
-    <% end %>
+  <% end %>
 </section>

@@ -1,0 +1,9 @@
+<div id="<%= dom_id(outfit, :visibility) %>" class="mb-4">
+  <% if outfit.visibility_public? %>
+    <%= button_to "Make private", outfit_publication_path(outfit), method: :delete,
+          class: "shrink-0 whitespace-nowrap text-sm px-3 py-1 rounded-full border border-zinc-300 text-zinc-700 hover:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-900 cursor-pointer" %>
+  <% else %>
+    <%= button_to "Make public", outfit_publication_path(outfit), method: :post,
+          class: "shrink-0 whitespace-nowrap text-sm px-3 py-1 rounded-full bg-zinc-900 text-champagne hover:bg-zinc-700 focus-visible:ring-2 focus-visible:ring-zinc-900 cursor-pointer" %>
+  <% end %>
+</div>

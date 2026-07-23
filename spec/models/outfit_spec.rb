@@ -116,4 +116,38 @@ RSpec.describe Outfit, type: :model do
       expect(result).to include(summer_and_chic)
     end
   end
+
+  describe "visibility" do
+    it "defaults to private" do
+      expect(build(:outfit).visibility_private?).to be true
+    end
+  end
+
+  describe "#visible_to?" do
+    let(:owner) { create(:user) }
+    let(:other) { create(:user) }
+
+    it "makes a public outfit visible to anyone, nil included" do
+      outfit = create(:outfit, user: owner, visibility: :public)
+      expect(outfit.visible_to?(other)).to be true
+      expect(outfit.visible_to?(nil)).to be true
+    end
+
+    it "keeps a private outfit visible to its owner only" do
+      outfit = create(:outfit, user: owner, visibility: :private)
+
+      expect(outfit.visible_to?(owner)).to be true
+      expect(outfit.visible_to?(other)).to be false
+      expect(outfit.visible_to?(nil)).to be false
+    end
+  end
+
+  describe ".visibility_public" do
+    it "returns only public outfits" do
+      owner = create(:user)
+      pub = create(:outfit, user: owner, visibility: :public)
+      create(:outfit, user: owner, visibility: :private)
+      expect(Outfit.visibility_public).to eq [ pub ]
+    end
+  end
 end
