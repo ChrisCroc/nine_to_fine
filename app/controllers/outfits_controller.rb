@@ -1,4 +1,5 @@
 class OutfitsController < ApplicationController
+  skip_before_action :authenticate_user!, only: :show
   before_action :set_outfit, only: %i[edit update destroy]
   before_action :set_garments, only: %i[new edit create update]
 
@@ -12,7 +13,8 @@ class OutfitsController < ApplicationController
   end
 
   def show
-    @outfit = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ], comments: :user).find(params.expect(:id))
+    @outfit = Outfit.includes(garments: [ :category, { photo_attachment: :blob } ], comments: :user).find(params.expect(:id))
+    raise ActiveRecord::RecordNotFound unless @outfit.visible_to?(current_user)
   end
 
   def new

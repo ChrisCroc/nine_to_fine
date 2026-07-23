@@ -204,4 +204,44 @@ RSpec.describe "Outfits", type: :request do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "GET /outfits/:id visibility" do
+    let(:owner) { create(:user) }
+    let(:stranger) { create(:user) }
+    let(:public_outfit) { create(:outfit, user: owner, visibility: :public) }
+    let(:private_outfit) { create(:outfit, user: owner, visibility: :private) }
+
+    it "shows a public outfit to an anonymous visitor" do
+      get outfit_path(public_outfit)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "returns 404 on a private outfit for an anonymous visitor" do
+      get outfit_path(private_outfit)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "shows the owner their own private outfit" do
+      sign_in owner
+      get outfit_path(private_outfit)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "returns 404 on another user's private outfit" do
+      sign_in stranger
+      get outfit_path(private_outfit)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "shows another user's public outfit to a signed-in visitor" do
+      sign_in stranger
+      get outfit_path(public_outfit)
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end

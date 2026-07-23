@@ -60,12 +60,14 @@
         </div>
       </div>
 
+    <% if current_user == @outfit.user %>
       <%# Actions %>
       <div class="flex items-center gap-3 md:mt-auto">
         <%= link_to "Edit", edit_outfit_path(@outfit), class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
         <%= button_to "Delete", outfit_path(@outfit), method: :delete, data: { turbo_confirm: "Are you sure?" }, form_class: "flex-1", class: "w-full text-center bg-white text-red-600 border border-red-300 font-semibold py-2 px-5 rounded-md hover:bg-red-50 transition cursor-pointer" %>
       </div>
       <%= link_to "My Outfits", outfits_path, class: "block text-center text-sm text-zinc-500 hover:text-zinc-700 mt-4" %>
+    <% end %>
     </div>
   </div>
 </section>
