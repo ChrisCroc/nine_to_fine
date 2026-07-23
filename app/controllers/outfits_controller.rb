@@ -56,7 +56,7 @@ private
   end
 
   def outfit_params
-    params.expect(outfit: [ :name, :description, :tag_names, garment_ids: [] ])
+    params.expect(outfit: [ :name, :description, :tag_names, :visibility, garment_ids: [] ])
   end
 
   def set_garments
