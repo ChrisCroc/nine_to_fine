@@ -107,4 +107,29 @@ RSpec.describe User, type: :model do
       .and change(Garment, :count).by(-2)
       .and change(Tag, :count).by(-1)
   end
+
+  describe ".search_by_username" do
+    let!(:henry) { create(:user, username: "henrystyle") }
+    let!(:henrietta) { create(:user, username: "henrietta") }
+    let!(:bob) { create(:user, username: "bob") }
+
+    it "matches usernames partially, case-insensitively" do
+      expect(User.search_by_username("HEN")).to contain_exactly(henry, henrietta)
+    end
+
+    it "returns none for blank query" do
+      expect(User.search_by_username("")).to be_empty
+      expect(User.search_by_username(nil)).to be_empty
+    end
+
+    it "escapes SQL LIKE wildcards" do
+      expect(User.search_by_username("%")).to be_empty
+    end
+
+    it "caps results at 10" do
+      create_list(:user, 12)
+
+      expect(User.search_by_username("username").to_a.length).to eq(10)
+    end
+  end
 end
