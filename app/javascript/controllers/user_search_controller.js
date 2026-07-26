@@ -7,6 +7,12 @@ export default class extends Controller {
     this.activeIndex = - 1
   }
 
+  onResults() {
+    this.activeIndex = -1
+    this.inputTarget.removeAttribute("aria-activedescendant")
+    this.inputTarget.setAttribute("aria-expanded", this.optionElements.length > 0)
+  }
+
   get optionElements() {
     return Array.from(this.element.querySelectorAll('[role="option"]'))
   }
