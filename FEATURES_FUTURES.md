@@ -86,13 +86,11 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Estimation restante** : 2-4 j (followers-only + approbation ~1,5-2 j ; tag navigation publique ~1 j ; avatar + listes cliquables ~0,5-1 j).
 - **Slot suggéré** : post-emploi (oct 2026+), ou plus tôt si le social devient un axe de démonstration en entretien.
 
-### Navigation clavier + accessibilité du dropdown de recherche users (combobox)
+### ~~Navigation clavier + accessibilité du dropdown de recherche users (combobox)~~ — ✅ LIVRÉ
 
-- **Contexte d'origine** : jeudi 23 juillet 2026 (sem 30), en finalisant US18 Phase 2 (recherche users live dans la navbar). La recherche fonctionne à la souris / au tap, mais on ne peut pas parcourir les résultats au clavier (flèches ↑/↓). Reporté sciemment pour boucler la Phase 2 et protéger le créneau React — Chris veut le faire en feature dédiée à la **prochaine session** pour apprendre le pattern *combobox* à fond.
-- **Description** : rendre le dropdown de résultats navigable au clavier — **↓ / ↑** surligne le résultat suivant / précédent (avec retour en boucle du dernier au premier), **Entrée** ouvre le résultat surligné (va sur son profil), **Échap** ferme le dropdown, **clic en dehors** ferme aussi (ce dernier point fusionne la « Task 4 dismiss » du plan Phase 2, non faite). Surlignage visuel de l'option active + attributs **ARIA** (`combobox` sur le champ, `listbox` sur la liste, `option` sur chaque ligne, `aria-selected`, `aria-activedescendant`) pour qu'un lecteur d'écran suive.
-- **Stack** : nouveau contrôleur Stimulus `user_search_controller.js` posé sur le wrapper de la barre (englobe le champ **et** le cadre dropdown). Il écoute `keydown` sur l'input, **re-scanne** les lignes de résultat à chaque touche (`querySelectorAll('[role=option]')`, car le contenu est injecté dynamiquement par Turbo), tient un `activeIndex`, surligne + met à jour l'ARIA, et **remet à zéro** à chaque nouvelle recherche (`input`). Il cohabite avec le contrôleur `search-form` existant (debounce) sur le même wrapper / champ. Côté HTML : rôles ARIA + `data-…` à ajouter sur `shared/_navbar.html.erb` (champ + cadre) et `users/_user.html.erb` (rôle option + id unique par ligne).
-- **Estimation** : ~0,5 j (un contrôleur Stimulus d'une soixantaine de lignes + les attributs HTML + une vérif a11y).
-- **Slot suggéré** : **prochaine session** (Chris l'a explicitement priorisé comme reprise immédiate, jeudi 23 juillet).
+- **✅ Fait dimanche 27 juillet 2026 (sem 30), PR #185** (branche `feat/search-keyboard-nav`, mergée + déployée). Nav clavier ↑/↓ avec bouclage + Entrée (ouvre le profil) + Échap + clic-dehors + **ARIA combobox complet** (`combobox`/`listbox`/`option`/`aria-selected`/`aria-activedescendant`/`aria-expanded`), via le nouveau contrôleur Stimulus `user_search_controller.js` posé sur le wrapper (cohabite avec `search-form`).
+- **Raffinements vs le plan initial** : reset non pas sur `input` mais sur **`turbo:frame-load`** (timing correct : les résultats sont arrivés) ; clic-dehors via **`click@window`** déclaratif (auto-nettoyé) ; **nettoyage `turbo:before-cache`** pour que le retour arrière ne restaure pas un dropdown ouvert ; **vidage du champ à la fermeture** (décision UX de Chris au test).
+- **Notes de consolidation** : [[navigation-clavier-combobox-accessible]] (Hotwire/ARIA) + [[nav-clavier-mecaniques-modulo-classlist-getter]] (JS pur).
 
 ### Détourage automatique des photos de garments (fond transparent)
 
