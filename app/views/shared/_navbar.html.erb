@@ -9,7 +9,8 @@
   <%# CENTER AREA (2/3) : search centered %>
   <div class="flex-1 flex justify-center">
     <%# Users search - permanent, visible for all %>
-    <div class="relative w-full max-w-sm" data-controller="user-search">
+    <div class="relative w-full max-w-sm" data-controller="user-search"
+          data-action="click@window->user-search#closeOnOutsideClick turbo:before-cache@document->user-search#close">
       <%= form_with url: users_path, method: :get,
             data: { controller: "search-form", turbo_frame: "user_search_results" } do %>
         <%= text_field_tag :query, params[:query],
