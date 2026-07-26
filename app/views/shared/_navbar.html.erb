@@ -9,7 +9,7 @@
   <%# CENTER AREA (2/3) : search centered %>
   <div class="flex-1 flex justify-center">
     <%# Users search - permanent, visible for all %>
-    <div class="relative w-full max-w-sm">
+    <div class="relative w-full max-w-sm" data-controller="user-search">
       <%= form_with url: users_path, method: :get,
             data: { controller: "search-form", turbo_frame: "user_search_results" } do %>
         <%= text_field_tag :query, params[:query],
@@ -17,7 +17,7 @@
               autocomplete: "off",
               role: "combobox",
               aria: { controls: "user_search_listbox", expanded: "false" },
-              data: { search_form_target: "input", action: "input->search-form#scheduleSubmit" },
+              data: { search_form_target: "input", user_search_target: "input", action: "input->search-form#scheduleSubmit keydown->user-search#navigate" },
               class: "w-full rounded-lg bg-white/10 px-4 py-2 text-champagne placeholder-champagne/40 focus:outline-none focus:ring-2 focus:ring-champagne/40" %>
       <% end %>
       <%= turbo_frame_tag "user_search_results", class: "absolute left-0 right-0 top-full mt-2 z-50" %>
