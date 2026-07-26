@@ -1,6 +1,7 @@
 <%= turbo_frame_tag "user_search_results" do %>
   <% if @query.present? %>
-    <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-xl divide-y divide-zinc-100">
+    <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-xl divide-y divide-zinc-100"
+          role="listbox" id="user_search_listbox">
       <% if @users.any? %>
         <%= render @users %>
       <% else %>

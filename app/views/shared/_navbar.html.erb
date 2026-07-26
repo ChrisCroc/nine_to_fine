@@ -15,6 +15,8 @@
         <%= text_field_tag :query, params[:query],
               placeholder: "Search users...",
               autocomplete: "off",
+              role: "combobox",
+              aria: { controls: "user_search_listbox", expanded: "false" },
               data: { search_form_target: "input", action: "input->search-form#scheduleSubmit" },
               class: "w-full rounded-lg bg-white/10 px-4 py-2 text-champagne placeholder-champagne/40 focus:outline-none focus:ring-2 focus:ring-champagne/40" %>
       <% end %>
