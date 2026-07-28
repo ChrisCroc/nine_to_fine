@@ -9,21 +9,35 @@
 #   end
 
 puts "Seeding catergories..."
-categories = [
-  { name: "Top", position: 1 },
-  { name: "Bottom", position: 2 },
-  { name: "Outerwear", position: 3 },
-  { name: "Footwear", position: 4 },
-  { name: "Accessories", position: 5 },
-  { name: "Dress", position: 6 },
-  { name: "Suit", position: 7 },
-  { name: "Swimwear", position: 8 }
-]
 
-categories.each do |attributes|
-  Category.find_or_create_by!(name: attributes[:name]) do |c|
-    c.position = attributes[:position]
+{ "Footwear" => "Shoes", "Top" => "Tops", "Bottom" => "Bottoms",
+  "Dress" => "Dresses", "Suit" => "Suits" }.each do |old_name, new_name|
+  Category.where(name: old_name, parent_id: nil).update_all(name: new_name)
+end
+
+TAXONOMY = {
+  "Tops" => %w[tshirt long\ sleeves polo shirt hoodie sweatshirt knitwear tank\ top],
+  "Bottoms" => %w[jeans trousers shorts skirt leggings],
+  "Outerwear" => %w[coat jacket blazer parka cardigan],
+  "Shoes" => %w[sneakers boots dress\ shoes sandals heels],
+  "Accessories" => %w[bag belt hat cap beanie scarf jewelry sunglasses],
+  "Dresses" => %w[dress jumpsuit],
+  "Suits" => %w[suit tuxedo],
+  "Swimwear" => %w[swimsuit bikini swim\ shorts]
+}.freeze
+
+TAXONOMY.each_with_index do |(parent_name, leaves), p_index|
+  parent = Category.find_or_create_by!(name: parent_name) do |c|
+    c.position = p_index + 1
+    c.parent = nil
+  end
+
+  leaves.each_with_index do |leaf_name, l_index|
+    Category.find_or_create_by!(name: leaf_name) do |c|
+      c.parent = parent
+      c.position = l_index + 1
+    end
   end
 end
 
-puts "Seeding complete! #{Category.count} categories in DB."
+puts "Seeding complete! #{Category.parents.count} parents, #{Category.leaves.count} subcategories."
