@@ -58,7 +58,7 @@ class GarmentsController < ApplicationController
   end
 
   def set_categories
-    @categories = Category.order(:position)
+    @categories = Category.parents.includes(:subcategories)
   end
 
   def filter_params
