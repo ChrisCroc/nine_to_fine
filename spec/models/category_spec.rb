@@ -40,7 +40,7 @@ RSpec.describe Category, type: :model do
 
   describe "#destroy" do
     it "is blocked when garments exist (dependent: :restrict_with_error)" do
-      category = create(:category)
+      category = create(:category, :leaf)
       create(:garment, category: category)
 
       expect(category.destroy).to be false

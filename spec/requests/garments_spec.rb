@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Garments", type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
-  let(:category) { create(:category) }
+  let(:category) { create(:category, :leaf) }
   let(:garment) { create(:garment, user: user, category: category) }
 
   context "when not signed in" do

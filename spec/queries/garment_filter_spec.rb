@@ -4,9 +4,9 @@ RSpec.describe GarmentFilter do
   let(:chris) { create(:user, username: "chris") }
   let(:john) { create(:user, username: "john") }
 
-  let(:top)       { create(:category, name: "Top", position: 1) }
-  let(:bottom)    { create(:category, name: "Bottom", position: 2) }
-  let(:outerwear) { create(:category, name: "Outerwear", position: 3) }
+  let(:top)       { create(:category, :leaf, name: "Top", position: 1) }
+  let(:bottom)    { create(:category, :leaf, name: "Bottom", position: 2) }
+  let(:outerwear) { create(:category, :leaf, name: "Outerwear", position: 3) }
 
   let(:summer) { create(:tag, name: "summer", user: chris) }
 
