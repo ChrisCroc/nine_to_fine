@@ -292,3 +292,19 @@ Chaque feature documente : **contexte d'origine** (quand/pourquoi sortie), **des
 - **Stack** : param `remove_photo` (checkbox/hidden) ajouté à `garment_params` + dans `GarmentsController#update`, si coché → `@garment.photo.purge` (ou `purge_later` en async via Active Job). ⚠️ Gérer l'ordre si un **nouveau** fichier est aussi uploadé dans le même submit (le nouveau doit gagner). Mettre à jour le partial preview (état « sans photo ») + request spec.
 - **Estimation** : ~0.5 j (param + purge + UI + test).
 - **Slot suggéré** : post-emploi, ou polish si le temps. Couple bien avec l'encadré cliquable (entrée ci-dessus).
+
+### Aperçu live de la tenue dans le form outfit (collage des pièces sélectionnées)
+
+- **Contexte d'origine** : mercredi 29 juillet 2026 (sem 31), vérif visuelle de la refonte catégories. Sur le form new/edit d'un **outfit** (`outfits/_form`), la grande zone d'en-tête affiche un placeholder statique « Photo (coming soon) », alors que le form **garment** affiche, lui, la photo choisie en direct dans sa grande zone (PR #179). Un outfit n'a pas de photo propre : sa « photo » naturelle = le **collage** de ses pièces. Les aperçus des pièces ne s'affichent aujourd'hui que dans la rangée « Pieces », pas dans la grande zone.
+- **Description** : afficher dans la grande zone du form outfit un **aperçu live** (mosaïque/collage) des pièces sélectionnées, mis à jour à chaque ajout/retrait dans le Tom Select — au lieu du placeholder « coming soon ». Réutilise la logique de `outfits/_collage`.
+- **Stack** : Stimulus controller écoutant les changements du Tom Select + reconstruction client de la mosaïque à partir des miniatures déjà présentes côté client (section « Pieces »). Pas de back (les pièces sont déjà chargées). Recoupe le pattern `photo_preview_controller` (PR #179).
+- **Estimation** : ~0,5-1 j (Stimulus + reconstruction mosaïque client + a11y).
+- **Slot suggéré** : post-emploi, ou polish UX si le temps le permet.
+
+### Collage « +N » cliquable (voir toutes les pièces d'une tenue)
+
+- **Contexte d'origine** : mercredi 29 juillet 2026 (sem 31), vérif visuelle de la refonte catégories. Le collage (`outfits/_collage`) plafonne la mosaïque à 4 vignettes et regroupe le surplus dans une tuile « +N » (ex « +2 »). Cette tuile n'est **pas cliquable** → sur la page show d'une tenue, impossible de voir les **photos** des pièces cachées (seuls leurs **noms** apparaissent dans la liste GARMENTS). Chris : « ça ne fait aucun sens de ne pas pouvoir visualiser toutes les pièces ».
+- **Description** : rendre la tuile « +N » cliquable pour révéler/visualiser **toutes** les pièces de la tenue (les photos, pas seulement les noms) — via une lightbox/modale ou l'expansion de la mosaïque.
+- **Stack** : Stimulus controller sur le collage (clic sur la tuile « +N » → modale/lightbox listant toutes les pièces avec leurs photos) ; réutilise les photos déjà eager-loaded. a11y (focus trap modale, Échap).
+- **Estimation** : ~0,5 j (Stimulus + modale + a11y).
+- **Slot suggéré** : post-emploi, ou polish UX.
