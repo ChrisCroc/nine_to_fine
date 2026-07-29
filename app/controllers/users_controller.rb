@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
   def show
     @outfits = @user.outfits.visibility_public
-                    .includes(garments: [ :category, { photo_attachment: :blob } ])
+                    .includes(garments: [ { category: :parent }, { photo_attachment: :blob } ])
                     .order(created_at: :desc)
   end
 
