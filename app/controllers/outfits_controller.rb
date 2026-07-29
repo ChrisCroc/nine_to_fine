@@ -4,7 +4,7 @@ class OutfitsController < ApplicationController
   before_action :set_garments, only: %i[new edit create update]
 
   def index
-    base = current_user.outfits.includes(garments: [ :category, { photo_attachment: :blob } ])
+    base = current_user.outfits.includes(garments: [ { category: :parent }, { photo_attachment: :blob } ])
     @filter_params = filter_params
     @outfits = OutfitFilter.new(base, @filter_params).results.order(created_at: :desc)
 
@@ -13,7 +13,7 @@ class OutfitsController < ApplicationController
   end
 
   def show
-    @outfit = Outfit.includes(garments: [ :category, { photo_attachment: :blob } ], comments: :user).find(params.expect(:id))
+    @outfit = Outfit.includes(garments: [ { category: :parent }, { photo_attachment: :blob } ], comments: :user).find(params.expect(:id))
     raise ActiveRecord::RecordNotFound unless @outfit.visible_to?(current_user)
   end
 

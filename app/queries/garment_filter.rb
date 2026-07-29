@@ -23,7 +23,7 @@ class GarmentFilter
   end
 
   def by_category_id(relation, value)
-    relation.where(category_id: value)
+    relation.joins(:category).where(categories: { parent_id: value })
   end
 
   def by_tag_id(relation, value)

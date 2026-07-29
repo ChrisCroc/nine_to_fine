@@ -3,6 +3,6 @@ FactoryBot.define do
     sequence(:name) { |n| "Garment #{n}" }
     color { "black" }
     user
-    category
+    category { create(:category, :leaf) }
   end
 end

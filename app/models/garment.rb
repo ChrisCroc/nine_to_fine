@@ -29,4 +29,14 @@ class Garment < ApplicationRecord
   validates :photo,
             content_type: { in: %w[image/png image/jpeg image/webp image/heic image/heif], spoofing_protection: true },
             size: { less_than: 10.megabytes, message: "must be smaller than 10MB" }
+  validate :category_must_be_leaf
+
+
+  private
+
+  def category_must_be_leaf
+    return if category.nil?
+
+    errors.add(:category, "must be a subcategory") if category.parent_id.nil?
+  end
 end

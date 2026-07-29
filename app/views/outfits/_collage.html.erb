@@ -1,4 +1,4 @@
-<% garments = outfit.garments.sort_by { |g| g.category.position } %>
+<% garments = outfit.garments.sort_by { |g| g.category.parent&.position || g.category.position } %>
 <% count = garments.size %>
 <% visible = count > 4 ? garments.first(3) : garments %>
 <% overflow = count > 4 ? count - 3 : 0 %>

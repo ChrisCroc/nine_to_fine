@@ -7,7 +7,7 @@ class GarmentsController < ApplicationController
     @garments = GarmentFilter.new(base, @filter_params).results.order(created_at: :desc)
 
     @available_colors = Garment::COLORS
-    @available_categories = Category.order(:position)
+    @available_categories = Category.parents
     @available_brands = current_user.garments.where.not(brand: [ nil, "" ]).distinct.pluck(:brand).sort
     @available_tags = current_user.tags.order(:name)
   end
@@ -58,7 +58,7 @@ class GarmentsController < ApplicationController
   end
 
   def set_categories
-    @categories = Category.order(:position)
+    @categories = Category.parents.includes(:subcategories)
   end
 
   def filter_params

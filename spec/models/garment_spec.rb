@@ -175,4 +175,20 @@ RSpec.describe Garment, type: :model do
       expect(Garment.find(garment.id).tag_names.split(", ").sort).to eq(%w[alpha beta])
     end
   end
+
+  describe "category must be a subcategory (leaf)" do
+    it "is invalid when the category is a top-level parent" do
+      parent = create(:category)
+      garment = build(:garment, category: parent)
+
+      expect(garment).to be_invalid
+      expect(garment.errors[:category]).to include("must be a subcategory")
+    end
+
+    it "is valid when the category is a leaf" do
+      leaf = create(:category, :leaf)
+
+      expect(build(:garment, category: leaf)).to be_valid
+    end
+  end
 end

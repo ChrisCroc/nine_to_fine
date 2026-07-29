@@ -4,20 +4,24 @@ RSpec.describe GarmentFilter do
   let(:chris) { create(:user, username: "chris") }
   let(:john) { create(:user, username: "john") }
 
-  let(:top)       { create(:category, name: "Top", position: 1) }
-  let(:bottom)    { create(:category, name: "Bottom", position: 2) }
+  let(:top)       { create(:category, name: "Tops", position: 1) }
+  let(:bottom)    { create(:category, name: "Bottoms", position: 2) }
   let(:outerwear) { create(:category, name: "Outerwear", position: 3) }
+
+  let(:tshirt) { create(:category, name: "tshirt", parent: top) }
+  let(:jeans) { create(:category, name: "jeans", parent: bottom) }
+  let(:jacket) { create(:category, name: "jacket", parent: outerwear) }
 
   let(:summer) { create(:tag, name: "summer", user: chris) }
 
   let!(:black_tshirt) do
-    create(:garment, user: chris, category: top, name: "Black T-shirt", color: "black", brand: "Uniqlo")
+    create(:garment, user: chris, category: tshirt, name: "Black T-shirt", color: "black", brand: "Uniqlo")
   end
   let!(:blue_jeans) do
-    create(:garment, user: chris, category: bottom, name: "Blue Jeans", color: "blue", brand: "Levi's")
+    create(:garment, user: chris, category: jeans, name: "Blue Jeans", color: "blue", brand: "Levi's")
   end
   let!(:black_jacket) do
-    create(:garment, user: john, category: outerwear, name: "Black Jacket", color: "black", brand: "Uniqlo")
+    create(:garment, user: john, category: jacket, name: "Black Jacket", color: "black", brand: "Uniqlo")
   end
 
   let(:chris_scope) { chris.garments }

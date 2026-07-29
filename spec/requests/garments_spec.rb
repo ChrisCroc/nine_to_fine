@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Garments", type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
-  let(:category) { create(:category) }
+  let(:category) { create(:category, :leaf) }
   let(:garment) { create(:garment, user: user, category: category) }
 
   context "when not signed in" do
@@ -45,6 +45,16 @@ RSpec.describe "Garments", type: :request do
       it "returns a successful response" do
         get new_garment_path
         expect(response).to have_http_status(:success)
+      end
+
+      it "renders subcategories grouped under their parent" do
+        parent = create(:category, name: "Tops")
+        create(:category, name: "tshirt", parent: parent)
+
+        get new_garment_path
+
+        expect(response.body).to include('<optgroup label="Tops"')
+        expect(response.body).to include(">tshirt</option")
       end
     end
 

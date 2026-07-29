@@ -4,7 +4,8 @@
 
   <div class="mb-4">
     <%= f.label :name, class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <%= f.text_field :name, class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+    <%= f.text_field :name, class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+    shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
     <% if garment.errors[:name].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:name].first %></span>
     <% end %>
@@ -23,17 +24,24 @@
 
   <div class="mb-4">
     <%= f.label :brand, class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <%= f.text_field :brand, class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+    <%= f.text_field :brand, class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+    shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
   </div>
 
   <div class="mb-4">
     <%= f.label :description, class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <%= f.text_area :description, rows: 3,class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+    <%= f.text_area :description, rows: 3, class: "block w-full rounded-md border border-zinc-300
+    px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
   </div>
 
   <div class="mb-4">
     <%= f.label :category_id, "Category", class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <%= f.collection_select :category_id, @categories, :id, :name, prompt: "Choose a category", class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+    <%= f.grouped_collection_select :category_id,
+          @categories, :subcategories, :name,
+          :id, :name,
+          { prompt: "Choose a category"} ,
+          { class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+          shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" } %>
     <% if garment.errors[:category].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:category].first %></span>
     <% end %>
@@ -44,7 +52,8 @@
     <%= f.file_field :photo,
                       accept: "image/*",
                       data: { photo_preview_target: "input", action: "change->photo-preview#update" },
-                      class: "block w-full text-sm text-zinc-700 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-900 file:px-4 file:py-2 file:text-champagne file:font-semibold file:cursor-pointer hover:file:bg-zinc-700" %>
+                      class: "block w-full text-sm text-zinc-700 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-900
+                      file:px-4 file:py-2 file:text-champagne file:font-semibold file:cursor-pointer hover:file:bg-zinc-700" %>
     <% if garment.errors[:photo].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:photo].first %></span>
     <% end %>
@@ -52,12 +61,13 @@
 
   <div class="mb-4">
     <%= f.label :tag_names, "Tags", class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <%= f.text_field :tag_names, placeholder: "casual, summer, blue", class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
+    <%= f.text_field :tag_names, placeholder: "casual, summer, blue", class: "block w-full rounded-md border border-zinc-300
+    px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
     <p class="mt-1 text-sm text-zinc-500">Split the tags with comas</p>
   </div>
 
   <div>
-    <%= f.submit class: "btn-base w-full bg-zinc-900 text-champagne hover:bg-zinc-700 focus:text-white hover:text-white data-loading:cursor-wait data-loading:opacity-50", data: { submit_button_target: "button" } %>
+    <%= f.submit class: "btn-base w-full bg-zinc-900 text-champagne hover:bg-zinc-700 focus:text-white hover:text-white
+    data-loading:cursor-wait data-loading:opacity-50", data: { submit_button_target: "button" } %>
   </div>
-
 <% end %>
