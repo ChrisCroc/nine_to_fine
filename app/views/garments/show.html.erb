@@ -15,7 +15,8 @@
     <%# Colonne infos (~40%) %>
     <div class="md:col-span-2 p-6 md:p-8 flex flex-col">
       <h1 class="text-2xl md:text-3xl font-bold text-zinc-900"><%= @garment.name %></h1>
-      <%= link_to @garment.category.name, garments_path(q: { category_id: @garment.category_id }), class: "inline-block self-start bg-zinc-100 text-zinc-700 text-xs font-medium px-3 py-1 rounded-full mt-2 mb-6 hover:bg-zinc-200 transition" %>
+      <%= link_to @garment.category.name, garments_path(q: { category_id: @garment.category.parent_id }),
+          class: "inline-block self-start bg-zinc-100 text-zinc-700 text-xs font-medium px-3 py-1 rounded-full mt-2 mb-6 hover:bg-zinc-200 transition" %>
 
       <dl class="space-y-3 mb-6">
         <div>
@@ -38,10 +39,12 @@
         <% if @garment.outfits.any? %>
           <div class="flex flex-wrap gap-2">
             <% @garment.outfits.each do |outfit| %>
-              <%= link_to outfit.name, outfit_path(outfit), class: "inline-block bg-zinc-100 text-zinc-700 text-sm px-3 py-1 rounded-full hover:bg-zinc-200 transition" %>
+              <%= link_to outfit.name, outfit_path(outfit),
+                  class: "inline-block bg-zinc-100 text-zinc-700 text-sm px-3 py-1 rounded-full hover:bg-zinc-200 transition" %>
             <% end %>
           </div>
-          <%= link_to "See the #{pluralize(@garment.outfits.size, 'outfit')} using this piece", outfits_path(q: { garment_id: @garment.id }), class: "inline-flex items-center gap-1 mt-3 px-4 py-2 rounded-md border border-zinc-300 text-sm font-medium text-zinc-800 hover:bg-zinc-100 transition" %>
+          <%= link_to "See the #{pluralize(@garment.outfits.size, 'outfit')} using this piece", outfits_path(q: { garment_id: @garment.id }),
+              class: "inline-flex items-center gap-1 mt-3 px-4 py-2 rounded-md border border-zinc-300 text-sm font-medium text-zinc-800 hover:bg-zinc-100 transition" %>
         <% else %>
           <p class="text-sm text-zinc-400 italic">Not used in any outfit yet</p>
         <% end %>
@@ -52,8 +55,10 @@
 
       <%# Actions %>
       <div class="flex items-center gap-3 mt-auto">
-        <%= link_to "Edit", edit_garment_path(@garment), class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
-        <%= button_to "Delete", garment_path(@garment), method: :delete, data: { turbo_confirm: "Are you sure?" }, form_class: "flex-1", class: "w-full text-center bg-white text-red-600 border border-red-300 font-semibold py-2 px-5 rounded-md hover:bg-red-50 transition cursor-pointer" %>
+        <%= link_to "Edit", edit_garment_path(@garment),
+            class: "flex-1 text-center bg-zinc-900 text-champagne font-semibold py-2 px-5 rounded-md hover:bg-zinc-700 hover:text-white transition" %>
+        <%= button_to "Delete", garment_path(@garment), method: :delete, data: { turbo_confirm: "Are you sure?" }, form_class: "flex-1",
+            class: "w-full text-center bg-white text-red-600 border border-red-300 font-semibold py-2 px-5 rounded-md hover:bg-red-50 transition cursor-pointer" %>
       </div>
         <%= link_to "My Clothes", garments_path, class: "block text-center text-sm text-zinc-500 hover:text-zinc-700 mt-4" %>
     </div>
