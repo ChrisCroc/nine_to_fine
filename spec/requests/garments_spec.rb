@@ -94,6 +94,21 @@ RSpec.describe "Garments", type: :request do
         get edit_garment_path(garment)
         expect(response).to have_http_status(:success)
       end
+
+      it "renders a blank placeholder instead of preselecting a leaf when the garment is on a parent (legacy)" do
+        garment.update_column(:category_id, category.parent_id)
+
+        get edit_garment_path(garment)
+
+        expect(response.body).to include('<option value="">Choose a category</option>')
+      end
+
+      it "keeps the current leaf selected for a properly categorized garment" do
+        get edit_garment_path(garment)
+
+        selected_option = Nokogiri::HTML(response.body).at_css("#garment_category_id option[selected]")
+        expect(selected_option["value"]).to eq(category.id.to_s)
+      end
     end
 
     describe "PATCH /garments/:id" do
