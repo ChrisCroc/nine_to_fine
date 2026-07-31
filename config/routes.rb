@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :garments
+  namespace :garments do
+    resources :analyses, only: :create
+  end
   resources :suggestions, only: %i[create]
   resources :outfits do
     resource :publication, only: %i[create destroy]
