@@ -144,6 +144,30 @@ RSpec.describe "Garments", type: :request do
         expect(flash[:notice]).to match(/deleted/i)
       end
     end
+
+    describe "AI taxonomy on create" do
+      it "persists the taxonomy and stamps ai_analyzed_at when the flag is set" do
+        post garments_path, params: { garment: {
+          name: "Shirt", color: "white", category_id: category.id,
+          formality: "smart_casual", season: "summer", pattern: "solid",
+          ai_analyzed: "1"
+        } }
+
+        garment = user.garments.last
+        expect(garment.formality).to eq("smart_casual")
+        expect(garment.season).to eq("summer")
+        expect(garment.pattern).to eq("solid")
+        expect(garment.ai_analyzed_at).to be_present
+      end
+
+      it "does not stamp ai_analyzed_at when the flag is absent" do
+        post garments_path, params: { garment: {
+          name: "Shirt", color: "white", category_id: category.id, ai_analyzed: "0"
+        } }
+
+        expect(user.garments.last.ai_analyzed_at).to be_nil
+      end
+    end
   end
 
   context "when signed in as another user (IDOR sentinels)" do

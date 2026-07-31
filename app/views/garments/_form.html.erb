@@ -5,7 +5,9 @@
   <!--Name input-->
   <div class="mb-4">
     <%= f.label :name, class: "block text-sm font-medium text-zinc-700 mb-1" %>
-    <%= f.text_field :name, class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+    <%= f.text_field :name,
+                      data: { photo_analyze_target: "name" },
+                      class: "block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
     shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
     <% if garment.errors[:name].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:name].first %></span>
@@ -18,7 +20,7 @@
     <%= f.select :color,
           Garment::COLORS.map { |c| [c.capitalize, c, { "data-hex": Garment::COLOR_HEX[c] }] },
           { prompt: "Choose a color" },
-          { data: { controller: "color-select" } } %>
+          { data: { controller: "color-select", photo_analyze_target: "color" } } %>
     <% if garment.errors[:color].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:color].first %></span>
     <% end %>
@@ -45,8 +47,9 @@
           @categories, :subcategories, :name,
           :id, :name,
           { include_blank: "Choose a category" },
-          { class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
-          shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" } %>
+          { data: { photo_analyze_target: "category" },
+            class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+          shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none cursor-pointer" } %>
     <% if garment.errors[:category].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:category].first %></span>
     <% end %>
@@ -57,7 +60,9 @@
     <%= f.label :photo, "Photo", class: "block text-sm font-medium text-zinc-700 mb-1" %>
     <%= f.file_field :photo,
                       accept: "image/*",
-                      data: { photo_preview_target: "input", action: "change->photo-preview#update" },
+                      data: { photo_preview_target: "input",
+                              photo_analyze_target: "input",
+                              action: "change->photo-preview#update change->photo-analyze#analyze" },
                       class: "block w-full text-sm text-zinc-700 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-900
                       file:px-4 file:py-2 file:text-champagne file:font-semibold file:cursor-pointer hover:file:bg-zinc-700" %>
     <% if garment.errors[:photo].any? %>
@@ -72,6 +77,45 @@
     px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
     <p class="mt-1 text-sm text-zinc-500">Split the tags with comas</p>
   </div>
+
+
+  <!--Formalities select -->
+  <div class="mb-4">
+    <%= f.label :formality, class: "block text-sm font-medium text-zinc-700 mb-1" %>
+    <%= f.select :formality,
+          Garment.formalities.keys.map { |key| [key.humanize, key] },
+          { include_blank: "—" },
+          { data: { photo_analyze_target: "formality" },
+            class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+            shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none cursor-pointer" } %>
+  </div>
+
+
+  <!--Seasons select -->
+  <div class="mb-4">
+    <%= f.label :season, class: "block text-sm font-medium text-zinc-700 mb-1" %>
+    <%= f.select :season,
+          Garment.seasons.keys.map { |k| [k.humanize, k] },
+          { include_blank: "—" },
+          { data: { photo_analyze_target: "season" },
+            class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+            shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none cursor-pointer" } %>
+  </div>
+
+
+<!--Pattern select -->
+  <div class="mb-4">
+    <%= f.label :pattern, class: "block text-sm font-medium text-zinc-700 mb-1" %>
+    <%= f.select :pattern,
+          Garment.patterns.keys.map { |k| [k.humanize, k] },
+          { include_blank: "—" },
+          { data: { photo_analyze_target: "pattern" },
+            class: "block w-full bg-white rounded-md border border-zinc-300 px-3 py-2 text-zinc-900
+            shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none cursor-pointer" } %>
+  </div>
+
+<!--Flag boolean for IA -->
+  <%= hidden_field_tag "garment[ai_analyzed]", "0", data: { photo_analyze_target: "flag" } %>
 
   <!--Submit-->
   <div>
