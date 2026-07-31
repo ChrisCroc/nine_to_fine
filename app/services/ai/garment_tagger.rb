@@ -48,7 +48,7 @@ module Ai
     def tool
       {
         name: TOOL_NAME,
-        description: "Record the attributes of the single garment shown in the. photo.
+        description: "Record the attributes of the single garment shown in the photo.
         Omit any field if you cannot determine with confidence.",
         input_schema: {
           type: "object",
