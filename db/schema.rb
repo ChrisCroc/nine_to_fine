@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_28_145540) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_31_072548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,12 +72,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_28_145540) do
   end
 
   create_table "garments", force: :cascade do |t|
+    t.datetime "ai_analyzed_at"
     t.string "brand"
     t.bigint "category_id", null: false
     t.string "color", null: false
     t.datetime "created_at", null: false
     t.text "description"
+    t.integer "formality"
     t.string "name", null: false
+    t.integer "pattern"
+    t.integer "season"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["category_id"], name: "index_garments_on_category_id"

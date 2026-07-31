@@ -191,4 +191,25 @@ RSpec.describe Garment, type: :model do
       expect(build(:garment, category: leaf)).to be_valid
     end
   end
+
+  describe "AI taxonomy enums" do
+    it "exposes the three enum vocabularies" do
+      expect(Garment.formalities.keys).to eq(%w[casual smart_casual formal])
+      expect(Garment.seasons.keys).to eq(%w[spring summer fall winter all_season])
+      expect(Garment.patterns.keys).to eq(%w[solid striped checked floral graphic other])
+    end
+
+    it "leaves the taxonomy nil by default (the AI may not know)" do
+      garment = create(:garment)
+
+      expect(garment.formality).to be_nil
+      expect(garment.season).to be_nil
+      expect(garment.pattern).to be_nil
+      expect(garment.ai_analyzed_at).to be_nil
+    end
+
+    it "rejects a value outside the enum" do
+      expect{ create(:garment, formality: "fancy") }.to raise_error(ArgumentError)
+    end
+  end
 end
