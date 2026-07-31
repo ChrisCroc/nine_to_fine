@@ -6,6 +6,9 @@ class Garment < ApplicationRecord
   has_many :outfit_garments, dependent: :destroy
   has_many :outfits, through: :outfit_garments
   has_one_attached :photo
+  enum :formality, { casual: 0, smart_casual: 1, formal: 2 }
+  enum :season, { spring: 0, summer: 1, fall: 2, winter: 3, all_season: 4 }
+  enum :pattern, { solid: 0, striped: 1, checked: 2, floral: 3, graphic: 4, other: 5 }
 
   COLORS = %w[black white grey beige brown red orange yellow green purple blue pink cream].freeze
   COLOR_HEX = {

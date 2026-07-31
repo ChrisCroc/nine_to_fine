@@ -21,7 +21,7 @@ class GarmentsController < ApplicationController
 
   def create
     @garment = current_user.garments.new(garment_params)
-
+    stamp_ai_analysis
     if @garment.save
       redirect_to @garment, notice: "Garment was successfully created."
     else
@@ -33,7 +33,9 @@ class GarmentsController < ApplicationController
   end
 
   def update
-    if @garment.update(garment_params)
+    @garment.assign_attributes(garment_params)
+    stamp_ai_analysis
+    if @garment.save
       redirect_to @garment, status: :see_other, notice: "Garment was successfully updated."
     else
       render :edit, status: :unprocessable_content
@@ -52,7 +54,7 @@ class GarmentsController < ApplicationController
   end
 
   def garment_params
-    permitted = params.expect(garment: [ :name, :color, :description, :brand, :category_id, :photo, :tag_names ])
+    permitted = params.expect(garment: [ :name, :color, :description, :brand, :category_id, :photo, :tag_names, :formality, :season, :pattern ])
     permitted.delete(:photo) if permitted[:photo].blank?
     permitted
   end
@@ -63,5 +65,9 @@ class GarmentsController < ApplicationController
 
   def filter_params
     params[:q]&.permit(:color, :category_id, :tag_id, :brand, :search) || {}
+  end
+
+  def stamp_ai_analysis
+    @garment.ai_analyzed_at = Time.current if params.dig(:garment, :ai_analyzed) == "1"
   end
 end
