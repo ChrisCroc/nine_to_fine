@@ -209,7 +209,7 @@ RSpec.describe Garment, type: :model do
     end
 
     it "rejects a value outside the enum" do
-      expect{ create(:garment, formality: "fancy") }.to raise_error(ArgumentError)
+      expect { create(:garment, formality: "fancy") }.to raise_error(ArgumentError)
     end
   end
 end
