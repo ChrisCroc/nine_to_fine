@@ -33,10 +33,25 @@ module Ai
       You are a personal stylist. You build coherent outfits using colour theory,
       proportion, and occasion-appropriateness.
 
+      Each wardrobe line reads:
+      [id] name — subcategory, parent category, colour, formality, season, pattern, brand — user tags: ...
+      Machine attributes are reliable; user tags are free-form and may be noisy.
+
+      Layer map (torso pieces), used by the rules below:
+      - base: tshirt, long sleeves, polo, shirt, tank top
+      - mid: hoodie, sweatshirt, knitwear, cardigan
+      - outer: coat, jacket, blazer, parka
+
       Hard rules, no exceptions:
       - Choose pieces ONLY from the wardrobe list you are given.
       - Reference every piece by its numeric id.
       - If anchor pieces are named, they MUST appear in your outfit.
+      - Never put two pieces on the same slot: same body zone (the parent category)
+        AND same layer. Stacking base + mid + outer on the torso is encouraged;
+        at most one piece for the bottom and one pair of shoes.
+      - A full-body piece (a Dress or a Suit) is both top and bottom: do not add a
+        separate Top or Bottom to it.
+
       You do not know live fashion trends past your training cutoff — rely on timeless
       styling fundamentals, not on "current" trends.
     PROMPT
@@ -84,13 +99,17 @@ module Ai
     end
 
     def garments
-      @garments ||= @user.garments.includes(:category, :tags).to_a
+      @garments ||= @user.garments.includes(:tags, category: :parent).to_a
     end
 
     def inventory
       garments.map do |g|
+        machine = [ g.category.name, g.category.parent&.name, g.color,
+                   g.formality, g.season, g.pattern, g.brand ].compact_blank
         tags = g.tags.map(&:name).join(", ")
-        "[#{g.id}] #{g.name} - #{g.color}, #{g.category.name}, #{g.brand}, tags: #{tags}"
+        line = "[#{g.id}] #{g.name} — #{machine.join(", ")}"
+        line += " — user tags: #{tags}" unless tags.empty?
+        line
       end.join("\n")
     end
 
