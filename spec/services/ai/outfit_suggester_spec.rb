@@ -100,5 +100,29 @@ RSpec.describe Ai::OutfitSuggester do
       expect { described_class.new(user: user, context: "x", client: client).suggest }
         .to raise_error(described_class::DuplicateOutfit)
     end
+
+    it "puts the subcategory, its parent and the machine attributes in the inventory" do
+      top = create(:category, name: "Tops")
+      shirt = create(:category, name: "shirt", parent: top)
+      create_list(:garment, 2, user: user)
+      piece = create(:garment, user: user, name: "Linen top", color: "white",
+                     category: shirt, formality: "smart_casual", season: "summer",
+                     pattern: "solid")
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: [ piece.id ]))
+
+      described_class.new(user: user, context: "x", client: client).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        prompt = args[:messages].first[:content]
+        expect(prompt).to include("shirt").and include("Tops")
+          .and include("smart_casual").and include("summer").and include("solid")
+      end
+    end
+
+    it "teaches the layering rules in the system prompt" do
+      expect(described_class::SYSTEM).to include("base").and include("mid").and include("outer")
+    end
   end
 end
