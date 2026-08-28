@@ -20,7 +20,7 @@ jobs:
       contents: write # Nécessaire pour push le commit fix sur la branche de la PR
     steps:
       - name: Checkout the Dependabot branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
