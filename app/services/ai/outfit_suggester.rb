@@ -10,6 +10,7 @@ module Ai
     class TooFewGarments < Error; end
     class NoValidGarments < Error; end
     class DuplicateOutfit < Error; end
+    class NoAlternative < Error; end
 
     TOOL = {
       name: "propose_outfit",
@@ -56,15 +57,17 @@ module Ai
       styling fundamentals, not on "current" trends.
     PROMPT
 
-    def initialize(user:, context:, anchor_garment_ids: [], client: nil)
+    def initialize(user:, context:, anchor_garment_ids: [], exclude_garment_ids: [], client: nil)
       @user = user
       @context = context.to_s.strip.first(MAX_CONTEXT)
       @anchor_garment_ids = Array(anchor_garment_ids).map(&:to_i)
+      @exclude_garment_ids = Array(exclude_garment_ids).map(&:to_i)
       @client = client || Anthropic::Client.new(api_key: Rails.application.credentials.dig(:anthropic, :api_key))
     end
 
     def suggest
       raise TooFewGarments if @user.garments.size < MIN_GARMENTS
+      raise NoAlternative if available_garments.count < MIN_GARMENTS
       message = @client.messages.create(
         model: MODEL,
         max_tokens: 1024,
@@ -75,7 +78,7 @@ module Ai
         messages: [ { role: "user", content: user_message } ]
       )
       proposal = tool_input(message)
-      validated_ids = valid_ids(proposal["garment_ids"])
+      validated_ids = without_excluded(owned_ids(proposal["garment_ids"]))
       raise NoValidGarments if validated_ids.empty?
       raise DuplicateOutfit if duplicate?(validated_ids)
       Result.new(
@@ -93,13 +96,25 @@ module Ai
       block.input.with_indifferent_access
     end
 
-    def valid_ids(returned)
-      ids = Array(returned).map(&:to_i)
+    def owned_ids(returned_ids)
+      ids = Array(returned_ids).map(&:to_i)
       @user.garments.where(id: ids).ids
     end
 
+    def without_excluded(ids)
+      offenders = ids & @exclude_garment_ids
+      if offenders.any?
+        Rails.logger.warn("[OutfitSuggester] user=#{@user.id} model returned excluded ids #{offenders}")
+      end
+      ids - @exclude_garment_ids
+    end
+
+    def available_garments
+      @user.garments.where.not(id: @exclude_garment_ids)
+    end
+
     def garments
-      @garments ||= @user.garments.includes(:tags, category: :parent).to_a
+      @garments ||= available_garments.includes(:tags, category: :parent).to_a
     end
 
     def inventory
@@ -133,8 +148,8 @@ module Ai
 
     # "Already present" = the EXACT same set of garment ids (order-agnostic)
     # A shared piece is fine; only an identical combination counts as a duplicate.
-    def duplicate?(ids)
-      target = ids.sort
+    def duplicate?(garment_ids)
+      target = garment_ids.sort
       existing_outfits.any? { |o| outfit_ids(o).sort == target }
     end
 

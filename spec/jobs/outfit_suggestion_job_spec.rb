@@ -33,6 +33,28 @@ RSpec.describe OutfitSuggestionJob do
       described_class.perform_now(user: user, context: "x")
   end
 
+  it "broadcasts a non-retryable error for NoAlternative" do
+    allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest)
+      .and_raise(Ai::OutfitSuggester::NoAlternative)
+
+    expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      .with(user, :outfit_suggestions, hash_including(locals: hash_including(retryable: false)))
+
+    described_class.perform_now(user: user, context: "x")
+  end
+
+  it "passes the excluded ids through to the suggester" do
+    suggester = instance_double(Ai::OutfitSuggester, suggest: result)
+    allow(Ai::OutfitSuggester).to receive(:new).and_return(suggester)
+    allow(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+
+    described_class.perform_now(user: user, context: "x", exclude_garment_ids: [ 7, 9 ])
+
+    expect(Ai::OutfitSuggester).to have_received(:new).with(
+      user: user, context: "x", anchor_garment_ids: [], exclude_garment_ids: [ 7, 9 ]
+    )
+  end
+
   it "passes the context to the result partial" do
     allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest).and_return(result)
 
@@ -40,5 +62,16 @@ RSpec.describe OutfitSuggestionJob do
       .with(user, :outfit_suggestions, hash_including(locals: hash_including(context: "rainy interview")))
 
     described_class.perform_now(user: user, context: "rainy interview")
+  end
+
+
+  it "accumulates the proposed pieces into the exclusion list of the result partial" do
+    allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest).and_return(result)
+
+    expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      .with(user, :outfit_suggestions,
+            hash_including(locals: hash_including(exclude_garment_ids: [ 5, 1, 2 ])))
+
+    described_class.perform_now(user: user, context: "x", exclude_garment_ids: [ 5 ])
   end
 end

@@ -17,6 +17,15 @@ RSpec.describe "Suggestions", type: :request do
         expect(response.body).to include('target="ai_suggestion_modal"')
       end
 
+      it "passes the excluded ids to the job" do
+        expect {
+          post suggestions_path, params: { context: "wedding", exclude_garment_ids: %w[31 58] },
+                                 headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(OutfitSuggestionJob).with(
+          user: user, context: "wedding", anchor_garment_ids: [], exclude_garment_ids: %w[31 58]
+        )
+      end
+
       it "does not enqueued when context and anchors are both blank" do
         expect {
           post suggestions_path, params: { context: "" },

@@ -75,6 +75,64 @@ RSpec.describe Ai::OutfitSuggester do
       end
     end
 
+    it "keeps the excluded pieces out of the inventory sent to the model" do
+      banned = create(:garment, user: user, name: "Banned shirt")
+      kept = create_list(:garment, 4, user: user)
+
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: kept.first(2).map(&:id)))
+
+      described_class.new(user: user, context: "wedding", client: client,
+                          exclude_garment_ids: [ banned.id ]).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        prompt = args[:messages].first[:content]
+        expect(prompt).not_to include("[#{banned.id}]")
+        expect(prompt).to include("[#{kept.first.id}]")
+      end
+    end
+
+    it "raises NoAlternative when too few pieces are left after exclusions" do
+      pieces = create_list(:garment, 4, user: user)
+      client = double("Anthropic::Client")
+
+      suggester = described_class.new(user: user, context: "x", client: client,
+                                      exclude_garment_ids: pieces.first(2).map(&:id))
+
+      expect { suggester.suggest }.to raise_error(described_class::NoAlternative)
+    end
+
+    it "still suggests when juste enough pieces survive the exclusions" do
+      pieces = create_list(:garment, 5, user: user)
+      excluded = pieces.first(2)
+      survivors = pieces.last(3)
+
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create)
+        .and_return(fake_response(garment_ids: survivors.map(&:id)))
+
+      result = described_class.new(user: user, context: "x", client: client,
+                                    exclude_garment_ids: excluded.map(&:id)).suggest
+      expect(result.garment_ids).to match_array(survivors.map(&:id))
+    end
+
+    it "drops an excluded piece the model returned anyway" do
+      pieces = create_list(:garment, 6, user: user)
+      banned = pieces.first(2)
+      picked = pieces.last(2)
+
+      client = client_returning(
+        fake_response(garment_ids: picked.map(&:id) + [ banned.first.id ])
+      )
+
+      result = described_class.new(user: user, context: "wedding", client: client,
+                                    exclude_garment_ids: banned.map(&:id)).suggest
+
+      expect(result.garment_ids).to match_array(picked.map(&:id))
+    end
+
     it "lists the user's existing outfits in the prompt (so they aren't re-proposed)" do
       pieces = create_list(:garment, 4, user: user)
       create(:outfit, user: user, name: "Casual Friday", garments: pieces.first(3))

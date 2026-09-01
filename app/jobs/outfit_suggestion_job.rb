@@ -1,16 +1,25 @@
 class OutfitSuggestionJob < ApplicationJob
   queue_as :default
 
-  def perform(user:, context:, anchor_garment_ids: [])
+  NON_RETRYABLE = [
+    Ai::OutfitSuggester::TooFewGarments,
+    Ai::OutfitSuggester::NoAlternative
+].freeze
+
+  def perform(user:, context:, anchor_garment_ids: [], exclude_garment_ids: [])
     result = Ai::OutfitSuggester.new(
-      user: user, context: context, anchor_garment_ids: anchor_garment_ids
+      user: user,
+      context: context,
+      anchor_garment_ids: anchor_garment_ids,
+      exclude_garment_ids: exclude_garment_ids
     ).suggest
 
     Turbo::StreamsChannel.broadcast_replace_to(
       user, :outfit_suggestions,
       target: "ai_suggestion",
       partial: "suggestions/result",
-      locals: { result: result, context: context }
+      locals: { result: result, context: context,
+                exclude_garment_ids: exclude_garment_ids + result.garment_ids }
     )
   rescue => e
     Rails.logger.error("[OutfitSuggestionJob] #{e.class}: #{e.message}")
@@ -18,7 +27,10 @@ class OutfitSuggestionJob < ApplicationJob
       user, :outfit_suggestions,
       target: "ai_suggestion",
       partial: "suggestions/error",
-      locals: { message: friendly_message(e), retryable: !e.is_a?(Ai::OutfitSuggester::TooFewGarments), context: context }
+      locals: { message: friendly_message(e),
+                retryable: NON_RETRYABLE.none? { |klaas| !e.is_a? (klaas) },
+                context: context,
+                exclude_garment_ids: exclude_garment_ids }
     )
   end
 
@@ -32,6 +44,8 @@ class OutfitSuggestionJob < ApplicationJob
       "The stylist couldn't build an outfit this time. Try rephrasing your context."
     when Ai::OutfitSuggester::DuplicateOutfit
       "You already have this exact outfit. Regenerate or change the context."
+    when Ai::OutfitSuggester::NoAlternative
+      "You've been through most of your wardrobe for this context. Start over or add more garments."
     else
       "Something went wrong reaching the stylist. Please try again."
     end
