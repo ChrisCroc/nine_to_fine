@@ -48,17 +48,18 @@ module Ai
     def tool
       {
         name: TOOL_NAME,
-        description: "Record the attributes of the single garment shown in the photo.
-        Omit any field if you cannot determine with confidence.",
+        description: <<~DESC,
+          Record the attributes of the single garment shown in the photo.
+          Omit any field if you cannot determine with confidence.
+        DESC
         input_schema: {
           type: "object",
           properties: {
             color: {
-              type: "string", enum: Garment::COLORS, description: "The dominant  colour."
+              type: "string", enum: Garment::COLORS, description: "The dominant colour."
             },
             category: {
-              type: "string", enum: Category.leaves.pluck(:name), description: "The most specific
-              garment type"
+              type: "string", enum: Category.leaves.pluck(:name), description: "The most specific garment type"
             },
             name: {
               type: "string", description: "Short descriptive name (~40 chars)"
@@ -87,14 +88,11 @@ module Ai
     end
 
     def read_image
-      bytes, media_type =
-        if @photo.respond_to?(:download)
-          [ @photo.download, @photo.content_type ]
-        else
-          [ @photo.read, @photo.content_type ]
-        end
+      media_type = @photo.content_type
       raise Error, "unsupported image type: #{media_type}" unless
         CLAUDE_MEDIA_TYPES.include?(media_type)
+
+      bytes = @photo.respond_to?(:download) ? @photo.download : @photo.read
       [ bytes, media_type ]
     end
 
