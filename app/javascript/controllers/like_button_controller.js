@@ -13,7 +13,7 @@ export default class extends Controller {
 
   confirm(event) {
     this.buttonTarget.disabled = false
-    if (!event.Detail.success) {
+    if (!event.detail.success) {
       this.likedValue = this.previousLiked
       this.iconTarget.textContent = this.likedValue ? "♥" : "♡"
     }
