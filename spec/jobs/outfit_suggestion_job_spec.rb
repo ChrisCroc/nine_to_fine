@@ -43,6 +43,16 @@ RSpec.describe OutfitSuggestionJob do
     described_class.perform_now(user: user, context: "x")
   end
 
+  it "broadcasts a retryable error for DuplicateOutfit" do
+    allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest)
+      .and_raise(Ai::OutfitSuggester::DuplicateOutfit)
+
+    expect(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+      .with(user, :outfit_suggestions, hash_including(locals: hash_including(retryable: true)))
+
+    described_class.perform_now(user: user, context: "x")
+  end
+
   it "passes the excluded ids through to the suggester" do
     suggester = instance_double(Ai::OutfitSuggester, suggest: result)
     allow(Ai::OutfitSuggester).to receive(:new).and_return(suggester)

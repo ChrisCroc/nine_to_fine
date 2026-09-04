@@ -28,7 +28,7 @@ class OutfitSuggestionJob < ApplicationJob
       target: "ai_suggestion",
       partial: "suggestions/error",
       locals: { message: friendly_message(e),
-                retryable: NON_RETRYABLE.none? { |klaas| !e.is_a? (klaas) },
+                retryable: NON_RETRYABLE.none? { |klass| e.is_a?(klass) },
                 context: context,
                 exclude_garment_ids: exclude_garment_ids }
     )
