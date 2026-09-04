@@ -19,9 +19,22 @@ RSpec.describe Ai::OutfitSuggester do
     client
   end
 
+  def leaf_in(parent_name)
+    parent = Category.find_or_create_by!(name: parent_name) {
+      |c| c.position = 0
+    }
+    create(:category, parent: parent)
+  end
+
+  def wearable_wardrobe(user)
+    %w[Tops Bottoms Shoes].map do |parent_name|
+      create(:garment, user: user, category: leaf_in(parent_name))
+    end
+  end
+
   describe "#suggest" do
-    it "raises TooFewGarments for a wardrobe below the minimum" do
-      create(:garment, user: user)
+    it "raises TooFewGarments when the wardrobe cannot dress a whole body" do
+      create_list(:garment, 3, user: user, category: leaf_in("Tops"))
       client = double("Anthropic::Client")
 
       suggester = described_class.new(user: user, context: "x", client: client)
@@ -29,8 +42,29 @@ RSpec.describe Ai::OutfitSuggester do
       expect { suggester.suggest }.to raise_error(described_class::TooFewGarments)
     end
 
+    it "accepts a wardrobe of a single dress and a pair of shoes" do
+      dress = create(:garment, user: user, category: leaf_in("Dresses"))
+      shoes = create(:garment, user: user, category: leaf_in("Shoes"))
+      client = client_returning(fake_response(garment_ids: [ dress.id, shoes.id ]))
+
+      result = described_class.new(user: user, context: "x", client: client).suggest
+
+      expect(result.garment_ids).to match_array([ dress.id, shoes.id ])
+    end
+
+    it "count swimwear as a bottom" do
+      top = create(:garment, user: user, category: leaf_in("Tops"))
+      swimsuit = create(:garment, user: user, category: leaf_in("Swimwear"))
+      shoes = create(:garment, user: user, category: leaf_in("Shoes"))
+      client = client_returning(fake_response(garment_ids: [ top.id, swimsuit.id, shoes.id ]))
+
+      result = described_class.new(user: user, context: "beach", client: client).suggest
+
+      expect(result.garment_ids).to match_array([ top.id, swimsuit.id, shoes.id ])
+    end
+
     it "parses the tool_use block into a Result" do
-      pieces = create_list(:garment, 3, user: user)
+      pieces = wearable_wardrobe(user)
       client = client_returning(fake_response(garment_ids: pieces.map(&:id), name: "Cosy", rationale: "Warm."))
 
       result = described_class.new(user: user, context: "cold day", client: client).suggest
@@ -42,7 +76,7 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "drops ids that are not the user's (invented or foreign)" do
-      mine = create_list(:garment, 3, user: user)
+      mine = wearable_wardrobe(user)
       stranger = create(:garment)
 
       client = client_returning(fake_response(garment_ids: mine.map(&:id) + [ stranger.id, 999_999 ]))
@@ -52,7 +86,7 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "raises NoValidGarments when nothing survives validation" do
-      create_list(:garment, 3, user: user)
+      wearable_wardrobe(user)
       client = client_returning(fake_response(garment_ids: [ 999_999 ]))
 
       expect { described_class.new(user: user, context: "x", client: client).suggest }
@@ -60,8 +94,8 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "sends the wardrobe inventory (with ids) to the model" do
-      shirt = create(:garment, user: user, name: "White shirt")
-      create_list(:garment, 2, user: user)
+      wearable_wardrobe(user)
+      shirt = create(:garment, user: user, name: "White shirt", category: leaf_in("Tops"))
 
       messages = double("messages")
       client = instance_double(Anthropic::Client, messages: messages)
@@ -76,8 +110,8 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "keeps the excluded pieces out of the inventory sent to the model" do
-      banned = create(:garment, user: user, name: "Banned shirt")
-      kept = create_list(:garment, 4, user: user)
+      kept = wearable_wardrobe(user)
+      banned = create(:garment, user: user, name: "Banned shirt", category: leaf_in("Tops"))
 
       messages = double("messages")
       client = instance_double(Anthropic::Client, messages: messages)
@@ -93,20 +127,37 @@ RSpec.describe Ai::OutfitSuggester do
       end
     end
 
-    it "raises NoAlternative when too few pieces are left after exclusions" do
-      pieces = create_list(:garment, 4, user: user)
+    it "keeps excluded shoes in the inventory, unlike any other piece" do
+      wearable_wardrobe(user)
+      spared = create(:garment, user: user, name: "Spared boots", category: leaf_in("Shoes"))
+
+      messages = double(":messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: [ spared.id ]))
+
+      described_class.new(user: user, context: "x", client: client,
+                          exclude_garment_ids: [ spared.id ]).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        prompt = args[:messages].first[:content]
+        expect(prompt).to include("[#{spared.id}]")
+      end
+    end
+
+    it "raises NoAlternative when the exclusions leave no complete outfit" do
+      top = wearable_wardrobe(user).first
       client = double("Anthropic::Client")
 
       suggester = described_class.new(user: user, context: "x", client: client,
-                                      exclude_garment_ids: pieces.first(2).map(&:id))
+                                      exclude_garment_ids: [ top.id ])
 
       expect { suggester.suggest }.to raise_error(described_class::NoAlternative)
     end
 
-    it "still suggests when juste enough pieces survive the exclusions" do
-      pieces = create_list(:garment, 5, user: user)
-      excluded = pieces.first(2)
-      survivors = pieces.last(3)
+    it "still suggests when a complete outfit survives the exclusions" do
+      survivors = wearable_wardrobe(user)
+      excluded = [ create(:garment, user: user, category: leaf_in("Tops")),
+                   create(:garment, user: user, category: leaf_in("Bottoms")) ]
 
       messages = double("messages")
       client = instance_double(Anthropic::Client, messages: messages)
@@ -119,9 +170,9 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "drops an excluded piece the model returned anyway" do
-      pieces = create_list(:garment, 6, user: user)
-      banned = pieces.first(2)
-      picked = pieces.last(2)
+      picked = wearable_wardrobe(user)
+      banned = [ create(:garment, user: user, category: leaf_in("Tops")),
+                 create(:garment, user: user, category: leaf_in("Bottoms")) ]
 
       client = client_returning(
         fake_response(garment_ids: picked.map(&:id) + [ banned.first.id ])
@@ -134,7 +185,8 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "lists the user's existing outfits in the prompt (so they aren't re-proposed)" do
-      pieces = create_list(:garment, 4, user: user)
+      pieces = wearable_wardrobe(user) + [ create(:garment, user: user, category:
+               leaf_in("Tops")) ]
       create(:outfit, user: user, name: "Casual Friday", garments: pieces.first(3))
       create(:outfit, user: user, name: "Date Night", garments: [ pieces[0], pieces[1], pieces[3] ])
 
@@ -151,7 +203,7 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "raises DuplicateOutfit when the proposed set is one the user already owns" do
-      pieces = create_list(:garment, 3, user: user)
+      pieces = wearable_wardrobe(user)
       create(:outfit, user: user, name: "Casual Friday", garments: pieces)
       client = client_returning(fake_response(garment_ids: pieces.map(&:id)))
 
@@ -160,9 +212,9 @@ RSpec.describe Ai::OutfitSuggester do
     end
 
     it "puts the subcategory, its parent and the machine attributes in the inventory" do
-      top = create(:category, name: "Tops")
+      top = Category.find_or_create_by!(name: "Tops") { |c| c.position = 0 }
       shirt = create(:category, name: "shirt", parent: top)
-      create_list(:garment, 2, user: user)
+      wearable_wardrobe(user)
       piece = create(:garment, user: user, name: "Linen top", color: "white",
                      category: shirt, formality: "smart_casual", season: "summer",
                      pattern: "solid")
@@ -181,6 +233,10 @@ RSpec.describe Ai::OutfitSuggester do
 
     it "teaches the layering rules in the system prompt" do
       expect(described_class::SYSTEM).to include("base").and include("mid").and include("outer")
+    end
+
+    it "requires a minimum composition in the system prompt" do
+      expect(described_class::SYSTEM).to include("a pair of shoes")
     end
   end
 end

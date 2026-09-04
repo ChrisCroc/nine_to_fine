@@ -39,7 +39,8 @@ class OutfitSuggestionJob < ApplicationJob
   def friendly_message(error)
     case error
     when Ai::OutfitSuggester::TooFewGarments
-      "Add a few more garments first - the stylist needs at least 3 pieces to work with."
+      "Add a few more garments first - the stylist needs a pair of shoes, plus a top and a
+        bottom, or a dress."
     when Ai::OutfitSuggester::NoValidGarments
       "The stylist couldn't build an outfit this time. Try rephrasing your context."
     when Ai::OutfitSuggester::DuplicateOutfit

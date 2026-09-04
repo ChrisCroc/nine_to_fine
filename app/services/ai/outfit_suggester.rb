@@ -1,8 +1,21 @@
 module Ai
   class OutfitSuggester
     MODEL = "claude-sonnet-5"
-    MIN_GARMENTS = 3
     MAX_CONTEXT = 300 # cap free-text length (light prompt injection guard)
+    SHOES = "Shoes".freeze
+    # Shoes never leave the wardrobe between regenerations: they are the
+    # scarcest category in most wardrobes, so banning a pair after a single
+    # proposal exhausts the outfit space long before the tops and bottoms
+    # have been explored.
+    # /!\ This rule is tied to the parent category NAME seeded in
+    # db/seeds.rb. Renaming "Shoes" there switches it off silently - no test
+    # would fail, the exclusion list would simply start eating shoes again.
+    TOPS = "Tops".freeze
+    # Swimwear sits on the same body zone as a bottom: a swimsuit still needs
+    # a top and a pair of shoes, exactly like a pair of shorts would.
+    BOTTOMS = %w[Bottoms Swimwear].freeze
+    # A single full-body piece dresses both halves on its own.
+    FULL_BODY = %w[Dresses Suits].freeze
 
     Result = Data.define(:rationale, :garment_ids, :name)
 
@@ -47,6 +60,9 @@ module Ai
       - Choose pieces ONLY from the wardrobe list you are given.
       - Reference every piece by its numeric id.
       - If anchor pieces are named, they MUST appear in your outfit.
+      - Every outfit MUST include a pair of shoes, AND must cover the body: either
+        a Top plus a Bottom (Swimwear counts as a Bottom), or a single full-body
+        piece ( a Dress or a Suit). Never propose an outfit with no shoes.
       - Never put two pieces on the same slot: same body zone (the parent category)
         AND same layer. Stacking base + mid + outer on the torso is encouraged;
         at most one piece for the bottom and one pair of shoes.
@@ -66,8 +82,10 @@ module Ai
     end
 
     def suggest
-      raise TooFewGarments if @user.garments.size < MIN_GARMENTS
-      raise NoAlternative if available_garments.count < MIN_GARMENTS
+      unless composable?(available_garments)
+        raise TooFewGarments unless composable?(@user.garments)
+        raise NoAlternative
+      end
       message = @client.messages.create(
         model: MODEL,
         max_tokens: 1024,
@@ -90,6 +108,20 @@ module Ai
 
     private
 
+    def composable?(scope)
+      parents = parent_names(scope)
+      parents.include?(SHOES) &&
+        (parents.intersect?(FULL_BODY) ||
+          (parents.include?(TOPS) && parents.intersect?(BOTTOMS)))
+    end
+
+    def parent_names(scope)
+      Category.where(id: scope.select(:category_id))
+              .includes(:parent)
+              .filter_map { |leaf| leaf.parent&.name }
+              .uniq
+    end
+
     def tool_input(message)
       block = message.content.find { |b| b.type.to_s == "tool_use" }
       raise Error, "no tool_use block in response" unless block
@@ -102,15 +134,26 @@ module Ai
     end
 
     def without_excluded(ids)
-      offenders = ids & @exclude_garment_ids
+      offenders = ids & excluded_ids
       if offenders.any?
         Rails.logger.warn("[OutfitSuggester] user=#{@user.id} model returned excluded ids #{offenders}")
       end
-      ids - @exclude_garment_ids
+      ids - excluded_ids
+    end
+
+    def excluded_ids
+      @excluded_ids ||= @exclude_garment_ids - reusable_excluded_ids
+    end
+
+    def reusable_excluded_ids
+      return [] if @exclude_garment_ids.empty?
+      shoes = Category.find_by(name: SHOES)
+      return [] unless shoes
+      @user.garments.where(id: @exclude_garment_ids, category: shoes.subcategories).ids
     end
 
     def available_garments
-      @user.garments.where.not(id: @exclude_garment_ids)
+      @user.garments.where.not(id: excluded_ids)
     end
 
     def garments
