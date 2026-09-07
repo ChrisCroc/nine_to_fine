@@ -10,7 +10,7 @@ class SuggestionsController < ApplicationController
       anchor_garment_ids: anchor_ids,
       exclude_garment_ids: exclude_ids
     )
-    # create.tubro_stream.erb injects the modal + spinner. No redirect
+    # create.turbo_stream.erb injects the modal + spinner. No redirect
   end
 
   private
