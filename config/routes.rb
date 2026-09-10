@@ -30,4 +30,8 @@ Rails.application.routes.draw do
     root to: "garments#index", as: :authenticated_root
   end
   root to: "pages#home"
+  get "/400", to: "errors#bad_request"
+  get "/404", to: "errors#not_found"
+  get "/422", to: "errors#unprocessable_content"
+  get "/500", to: "errors#internal_server_error"
 end
