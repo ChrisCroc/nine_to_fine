@@ -1,6 +1,13 @@
 module Ai
   class OutfitSuggester
     MODEL = "claude-sonnet-5"
+    # Wall-clock budget for one suggestion. Larger than the tagger's because
+    # this call reads the whole wardrobe and writes up to 1024 tokens, and it
+    # runs in a job rather than in the request. Budget = timeout * (1 + max_retries).
+    # /!\ These MUST travel with the request. A timeout passed to
+    # Anthropic::Client is silently overwritten by the SDK
+    # (anthropic-1.67.0, resources/messages.rb:81-91).
+    REQUEST_OPTIONS = { timeout: 45, max_retries: 1 }.freeze
     MAX_CONTEXT = 300 # cap free-text length (light prompt injection guard)
     SHOES = "Shoes".freeze
     # Shoes never leave the wardrobe between regenerations: they are the
@@ -93,7 +100,8 @@ module Ai
         system_: SYSTEM,
         tools: [ TOOL ],
         tool_choice: { type: "tool", name: "propose_outfit" },
-        messages: [ { role: "user", content: user_message } ]
+        messages: [ { role: "user", content: user_message } ],
+        request_options: REQUEST_OPTIONS
       )
       proposal = tool_input(message)
       validated_ids = without_excluded(owned_ids(proposal["garment_ids"]))

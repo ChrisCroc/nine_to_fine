@@ -4,6 +4,15 @@ module Ai
   class GarmentTagger
     MODEL = "claude-sonnet-5"
     TOOL_NAME = "record_garment"
+    # Wall-clock budget for one analysis, spent INSIDE the request
+    # (see garments/analyses_controller.rb): it holds a Puma thread - one of
+    # three - until it returns. The SDK defaults to 600 s per attempt and
+    # retries twice, so a silent connection would freeze that thread for half
+    # an hour. Budget = timeout * (1 + max_retries).
+    # /!\ These MUST travel with the request. A timeout passed to
+    # Anthropic::Client is silently overwritten by the SDK
+    # (anthropic-1.67.0, resources/messages.rb:81-91).
+    REQUEST_OPTIONS = { timeout: 20, max_retries: 1 }.freeze
 
     CLAUDE_MEDIA_TYPES = %w[image/jpeg image/png image/gif image/webp].freeze
 
@@ -38,7 +47,8 @@ module Ai
         system_: SYSTEM,
         tools: [ tool ],
         tool_choice: { type: "tool", name: TOOL_NAME },
-        messages: [ { role: "user", content: content } ]
+        messages: [ { role: "user", content: content } ],
+        request_options: REQUEST_OPTIONS
       )
       build_result(tool_input(message))
     end
