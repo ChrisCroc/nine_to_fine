@@ -26,11 +26,25 @@ RSpec.describe "Suggestions", type: :request do
         )
       end
 
-      it "does not enqueued when context and anchors are both blank" do
+      it "refuses a blank context, enqueues nothing, and answers inside the modal" do
         expect {
-          post suggestions_path, params: { context: "" },
-                                            headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          post suggestions_path, params: { context: "   " },
+                                  headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.not_to have_enqueued_job(OutfitSuggestionJob)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include('<turbo-stream action="update"')
+        expect(response.body).to include('target="ai_suggestion_modal"')
+        expect(response.body).to include("Tell the stylist about the occasion")
+      end
+
+      it "enqueues when anchors are given without a context" do
+        expect {
+          post suggestions_path, params: { anchor_garment_ids: %w[7] },
+                                  headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(OutfitSuggestionJob).with(
+          user: user, context: nil, anchor_garment_ids: %w[7], exclude_garment_ids: []
+        )
       end
     end
 

@@ -1,0 +1,17 @@
+<%# Rendered with 422 when the request carries neither a context nor an anchor.
+    Turbo applies a stream on any status, so the refusal lands in the same modal. %%>
+<%= turbo_stream.update "ai_suggestion_modal" do %>
+  <%= render layout: "suggestions/modal" do %>
+    <div class="flex flex-col gap-4 py-4 text-center">
+      <p class="text-sm text-zinc-700">
+        Tell the stylist about the occasion - a few words are enough
+      </p>
+      <div class="flex justify-center">
+        <button type="button" data-action="modal#close"
+                class="btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white">
+          Close
+        </button>
+      </div>
+    </div>
+  <% end %>
+<% end %>
