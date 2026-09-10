@@ -21,6 +21,8 @@ module NineToFine
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
+    # Serve error pages through our own routes (see the /400, /404, /422, /500 routes)
+    config.exceptions_app = self.routes
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
   end
