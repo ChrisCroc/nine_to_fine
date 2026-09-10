@@ -1,5 +1,17 @@
-<title><%= content_for?(:page_title) ? "#{content_for(:page_title)} - Nine to Fine" : "Nine to Fine" %></title>
-<meta name="description" content="<%= content_for?(:meta_description) ? content_for(:meta_description) : 'Nine to Fine, your pocket wardrobe to organize your clothes and build the outfits that you love.' %>">
+<% page_title = content_for?(:page_title) ? content_for(:page_title) + " - Nine to Fine" : "Nine to Fine" %>
+<% page_description = content_for?(:meta_description) ? content_for(:meta_description) : "Nine to Fine, your pocket wardrobe to organize your clothes and build the outfits that you love." %>
+
+<title><%= page_title %></title>
+<meta name="description" content="<%= page_description %>">
+
+<meta property="og:site_name" content="Nine to Fine">
+<meta property="og:type" content="website">
+<meta property="og:title" content="<%= page_title %>">
+<meta property="og:description" content="<%= page_description %>">
+<meta property="og:url" content="<%= request.base_url + request.path %>">
+<meta property="og:image" content="<%= image_url("og-image.png") %>">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="application-name" content="Nine To Fine">
