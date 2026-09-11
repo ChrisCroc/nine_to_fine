@@ -49,14 +49,17 @@ RSpec.describe "Suggestions", type: :request do
         )
       end
 
-      it "hands the job a usable position as a single pair" do
+      # The job arguments are stored in clear in the queue row, where
+      # filter_parameters does not reach, so the position is cut down to what a
+      # weather lookup can use before anything is written anywhere.
+      it "hands the job a usable position as a single rounded pair" do
         expect {
           post suggestions_path,
                 params: { context: "interview", latitude: "50.8503396", longitude: "4.3517103" },
                 headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(OutfitSuggestionJob).with(
           user: user, context: "interview", anchor_garment_ids: [], exclude_garment_ids: [],
-          coordinates: [ 50.8503396, 4.3517103 ]
+          coordinates: [ 50.85, 4.35 ]
         )
       end
 

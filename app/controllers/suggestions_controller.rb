@@ -1,4 +1,11 @@
 class SuggestionsController < ApplicationController
+  # Never let more precision into the system than the feature needs. These two
+  # numbers are serialized into the solid_queue_jobs row, where filter_parameters
+  # does not reach, and ~1 km is all a weather lookup can use.
+  # Weather::OpenMeteo rounds again for its cache key: same value today, other
+  # reason, so this is a second policy and not a duplicated rule.
+  STORED_PRECISION = 2
+
   def create
     unless suggestion_params[:context].present? || anchor_ids.any?
       return render :blank_request, status: :unprocessable_content
@@ -39,6 +46,6 @@ class SuggestionsController < ApplicationController
     longitude = Float(suggestion_params[:longitude], exception: false)
     return unless latitude&.between?(-90, 90) && longitude&.between?(-180, 180)
 
-    [ latitude, longitude ]
+    [ latitude.round(STORED_PRECISION), longitude.round(STORED_PRECISION) ]
   end
 end
