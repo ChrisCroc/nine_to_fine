@@ -20,6 +20,7 @@
   <%= link_to "Create this outfit", new_outfit_path(garment_ids: result.garment_ids, name: result.name),
         class: "btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white text-center" %>
   <%= button_to "Regenerate", suggestions_path,
-        params: { context: context, exclude_garment_ids: exclude_garment_ids },
+        params: { context: context, exclude_garment_ids: exclude_garment_ids,
+                  latitude: coordinates&.first, longitude: coordinates&.last },
         class: "btn-base border border-zinc-300 text-zinc-900 hover:bg-zinc-100 text-center w-full" %>
 </div>

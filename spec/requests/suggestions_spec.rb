@@ -22,7 +22,8 @@ RSpec.describe "Suggestions", type: :request do
           post suggestions_path, params: { context: "wedding", exclude_garment_ids: %w[31 58] },
                                  headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(OutfitSuggestionJob).with(
-          user: user, context: "wedding", anchor_garment_ids: [], exclude_garment_ids: %w[31 58]
+          user: user, context: "wedding", anchor_garment_ids: [], exclude_garment_ids: %w[31 58],
+          coordinates: nil
         )
       end
 
@@ -43,7 +44,46 @@ RSpec.describe "Suggestions", type: :request do
           post suggestions_path, params: { anchor_garment_ids: %w[7] },
                                   headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(OutfitSuggestionJob).with(
-          user: user, context: nil, anchor_garment_ids: %w[7], exclude_garment_ids: []
+          user: user, context: nil, anchor_garment_ids: %w[7], exclude_garment_ids: [],
+          coordinates: nil
+        )
+      end
+
+      # The job arguments are stored in clear in the queue row, where
+      # filter_parameters does not reach, so the position is cut down to what a
+      # weather lookup can use before anything is written anywhere.
+      it "hands the job a usable position as a single rounded pair" do
+        expect {
+          post suggestions_path,
+                params: { context: "interview", latitude: "50.8503396", longitude: "4.3517103" },
+                headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(OutfitSuggestionJob).with(
+          user: user, context: "interview", anchor_garment_ids: [], exclude_garment_ids: [],
+          coordinates: [ 50.85, 4.35 ]
+        )
+      end
+
+      # to_f would answer 0.0 here, and 0.0/0.0 is a real spot in the Gulf of
+      # Guinea the weather API answers for. Asserting nil is asserting that.
+      it "drops a position it cannot read" do
+        expect {
+          post suggestions_path,
+                params: { context: "interview", latitude: "abc", longitude: "4.35" },
+                headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(OutfitSuggestionJob).with(
+          user: user, context: "interview", anchor_garment_ids: [], exclude_garment_ids: [],
+          coordinates: nil
+        )
+      end
+
+      it "drops a position that is a number but not a place" do
+        expect {
+          post suggestions_path,
+                params: { context: "interview", latitude: "91", longitude: "4.35" },
+                headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(OutfitSuggestionJob).with(
+          user: user, context: "interview", anchor_garment_ids: [], exclude_garment_ids: [],
+          coordinates: nil
         )
       end
     end

@@ -80,11 +80,12 @@ module Ai
       styling fundamentals, not on "current" trends.
     PROMPT
 
-    def initialize(user:, context:, anchor_garment_ids: [], exclude_garment_ids: [], client: nil)
+    def initialize(user:, context:, anchor_garment_ids: [], exclude_garment_ids: [], weather: nil, client: nil)
       @user = user
       @context = context.to_s.strip.first(MAX_CONTEXT)
       @anchor_garment_ids = Array(anchor_garment_ids).map(&:to_i)
       @exclude_garment_ids = Array(exclude_garment_ids).map(&:to_i)
+      @weather = weather
       @client = client || Anthropic::Client.new(api_key: Rails.application.credentials.dig(:anthropic, :api_key))
     end
 
@@ -181,6 +182,7 @@ module Ai
 
     def user_message
       lines = [ "Wardrobe:", inventory, "", "Context: #{@context}" ]
+      lines << @weather if @weather
       unless existing_outfits.empty?
         lines << ""
         lines << "Outfits already owned - do NOT re-propose any of these EXACT combinations:"
