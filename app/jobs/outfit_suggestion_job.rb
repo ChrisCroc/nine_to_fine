@@ -6,19 +6,21 @@ class OutfitSuggestionJob < ApplicationJob
     Ai::OutfitSuggester::NoAlternative
 ].freeze
 
-  def perform(user:, context:, anchor_garment_ids: [], exclude_garment_ids: [])
+  def perform(user:, context:, anchor_garment_ids: [], exclude_garment_ids: [], coordinates: nil)
+    weather = Weather::OpenMeteo.new(coordinates).sentence
     result = Ai::OutfitSuggester.new(
       user: user,
       context: context,
       anchor_garment_ids: anchor_garment_ids,
-      exclude_garment_ids: exclude_garment_ids
+      exclude_garment_ids: exclude_garment_ids,
+      weather: weather
     ).suggest
 
     Turbo::StreamsChannel.broadcast_replace_to(
       user, :outfit_suggestions,
       target: "ai_suggestion",
       partial: "suggestions/result",
-      locals: { result: result, context: context,
+      locals: { result: result, context: context, coordinates: coordinates,
                 exclude_garment_ids: exclude_garment_ids + result.garment_ids }
     )
   rescue => e
@@ -30,6 +32,7 @@ class OutfitSuggestionJob < ApplicationJob
       locals: { message: friendly_message(e),
                 retryable: NON_RETRYABLE.none? { |klass| e.is_a?(klass) },
                 context: context,
+                coordinates: coordinates,
                 exclude_garment_ids: exclude_garment_ids }
     )
   end

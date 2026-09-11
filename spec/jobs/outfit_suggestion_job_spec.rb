@@ -61,7 +61,8 @@ RSpec.describe OutfitSuggestionJob do
     described_class.perform_now(user: user, context: "x", exclude_garment_ids: [ 7, 9 ])
 
     expect(Ai::OutfitSuggester).to have_received(:new).with(
-      user: user, context: "x", anchor_garment_ids: [], exclude_garment_ids: [ 7, 9 ]
+      user: user, context: "x", anchor_garment_ids: [], exclude_garment_ids: [ 7, 9 ],
+      weather: nil
     )
   end
 
