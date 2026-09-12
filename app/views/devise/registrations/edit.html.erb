@@ -28,8 +28,7 @@
 
 <div class="mt-6 pt-4 border-t border-zinc-200 flex flex-col gap-2">
   <p class="text-caption text-zinc-500">Unhappy? You can delete your account permanently.</p>
-  <%= button_to "Cancel my account", registration_path(resource_name), method: :delete,
-        data: { turbo_confirm: "Are you sure? This cannot be undone." },
+  <%= link_to "Delete my account", confirm_destroy_user_path,
         class: "btn-base bg-red-600 text-white hover:bg-red-700 w-full" %>
 </div>
 

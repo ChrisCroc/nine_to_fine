@@ -1,0 +1,22 @@
+<% content_for :page_title, "Delete my account" %>
+
+<div class="rounded-lg border border-red-200 bg-red-50 p-4 flex flex-col gap-2">
+  <p class="text-caption font-semibold text-red-800">This cannot be undone</p>
+  <p class="text-caption text-red-700">
+    Deleting your account permanently removes your
+    <%= pluralize(current_user.garments.count, "garment") %>,
+    <%= pluralize(current_user.outfits.count, "outfit") %>,
+    and every tag, like and comment you created.
+  </p>
+</div>
+
+<%= form_with model: resource, url: registration_path(resource_name), method: :delete,
+      class: "flex flex-col gap-4" do |f| %>
+  <%= render "devise/shared/field", form: f, attribute: :current_password, type: :password,
+        label: "Your password", options: { autocomplete: "current-password", autofocus: true } %>
+  <%= f.submit "Delete my account permanently",
+        class: "btn-base bg-red-600 text-white hover:bg-red-700 w-full" %>
+<% end %>
+
+<%= link_to "Keep my account", edit_user_registration_path,
+      class: "text-caption text-zinc-600 hover:text-zinc-900 self-center" %>
