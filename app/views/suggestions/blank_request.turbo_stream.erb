@@ -1,5 +1,5 @@
 <%# Rendered with 422 when the request carries neither a context nor an anchor.
-    Turbo applies a stream on any status, so the refusal lands in the same modal. %%>
+    Turbo applies a stream on any status, so the refusal lands in the same modal. %>
 <%= turbo_stream.update "ai_suggestion_modal" do %>
   <%= render layout: "suggestions/modal" do %>
     <div class="flex flex-col gap-4 py-4 text-center">
