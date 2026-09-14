@@ -31,6 +31,7 @@ module Ai
     class NoValidGarments < Error; end
     class DuplicateOutfit < Error; end
     class NoAlternative < Error; end
+    class AnchorMissing < Error; end
 
     TOOL = {
       name: "propose_outfit",
@@ -107,6 +108,7 @@ module Ai
       proposal = tool_input(message)
       validated_ids = without_excluded(owned_ids(proposal["garment_ids"]))
       raise NoValidGarments if validated_ids.empty?
+      raise AnchorMissing unless anchor_garments.all? { |g| validated_ids.include?(g.id) }
       raise DuplicateOutfit if duplicate?(validated_ids)
       Result.new(
         rationale: proposal["rationale"],
@@ -151,7 +153,7 @@ module Ai
     end
 
     def excluded_ids
-      @excluded_ids ||= @exclude_garment_ids - reusable_excluded_ids
+      @excluded_ids ||= @exclude_garment_ids - reusable_excluded_ids - @anchor_garment_ids
     end
 
     def reusable_excluded_ids
@@ -180,9 +182,22 @@ module Ai
       end.join("\n")
     end
 
+    def anchor_garments
+      @anchor_garments ||= @user.garments.where(id: @anchor_garment_ids).to_a
+    end
+
     def user_message
-      lines = [ "Wardrobe:", inventory, "", "Context: #{@context}" ]
+      lines = [ "Wardrobe:", inventory ]
+      if @context.present?
+        lines << ""
+        lines << "Context: #{@context}"
+      end
       lines << @weather if @weather
+      unless anchor_garments.empty?
+        lines << ""
+        lines << "Anchor pieces - these MUST appear in the outfit:"
+        anchor_garments.each { |g| lines << "- [#{g.id}] #{g.name}" }
+      end
       unless existing_outfits.empty?
         lines << ""
         lines << "Outfits already owned - do NOT re-propose any of these EXACT combinations:"

@@ -21,7 +21,8 @@ class OutfitSuggestionJob < ApplicationJob
       target: "ai_suggestion",
       partial: "suggestions/result",
       locals: { result: result, context: context, coordinates: coordinates,
-                exclude_garment_ids: exclude_garment_ids + result.garment_ids }
+                anchor_garment_ids: anchor_garment_ids,
+                exclude_garment_ids: (exclude_garment_ids + result.garment_ids).map(&:to_i).uniq }
     )
   rescue => e
     Rails.logger.error("[OutfitSuggestionJob] #{e.class}: #{e.message}")
@@ -33,6 +34,7 @@ class OutfitSuggestionJob < ApplicationJob
                 retryable: NON_RETRYABLE.none? { |klass| e.is_a?(klass) },
                 context: context,
                 coordinates: coordinates,
+                anchor_garment_ids: anchor_garment_ids,
                 exclude_garment_ids: exclude_garment_ids }
     )
   end
@@ -48,6 +50,8 @@ class OutfitSuggestionJob < ApplicationJob
       "The stylist couldn't build an outfit this time. Try rephrasing your context."
     when Ai::OutfitSuggester::DuplicateOutfit
       "You already have this exact outfit. Regenerate or change the context."
+    when Ai::OutfitSuggester::AnchorMissing
+      "The stylist couldn't build an outfit around the pieces you picked. Try picking fewer, or pieces that can be worn together."
     when Ai::OutfitSuggester::NoAlternative
       "You've been through most of your wardrobe for this context. Start over or add more garments."
     else

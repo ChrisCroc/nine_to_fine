@@ -3,10 +3,18 @@ require "rails_helper"
 # Same reasoning as the result partial: nothing else renders this file.
 # /!\ type: :view is explicit: infer_spec_type_from_file_location! is off.
 RSpec.describe "suggestions/_error", type: :view do
-  def render_with(coordinates, retryable: true)
+  def render_with(coordinates, retryable: true, anchor_garment_ids: [])
     render partial: "suggestions/error",
            locals: { message: "The stylist could not answer", retryable: retryable,
-                     context: "wedding", exclude_garment_ids: [], coordinates: coordinates }
+                     context: "wedding", anchor_garment_ids: anchor_garment_ids,
+                     exclude_garment_ids: [], coordinates: coordinates }
+  end
+
+  it "sends the anchored pieces back with the Regenerate button" do
+    render_with([ 50.85, 4.35 ], anchor_garment_ids: %w[52])
+
+    form = Capybara.string(rendered)
+    expect(form).to have_css("input[name='anchor_garment_ids[]'][value='52']", visible: :all)
   end
 
   it "sends the position back with the Regenerate button" do

@@ -231,6 +231,111 @@ RSpec.describe Ai::OutfitSuggester do
       end
     end
 
+    it "names the anchored pieces in the prompt, in the same form as the inventory" do
+      pieces = wearable_wardrobe(user)
+      anchor = pieces.first
+
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: pieces.map(&:id)))
+
+      described_class.new(user: user, context: "x", client: client,
+                          anchor_garment_ids: [ anchor.id ]).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        prompt = args[:messages].first[:content]
+        expect(prompt).to include("Anchor pieces").and include("- [#{anchor.id}] #{anchor.name}")
+      end
+    end
+
+    it "leaves the anchor section out of the prompt when nothing is anchored" do
+      pieces = wearable_wardrobe(user)
+
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: pieces.map(&:id)))
+
+      described_class.new(user: user, context: "x", client: client).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        expect(args[:messages].first[:content]).not_to include("Anchor pieces")
+      end
+    end
+
+    it "leaves the Context line out when the request carries no context" do
+      pieces = wearable_wardrobe(user)
+
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: pieces.map(&:id)))
+
+      described_class.new(user: user, context: "", client: client,
+                          anchor_garment_ids: [ pieces.first.id ]).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        expect(args[:messages].first[:content]).not_to include("Context:")
+      end
+    end
+
+    # Regenerate hands back the previous proposal as exclusions, and the anchor
+    # was part of it. Without the subtraction in excluded_ids, the anchored piece
+    # leaves the inventory and every regeneration fails on AnchorMissing.
+    it "keeps an anchored piece in the inventory even when it is also excluded" do
+      pieces = wearable_wardrobe(user)
+      anchor = pieces.first
+
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: pieces.map(&:id)))
+
+      described_class.new(user: user, context: "x", client: client,
+                          anchor_garment_ids: [ anchor.id ],
+                          exclude_garment_ids: [ anchor.id ]).suggest
+
+      expect(messages).to have_received(:create) do |args|
+        expect(args[:messages].first[:content]).to include("[#{anchor.id}]")
+      end
+    end
+
+    it "raises AnchorMissing when the proposal leaves an anchored piece out" do
+      pieces = wearable_wardrobe(user)
+      anchor = create(:garment, user: user, name: "Anchored coat", category: leaf_in("Tops"))
+      client = client_returning(fake_response(garment_ids: pieces.map(&:id)))
+
+      expect {
+        described_class.new(user: user, context: "x", client: client,
+                            anchor_garment_ids: [ anchor.id ]).suggest
+      }.to raise_error(described_class::AnchorMissing)
+    end
+
+    it "accepts the proposal when every anchored piece is in it" do
+      pieces = wearable_wardrobe(user)
+      anchor = pieces.last
+      client = client_returning(fake_response(garment_ids: pieces.map(&:id)))
+
+      result = described_class.new(user: user, context: "x", client: client,
+                                    anchor_garment_ids: [ anchor.id ]).suggest
+
+      expect(result.garment_ids).to include(anchor.id)
+    end
+
+    # Resolving the ids IS the validation: a foreign id never becomes an anchor,
+    # so it cannot make the guard fail either. Silent on purpose.
+    it "ignores an anchor id that is not the user's" do
+      pieces = wearable_wardrobe(user)
+      stranger = create(:garment)
+      client = client_returning(fake_response(garment_ids: pieces.map(&:id)))
+
+      result = described_class.new(user: user, context: "x", client: client,
+                                    anchor_garment_ids: [ stranger.id ]).suggest
+
+      expect(result.garment_ids).to match_array(pieces.map(&:id))
+    end
+
+    it "announces the anchor rule in the system prompt" do
+      expect(described_class::SYSTEM).to include("anchor pieces are named")
+    end
+
     it "teaches the layering rules in the system prompt" do
       expect(described_class::SYSTEM).to include("base").and include("mid").and include("outer")
     end

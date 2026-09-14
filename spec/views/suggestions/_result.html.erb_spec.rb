@@ -6,10 +6,21 @@ require "rails_helper"
 RSpec.describe "suggestions/_result", type: :view do
   let(:result) { Ai::OutfitSuggester::Result.new(rationale: "R", garment_ids: [], name: "N") }
 
-  def render_with(coordinates)
+  def render_with(coordinates, anchor_garment_ids: [])
     render partial: "suggestions/result",
            locals: { result: result, context: "wedding",
+                     anchor_garment_ids: anchor_garment_ids,
                      exclude_garment_ids: [], coordinates: coordinates }
+  end
+
+  # Regenerate is a form of its own: what it does not carry is lost. Drop the
+  # anchors here and the second proposal quietly ignores what was asked for.
+  it "sends the anchored pieces back with the Regenerate button" do
+    render_with([ 50.85, 4.35 ], anchor_garment_ids: %w[52 7])
+
+    form = Capybara.string(rendered)
+    expect(form).to have_css("input[name='anchor_garment_ids[]'][value='52']", visible: :all)
+    expect(form).to have_css("input[name='anchor_garment_ids[]'][value='7']", visible: :all)
   end
 
   it "sends the position back with the Regenerate button" do

@@ -22,6 +22,18 @@ RSpec.describe "Outfits", type: :request do
         get outfits_path
         expect(response).to have_http_status(:success)
       end
+
+      # The composer offers pieces to build around, so index needs the wardrobe
+      # loaded. Without :index in the set_garments before_action, @garments is
+      # nil and the whole page raises - not just the selector.
+      it "offers the wardrobe as anchor choices in the composer" do
+        create(:garment, user: user, name: "Anchor candidate")
+
+        get outfits_path
+
+        expect(response.body).to include("anchor_garment_ids")
+        expect(response.body).to include("Anchor candidate")
+      end
     end
 
     describe "GET /outfits with filters" do
