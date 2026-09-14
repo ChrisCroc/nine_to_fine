@@ -2,9 +2,17 @@
   The modal holds #ai_suggestion (spinner) - the job broadcast replace that %>
 <%= turbo_stream.update "ai_suggestion_modal" do %>
   <%= render layout: "suggestions/modal" do %>
-    <div class="flex flex-col items-center gap-3 py-6 text-center">
+    <div class="flex flex-col items-center gap-3 py-6 text-center"
+          data-controller="long-wait">
       <span class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900"></span>
       <p class="text-sm text-zinc-600">The stylist is thinking...</p>
+      <div class="hidden w-full" data-long-wait-target="fallback">
+        <p class="text-sm text-zinc-500">This is taking longer than usual. You can keep waiting, or close this and try again.</p>
+        <button type="button" data-action="modal#close"
+                class="btn-base bg-zinc-900 text-champagne hover:bg-zinc-700 hover:text-white">
+          Close
+        </button>
+      </div>
     </div>
   <% end %>
 <% end %>

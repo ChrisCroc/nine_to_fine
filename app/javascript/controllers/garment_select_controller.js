@@ -18,10 +18,26 @@ export default class extends Controller {
     this.select.on("item_add", () => this.renderBoard())
     this.select.on("item_remove", () => this.renderBoard())
     this.renderBoard()
+    // The composer form is reset on every successful submit (reset_form_controller),
+    // and a native reset never reaches TomSelect: without this, the board keeps
+    // showing pieces the emptied <select> will no longer submit.
+    // /!\ bind: removeEventListener needs the very same function object.
+    this.clearOnReset = this.clearOnReset.bind(this)
+    this.form = this.element.closest("form")
+    this.form?.addEventListener("reset", this.clearOnReset)
   }
 
   disconnect() {
+    this.form?.removeEventListener("reset", this.clearOnReset)
     this.select?.destroy()
+  }
+
+  // /!\ Clearing is only right because no option here is pre-selected. A form
+  // whose options carry `selected` (the outfit edit form) would need the
+  // selection restored, not wiped.
+  clearOnReset() {
+    this.select.clear()
+    this.renderBoard()
   }
 
   renderRow(data, escape) {
@@ -46,7 +62,7 @@ export default class extends Controller {
       cell.className = "relative"
       cell.innerHTML = `
         ${visual}
-        <button type="button" data-action="click->garment-select#removepiece" data-id="${id}"
+        <button type="button" data-action="click->garment-select#removePiece" data-id="${id}"
           class="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900/70 text-xs text-white">&times;</button>
         <p class="mt-1 truncate text-center text-xs text-zinc-600">${name}</p>`
       this.boardTarget.appendChild(cell)

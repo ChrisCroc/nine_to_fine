@@ -1,7 +1,7 @@
 class OutfitsController < ApplicationController
   skip_before_action :authenticate_user!, only: :show
   before_action :set_outfit, only: %i[edit update destroy]
-  before_action :set_garments, only: %i[new edit create update]
+  before_action :set_garments, only: %i[index new edit create update]
 
   def index
     base = current_user.outfits.includes(garments: [ { category: :parent }, { photo_attachment: :blob } ])
