@@ -65,6 +65,11 @@
                               action: "change->photo-preview#update change->photo-analyze#analyze" },
                       class: "block w-full text-sm text-zinc-700 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-900
                       file:px-4 file:py-2 file:text-champagne file:font-semibold file:cursor-pointer hover:file:bg-zinc-700" %>
+    <% if garment.photo.attached? && !garment.photo.blob&.persisted? %>
+      <p class="mt-1 text-sm text-amber-700">
+        We could not keep <%= garment.photo.filename %> — please choose it again
+      </p>
+    <% end %>
     <% if garment.errors[:photo].any? %>
       <span class="block text-sm text-red-600 mt-1"><%= garment.errors[:photo].first %></span>
     <% end %>

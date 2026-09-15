@@ -86,6 +86,16 @@ RSpec.describe "Garments", type: :request do
 
           expect(response).to have_http_status(:unprocessable_content)
         end
+
+        it "names the photo it could not keep" do
+          post garments_path, params: {
+            garment: { name: "", color: "blue", category_id: category.id,
+                       photo: fixture_file_upload("valid.jpg", "image/jpeg") }
+          }
+
+          expect(response.body).to include("We could not keep")
+          expect(response.body).to include("valid.jpg")
+        end
       end
     end
 
@@ -129,6 +139,16 @@ RSpec.describe "Garments", type: :request do
 
           expect(response).to have_http_status(:unprocessable_content)
           expect(garment.reload.name).to eq(original_name)
+        end
+
+        it "says nothing about a photo that is safely stored" do
+          garment.photo.attach(io: File.open(Rails.root.join("spec/fixtures/files/valid.jpg")),
+                               filename: "valid.jpg", content_type: "image/jpeg")
+
+          patch garment_path(garment), params: { garment: { name: "" } }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).not_to include("We could not keep")
         end
       end
     end
