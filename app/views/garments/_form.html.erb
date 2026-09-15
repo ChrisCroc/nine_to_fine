@@ -75,7 +75,7 @@
     <%= f.label :tag_names, "Tags", class: "block text-sm font-medium text-zinc-700 mb-1" %>
     <%= f.text_field :tag_names, placeholder: "casual, summer, blue", class: "block w-full rounded-md border border-zinc-300
     px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:ring-2 focus:ring-zinc-500 focus:outline-none" %>
-    <p class="mt-1 text-sm text-zinc-500">Split the tags with comas</p>
+    <p class="mt-1 text-sm text-zinc-500">Split the tags with commas</p>
   </div>
 
 
@@ -119,7 +119,8 @@
 
   <!--Submit-->
   <div>
-    <%= f.submit class: "btn-base w-full bg-zinc-900 text-champagne hover:bg-zinc-700 focus:text-white hover:text-white
-    data-loading:cursor-wait data-loading:opacity-50", data: { submit_button_target: "button" } %>
+    <%= f.submit data: { submit_button_target: "button" },
+                 class: "btn-base w-full bg-zinc-900 text-champagne hover:bg-zinc-700 focus:text-white hover:text-white
+                        data-loading:cursor-wait data-loading:opacity-50" %>
   </div>
 <% end %>
