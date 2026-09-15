@@ -18,7 +18,7 @@ module Taggable
   end
 
   def tag_names
-    tags.map(&:name).join(", ")
+    (@tag_names || tags.map(&:name)).join(", ")
   end
 
 private
