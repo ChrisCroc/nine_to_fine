@@ -174,6 +174,23 @@ RSpec.describe Garment, type: :model do
 
       expect(Garment.find(garment.id).tag_names.split(", ").sort).to eq(%w[alpha beta])
     end
+
+    it "keeps the submitted tag names in the field when the record is invalid" do
+      garment = build(:garment, user: user, name: "", tag_names: "Casual, casual, SUMMER, ")
+
+      expect(garment.save).to be false
+      expect(garment.tag_names).to eq("casual, summer")
+    end
+
+    it "does not refill the field from the database when the user cleared it" do
+      garment = build(:garment, user: user, tag_names: "summer, casual")
+      garment.save!
+
+      garment.assign_attributes(name: "", tag_names: "")
+
+      expect(garment.save).to be false
+      expect(garment.tag_names).to eq("")
+    end
   end
 
   describe "category must be a subcategory (leaf)" do
