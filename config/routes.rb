@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   end
   get "/explore", to: "explore#index", as: :explore
   authenticated :user do
-    root to: "garments#index", as: :authenticated_root
+    root to: "explore#index", as: :authenticated_root
   end
   root to: "pages#home"
   get "/400", to: "errors#bad_request"

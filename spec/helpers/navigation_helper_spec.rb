@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.describe NavigationHelper, type: :helper do
   describe "#nav_destinations" do
-    it "returns the three signed_in destinations in order with their paths" do
+    it "returns the four signed_in destinations in order with their paths" do
       user = create(:user)
       allow(helper).to receive(:current_user).and_return(user)
 
       destinations = helper.nav_destinations
 
-      expect(destinations.map { |d| d[:label] }).to eq(%w[Closet Looks Profile])
-      expect(destinations.map { |d| d[:path] }).to eq([ garments_path, outfits_path, user_path(user) ])
+      expect(destinations.map { |d| d[:label] }).to eq(%w[Explore Closet Looks Profile])
+      expect(destinations.map { |d| d[:path] }).to eq([ explore_path, garments_path, outfits_path, user_path(user) ])
     end
   end
 

@@ -60,7 +60,7 @@ RSpec.describe "Explore", type: :request do
         create(:outfit, user: author, visibility: :public, name: "OldestLook", created_at: 30.days.ago)
         12.times { |i| create(:outfit, user: author, visibility: :public, name: "Recent#{i}", created_at: (i + 1).hours.ago) }
 
-        get explore_path(page: 2), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        get explore_path(page: 2), headers: { "Accept" => "text/vnd.turbo-stream.html, text/html" }
 
         expect(response.body).to include("OldestLook")
         expect(response.body).not_to include("Recent0")
@@ -69,11 +69,19 @@ RSpec.describe "Explore", type: :request do
       it "answers with a Turbo Stream that appends to the grid" do
         13.times { |i| create(:outfit, user: author, visibility: :public) }
 
-        get explore_path(page: 2), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        get explore_path(page: 2), headers: { "Accept" => "text/vnd.turbo-stream.html, text/html" }
 
         expect(response.media_type).to eq("text/vnd.turbo-stream.html")
         expect(response.body).to include('<turbo-stream action="append"')
         expect(response.body).to include('target="explore_outfits"')
+      end
+    end
+
+    describe "GET / — Turbo follows a redirect" do
+      it "serves HTML, not a Turbo Stream, when no page is asked for" do
+        get root_path, headers: { "Accept" => "text/vnd.turbo-stream.html, text/html" }
+
+        expect(response.media_type).to eq("text/html")
       end
     end
   end
