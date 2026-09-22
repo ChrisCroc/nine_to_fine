@@ -5,9 +5,9 @@
     <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30 mb-8">Explore</h1>
 
     <% if @outfits.any? %>
-      <div id="expore_outfits" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div id="explore_outfits" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <% @outfits.each do |outfit| %>
-          <%= render "outfits/card", outfit: outfit %>
+          <%= render "outfits/card", outfit: outfit, show_author: true %>
         <% end %>
       </div>
     <% else %>

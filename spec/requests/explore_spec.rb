@@ -44,6 +44,15 @@ RSpec.describe "Explore", type: :request do
         expect(response.body).to include("NewestLook")
         expect(response.body).not_to include("OldestLook")
       end
+
+      it "names the author of each outfit and links to their profile" do
+        create(:outfit, user: author, visibility: :public, name: "VisibleLook")
+
+        get explore_path
+
+        expect(response.body).to include(author.username)
+        expect(response.body).to include(user_path(author))
+      end
     end
   end
 end
