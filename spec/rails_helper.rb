@@ -67,8 +67,11 @@ RSpec.configure do |config|
 
   config.include Devise::Test::IntegrationHelpers, type: :request
 
-  config.before(:each) { Bullet.start_request if defined?(Bullet) && Bullet.enable? }
-  config.after(:each) do
+  # Bullet measures the gap between what a request preloads and what its views
+  # actually read. Model, service and job specs render nothing, so it has nothing
+  # to measure there and reports every preload as unused.
+  config.before(:each, type: :request) { Bullet.start_request if defined?(Bullet) && Bullet.enable? }
+  config.after(:each, type: :request) do
     if defined?(Bullet) && Bullet.enable?
       Bullet.perform_out_of_channel_notifications if Bullet.notification?
       Bullet.end_request
