@@ -12,6 +12,12 @@ class Outfit < ApplicationRecord
   validates :name, presence: true, length: { maximum: 200 }, uniqueness: { scope: :user_id, case_sensitive: false }
   validates :garments, presence: true
 
+  scope :public_feed, -> {
+    visibility_public
+      .includes(:user, garments: [ { category: :parent }, { photo_attachment: :blob } ])
+      .order(created_at: :desc, id: :desc)
+  }
+
   def like_of(user)
     return nil unless user
     likes.find_by(user: user)

@@ -150,4 +150,34 @@ RSpec.describe Outfit, type: :model do
       expect(Outfit.visibility_public).to eq [ pub ]
     end
   end
+
+  describe ".public_feed" do
+    it "returns every public outfit, whoever owns it" do
+      owner = create(:user)
+      other = create(:user)
+      mine = create(:outfit, user: owner, visibility: :public)
+      their = create(:outfit, user: other, visibility: :public)
+      create(:outfit, user: owner, visibility: :private)
+      create(:outfit, user: other, visibility: :private)
+
+      expect(Outfit.public_feed).to contain_exactly(mine, their)
+    end
+
+    it "returns the most recent first" do
+      owner = create(:user)
+      old = create(:outfit, user: owner, visibility: :public, created_at: 2.days.ago)
+      recent = create(:outfit, user: owner, visibility: :public, created_at: 1.hour.ago)
+
+      expect(Outfit.public_feed).to eq [ recent, old ]
+    end
+
+    it "breaks a created_at tie with a descending id" do
+      owner = create(:user)
+      moment = 3.hours.ago
+      first = create(:outfit, user: owner, visibility: :public, created_at: moment)
+      second = create(:outfit, user: owner, visibility: :public, created_at: moment)
+
+      expect(Outfit.public_feed).to eq [ second, first ]
+    end
+  end
 end
