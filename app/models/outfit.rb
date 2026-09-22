@@ -14,7 +14,7 @@ class Outfit < ApplicationRecord
 
   scope :public_feed, -> {
     visibility_public
-      .includes(:user, garments: [ { category: :parent }, { photo_attachment: :blob } ])
+      .includes(garments: [ { category: :parent }, { photo_attachment: :blob } ])
       .order(created_at: :desc, id: :desc)
   }
 

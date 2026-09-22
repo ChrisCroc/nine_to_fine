@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :users, only: %i[index show edit update] do
     resource :follow, only: %i[create destroy]
   end
+  get "/explore", to: "explore#index", as: :explore
   authenticated :user do
     root to: "garments#index", as: :authenticated_root
   end
