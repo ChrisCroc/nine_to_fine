@@ -10,6 +10,10 @@
           <%= render "outfits/card", outfit: outfit, show_author: true %>
         <% end %>
       </div>
+      
+      <div id="explore_load_more" class="text-center mt-10">
+        <%= render "explore/load_more", pagy: @pagy %>
+      </div>
     <% else %>
       <div class="text-center py-16">
         <p class="text-lg text-zinc-700">No public outfits yet.</p>

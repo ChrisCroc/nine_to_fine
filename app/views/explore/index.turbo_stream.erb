@@ -1,0 +1,9 @@
+<%= turbo_stream.append "explore_outfits" do %>
+  <% @outfits.each do |outfit| %>
+    <%= render "outfits/card", outfit: outfit, show_author: true %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "explore_load_more" do %>
+  <%= render "explore/load_more", pagy: @pagy %>
+<% end %>
