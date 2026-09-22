@@ -17,7 +17,7 @@ RSpec.describe "Outfits", type: :request do
     before { sign_in user }
 
     describe "GET /outfits" do
-      it "retruns a successful response" do
+      it "returns a successful response" do
         outfit
         get outfits_path
         expect(response).to have_http_status(:success)
