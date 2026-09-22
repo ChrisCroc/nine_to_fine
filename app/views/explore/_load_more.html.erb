@@ -1,0 +1,5 @@
+<% if pagy.next %>
+  <%= link_to "Load more", pagy.page_url(:next),
+        data: { turbo_stream: true },
+        class: "btn-base bg-zinc-900 hover:bg-zinc-700 text-champagne" %>
+<% end %>

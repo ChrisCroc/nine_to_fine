@@ -1,0 +1,25 @@
+<% content_for :page_title, "Explore" %>
+
+<section class="page-shell">
+  <div class="max-w-6xl mx-auto mt-10 px-4">
+    <h1 class="text-3xl md:text-4xl font-bold text-champagne text-shadow-lg/30 mb-8">Explore</h1>
+
+    <% if @outfits.any? %>
+      <div id="explore_outfits" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% @outfits.each do |outfit| %>
+          <%= render "outfits/card", outfit: outfit, show_author: true %>
+        <% end %>
+      </div>
+      
+      <div id="explore_load_more" class="text-center mt-10">
+        <%= render "explore/load_more", pagy: @pagy %>
+      </div>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-lg text-zinc-700">No public outfits yet.</p>
+        <%= link_to "Start your closet", garments_path,
+            class: "inline-block mt-3 text-zinc-600 underline hover:text-zinc-900" %>
+      </div>
+    <% end %>
+  </div>
+</section>

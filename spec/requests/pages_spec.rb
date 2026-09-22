@@ -33,6 +33,15 @@ RSpec.describe "Pages", type: :request do
         get root_path
         expect(response).to have_http_status(:success)
       end
+
+      it "serves the Explore feed at the root" do
+        author = create(:user)
+        create(:outfit, user: author, visibility: :public, name: "VisibleLook")
+
+        get root_path
+
+        expect(response.body).to include("VisibleLook")
+      end
     end
   end
 end
