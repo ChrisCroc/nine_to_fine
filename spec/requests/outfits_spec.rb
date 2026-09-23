@@ -180,6 +180,31 @@ RSpec.describe "Outfits", type: :request do
           expect(response).to have_http_status(:unprocessable_content)
           expect(outfit.reload.name).not_to eq("")
         end
+
+        it "does not change the pieces when the validation rejects the update" do
+          original = outfit.garments.first
+          replacement = create(:garment, user: user)
+
+          patch outfit_path(outfit), params: {
+            outfit: { name: "", garment_ids: [ replacement.id ] }
+          }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(outfit.reload.garment_ids).to eq([ original.id ])
+        end
+      end
+
+      context "with a foreign garment id (IDOR)" do
+        it "does not attach a garment the user doesn't own" do
+          mine = create(:garment, user: user)
+          stranger_piece = create(:garment)
+
+          patch outfit_path(outfit), params: {
+            outfit: { name: outfit.name, garment_ids: [ mine.id, stranger_piece.id ] }
+          }
+
+          expect(outfit.reload.garment_ids).to eq([ mine.id ])
+        end
       end
     end
 
