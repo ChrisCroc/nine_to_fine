@@ -23,6 +23,31 @@ RSpec.describe "Pages", type: :request do
         expect(response.body).to include("github.com/ChrisCroc")
         expect(response.body).to include("linkedin.com/in/christophe-crokaert")
       end
+
+      it "shows three real public outfits" do
+        author = create(:user)
+        4.times do |i|
+          create(:outfit,
+                  user: author,
+                  visibility: :public,
+                  name: "Look #{i}",
+                  created_at: i.hours.ago)
+        end
+
+        get root_path
+
+        expect(response.body).to include("Look 0", "Look 1", "Look 2")
+        expect(response.body).not_to include("Look 3")
+      end
+
+      it "never shows a private outfit" do
+        author = create(:user)
+        create(:outfit, user: author, visibility: :private, name: "Hidden look")
+
+        get root_path
+
+        expect(response.body).not_to include("Hidden look")
+      end
     end
 
     context "when the user is signed in" do
