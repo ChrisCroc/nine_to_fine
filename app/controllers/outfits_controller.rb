@@ -36,9 +36,7 @@ class OutfitsController < ApplicationController
   end
 
   def update
-    @outfit.assign_attributes(outfit_params.except(:garment_ids))
-    @outfit.garment_ids = owned_garment_ids(outfit_params[:garment_ids]) if outfit_params[:garment_ids].present?
-    if @outfit.update(outfit_params)
+    if @outfit.update(outfit_params_with_owned_garments)
       redirect_to @outfit, status: :see_other, notice: "Outfit successfully updated."
     else
       render :edit, status: :unprocessable_content
@@ -57,6 +55,13 @@ private
 
   def outfit_params
     params.expect(outfit: [ :name, :description, :tag_names, :visibility, garment_ids: [] ])
+  end
+
+  def outfit_params_with_owned_garments
+    attributes = outfit_params
+    return attributes unless attributes.key?(:garment_ids)
+
+    attributes.merge(garment_ids: owned_garment_ids(attributes[:garment_ids]))
   end
 
   def set_garments
