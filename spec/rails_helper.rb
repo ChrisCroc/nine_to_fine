@@ -66,6 +66,13 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include Devise::Test::IntegrationHelpers, type: :system
+
+  # System specs drive a real, headless Chrome: they are the only specs that
+  # see what Turbo and Stimulus do to the page once the server has answered.
+  config.before(:each, type: :system) do
+    driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1000 ]
+  end
 
   # Bullet measures the gap between what a request preloads and what its views
   # actually read. Model, service and job specs render nothing, so it has nothing
