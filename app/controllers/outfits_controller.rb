@@ -73,6 +73,8 @@ private
   end
 
   def filter_params
-    params[:q]&.permit(:garment_id, tag_ids: []) || {}
+    return {} unless params.key?(:q)
+
+    params.expect(q: [ :garment_id, tag_ids: [] ])
   end
 end

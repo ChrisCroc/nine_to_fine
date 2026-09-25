@@ -31,6 +31,12 @@ RSpec.describe "Garments", type: :request do
           get garments_path, params: { q: { color: garment.color, category_id: category.id } }
           expect(response).to have_http_status(:success)
         end
+
+        it "answers 400 when q is not a set of filters" do
+          get garments_path, params: { q: "hack" }
+
+          expect(response).to have_http_status(:bad_request)
+        end
       end
     end
 

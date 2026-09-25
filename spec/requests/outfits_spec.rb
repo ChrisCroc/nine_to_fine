@@ -74,6 +74,12 @@ RSpec.describe "Outfits", type: :request do
 
         expect(response.body).not_to include("StrangerFit")
       end
+
+      it "answers 400 when q is not a set of filters" do
+        get outfits_path(q: "hack")
+
+        expect(response).to have_http_status(:bad_request)
+      end
     end
 
     describe "GET /outfits/:id" do
