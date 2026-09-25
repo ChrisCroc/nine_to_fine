@@ -64,7 +64,9 @@ class GarmentsController < ApplicationController
   end
 
   def filter_params
-    params[:q]&.permit(:color, :category_id, :tag_id, :brand, :search) || {}
+    return {} unless params.key?(:q)
+
+    params.expect(q: [ :color, :category_id, :tag_id, :brand, :search ])
   end
 
   def stamp_ai_analysis
