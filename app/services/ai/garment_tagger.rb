@@ -20,6 +20,19 @@ module Ai
 
     class Error < StandardError; end
 
+    # The API failing to answer: no connection, no answer in time (the SDK
+    # files a timeout under connection errors), a rate limit, an overload or a
+    # crash on its side. None of these is a bug here, so they become an Error
+    # and the form falls back to manual entry. Every other SDK error - a
+    # rejected key (401), a refused request (400), an unknown model (404) - IS
+    # a bug here, and stays a loud 500.
+    # (anthropic-1.72.0, lib/anthropic/errors.rb)
+    UNAVAILABLE = [
+      Anthropic::Errors::APIConnectionError,
+      Anthropic::Errors::RateLimitError,
+      Anthropic::Errors::InternalServerError
+    ].freeze
+
     SYSTEM = <<~PROMPT.freeze
       You are a fashion cataloguer. Look at the single garment in the photo and
       describe ONLY what is visibly true of it. Never guess or invent.
@@ -51,6 +64,10 @@ module Ai
         request_options: REQUEST_OPTIONS
       )
       build_result(tool_input(message))
+    rescue *UNAVAILABLE => e
+      # A 422 leaves no incident behind: this line is what keeps an outage visible.
+      Rails.logger.warn("[Ai::GarmentTagger] #{e.class}: #{e.message}")
+      raise Error, "analysis unavailable: #{e.class}"
     end
 
     private

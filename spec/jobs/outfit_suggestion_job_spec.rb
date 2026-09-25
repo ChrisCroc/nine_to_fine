@@ -112,6 +112,22 @@ RSpec.describe OutfitSuggestionJob do
     )
   end
 
+  # Every other example sends no position, so the weather service stops at its
+  # first line: this is the only one that walks from the browser's position to
+  # the stylist's prompt.
+  it "hands the weather at the user's position to the suggester" do
+    weather = instance_double(Weather::OpenMeteo, sentence: "Current weather at the user's location: 14.2°C.")
+    allow(Weather::OpenMeteo).to receive(:new).with([ 48.86, 2.35 ]).and_return(weather)
+    suggester = instance_double(Ai::OutfitSuggester, suggest: result)
+    allow(Ai::OutfitSuggester).to receive(:new).and_return(suggester)
+    allow(Turbo::StreamsChannel).to receive(:broadcast_replace_to)
+
+    described_class.perform_now(user: user, context: "x", coordinates: [ 48.86, 2.35 ])
+
+    expect(Ai::OutfitSuggester).to have_received(:new)
+      .with(hash_including(weather: "Current weather at the user's location: 14.2°C."))
+  end
+
   it "sends the anchors back to the result partial" do
     allow_any_instance_of(Ai::OutfitSuggester).to receive(:suggest).and_return(result)
 

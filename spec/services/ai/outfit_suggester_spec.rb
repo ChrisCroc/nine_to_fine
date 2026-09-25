@@ -109,6 +109,19 @@ RSpec.describe Ai::OutfitSuggester do
       end
     end
 
+    # Same rule as the tagger: the budget is lost if it rides on the client.
+    it "sends its time budget with the call" do
+      pieces = wearable_wardrobe(user)
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(garment_ids: pieces.map(&:id)))
+
+      described_class.new(user: user, context: "x", client: client).suggest
+
+      expect(messages).to have_received(:create)
+        .with(hash_including(request_options: described_class::REQUEST_OPTIONS))
+    end
+
     it "keeps the excluded pieces out of the inventory sent to the model" do
       kept = wearable_wardrobe(user)
       banned = create(:garment, user: user, name: "Banned shirt", category: leaf_in("Tops"))

@@ -40,4 +40,19 @@ RSpec.describe "Garments::Analyses", type: :request do
     expect(response).to have_http_status(:unprocessable_content)
     expect(response.parsed_body["error"]).to eq("analysis_failed")
   end
+
+  # The whole chain, with only the network replaced: the SDK raises, the
+  # service converts, the controller answers. Before, the timeout crossed the
+  # controller untouched and became a 500.
+  it "returns a 422 when Anthropic does not answer in time" do
+    sign_in user
+    messages = double("messages")
+    allow(messages).to receive(:create)
+      .and_raise(Anthropic::Errors::APITimeoutError.new(url: URI("https://api.anthropic.com/v1/messages")))
+    allow(Anthropic::Client).to receive(:new).and_return(instance_double(Anthropic::Client, messages: messages))
+
+    post garments_analyses_path, params: { photo: photo }
+
+    expect(response).to have_http_status(:unprocessable_content)
+  end
 end

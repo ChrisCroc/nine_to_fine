@@ -16,6 +16,20 @@ RSpec.describe Ai::GarmentTagger do
     client
   end
 
+  def client_raising(error)
+    client = instance_double(Anthropic::Client)
+    messages = double("messages")
+    allow(client).to receive(:messages).and_return(messages)
+    allow(messages).to receive(:create).and_raise(error)
+    client
+  end
+
+  # What the SDK raises once the API has answered with an error status.
+  def status_error(klass, status)
+    klass.new(url: URI("https://api.anthropic.com/v1/messages"), status:,
+              headers: {}, body: nil, request: nil, response: nil)
+  end
+
   describe "#tag" do
     it "parses the tool_use block into a validated Result" do
       leaf = create(:category, :leaf, name: "shirt")
@@ -83,6 +97,65 @@ RSpec.describe Ai::GarmentTagger do
         expect(image[:source][:media_type]).to eq("image/jpeg")
         expect(image[:source][:type]).to eq("base64")
       end
+    end
+
+    # The budget only holds if it travels WITH the call: a timeout set on the
+    # client is silently overwritten by the SDK. Drop the option and the
+    # analysis still works - on the SDK defaults, 600 s per attempt.
+    it "sends its time budget with the call" do
+      create(:category, :leaf, name: "shirt")
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(color: "white", category: "shirt"))
+
+      described_class.new(photo: photo, client: client).tag
+
+      expect(messages).to have_received(:create)
+        .with(hash_including(request_options: described_class::REQUEST_OPTIONS))
+    end
+
+    # An outage of the API is not a bug in this code. Turned into Error, it
+    # reaches the controller's rescue: a 422, and a form the user fills by hand.
+    context "when the API is unavailable" do
+      it "turns a timeout into its own error, keeping the original as the cause" do
+        timeout = Anthropic::Errors::APITimeoutError.new(url: URI("https://api.anthropic.com/v1/messages"))
+        client = client_raising(timeout)
+
+        expect { described_class.new(photo: photo, client: client).tag }
+          .to raise_error(described_class::Error, /unavailable/) { |error| expect(error.cause).to eq(timeout) }
+      end
+
+      it "turns a rate limit into its own error" do
+        client = client_raising(status_error(Anthropic::Errors::RateLimitError, 429))
+
+        expect { described_class.new(photo: photo, client: client).tag }
+          .to raise_error(described_class::Error, /unavailable/)
+      end
+
+      it "turns an overloaded API into its own error" do
+        client = client_raising(status_error(Anthropic::Errors::InternalServerError, 529))
+
+        expect { described_class.new(photo: photo, client: client).tag }
+          .to raise_error(described_class::Error, /unavailable/)
+      end
+
+      # A 422 leaves no incident in the logs: without this line, an outage
+      # would vanish entirely instead of showing up as what it is.
+      it "leaves a trace naming the outage" do
+        allow(Rails.logger).to receive(:warn)
+        client = client_raising(status_error(Anthropic::Errors::RateLimitError, 429))
+
+        expect { described_class.new(photo: photo, client: client).tag }.to raise_error(described_class::Error)
+        expect(Rails.logger).to have_received(:warn).with(/RateLimitError/)
+      end
+    end
+
+    # A rejected key is a defect on our side, not an outage: it must stay a 500.
+    it "lets a rejected API key through untouched" do
+      client = client_raising(status_error(Anthropic::Errors::AuthenticationError, 401))
+
+      expect { described_class.new(photo: photo, client: client).tag }
+        .to raise_error(Anthropic::Errors::AuthenticationError)
     end
   end
 end
