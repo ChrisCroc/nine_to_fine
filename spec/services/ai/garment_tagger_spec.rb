@@ -84,5 +84,20 @@ RSpec.describe Ai::GarmentTagger do
         expect(image[:source][:type]).to eq("base64")
       end
     end
+
+    # The budget only holds if it travels WITH the call: a timeout set on the
+    # client is silently overwritten by the SDK. Drop the option and the
+    # analysis still works - on the SDK defaults, 600 s per attempt.
+    it "sends its time budget with the call" do
+      create(:category, :leaf, name: "shirt")
+      messages = double("messages")
+      client = instance_double(Anthropic::Client, messages: messages)
+      allow(messages).to receive(:create).and_return(fake_response(color: "white", category: "shirt"))
+
+      described_class.new(photo: photo, client: client).tag
+
+      expect(messages).to have_received(:create)
+        .with(hash_including(request_options: described_class::REQUEST_OPTIONS))
+    end
   end
 end
