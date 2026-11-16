@@ -54,7 +54,7 @@ gem "active_storage_validations"
 gem "anthropic"
 
 # Pagination for the public outfit feed [https://github.com/ddnexus/pagy]
-gem "pagy", "~> 43.6"
+gem "pagy", "~> 43.8"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -72,7 +72,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
 
   gem "factory_bot_rails", "~> 6.5"
 end
